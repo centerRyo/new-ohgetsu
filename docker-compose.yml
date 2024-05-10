@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres
+    container_name: ohgetsu-db
+    environment:
+      POSTGRES_DB: ohgetsu
+      POSTGRES_PASSWORD: postgres
+      TZ: 'Asia/Tokyo'
+    ports:
+      - 5432:5432
+    volumes:
+      - db-store:/var/lib/postgresql/data
+
+  test-db:
+    image: postgres
+    container_name: ohgetsu-test-db
+    environment:
+      POSTGRES_DB: ohgetsu-test
+      POSTGRES_PASSWORD: postgres
+      TZ: 'Asia/Tokyo'
+    ports:
+      - 5433:5432
+volumes:
+  db-store:
