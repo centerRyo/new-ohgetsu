@@ -7,11 +7,11 @@ on:
       - '.github/workflows/frontend.yml'
 
 jobs:
-  lint:
+  frontend:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [20.x]
     timeout-minutes: 10
     defaults:
       run:
