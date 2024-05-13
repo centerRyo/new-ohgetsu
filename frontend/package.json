@@ -8,7 +8,6 @@
     "dev:path": "pathpida --watch",
     "build": "next build",
     "start": "next start",
-    "prepare": "husky install",
     "types-check": "tsc --pretty --noEmit",
     "format:check": "prettier 'src/**/*.{js,ts,tsx,json}' --check",
     "lint": "eslint \"src/**/*.{js,ts,tsx}\" --max-warnings=0",
