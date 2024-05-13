@@ -1,0 +1,14 @@
+{
+  "name": "@ohgetsu-monorepo",
+  "description": "Monorepo for Ohgetsu",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "devDependencies": {
+    "@types/node": "^20.12.11",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
