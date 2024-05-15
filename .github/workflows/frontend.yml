@@ -25,12 +25,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
         run: npm ci
-      - name: Check if ESLint is installed
+      - name: Check if tsc is installed
         run: |
-          if command -v eslint &> /dev/null; then
-            echo "ESLint is installed."
+          if command -v tsc &> /dev/null; then
+            echo "typescript is installed."
           else
-            echo "ESLint is not installed."
+            echo "typescript is not installed."
             exit 1
           fi
 
