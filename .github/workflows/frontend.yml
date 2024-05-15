@@ -25,6 +25,14 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
         run: npm install
+      - name: Check if ESLint is installed
+        run: |
+          if command -v eslint &> /dev/null; then
+            echo "ESLint is installed."
+          else
+            echo "ESLint is not installed."
+            exit 1
+          fi
 
   lint:
     runs-on: ubuntu-latest
