@@ -42,7 +42,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm install
       - name: Type Check
-        run: npm run type-check
+        run: npm run types-check
 
       - name: Format Check
         run: npm run format:check
