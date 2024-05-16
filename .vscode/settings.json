@@ -25,11 +25,11 @@
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   },
-  "prettier.configPath": "frontend/.prettierrc",
+  "prettier.configPath": ".prettierrc",
   "editor.lineNumbers": "on",
   "editor.rulers": [80],
   "editor.wordWrap": "on",
   "files.trimTrailingWhitespace": true,
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "typescript.tsdk": "frontend/node_modules/typescript/lib",
+  "typescript.tsdk": "frontend/node_modules/typescript/lib"
 }
