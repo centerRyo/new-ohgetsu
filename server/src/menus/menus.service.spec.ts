@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MenusService } from './menus.service';
 import { AppModule } from '../app.module';
-import { MenusModule } from './menus.module';
 import { PrismaService } from '../prisma.service';
+import { MenusModule } from './menus.module';
+import { MenusService } from './menus.service';
 
 describe('MenusService', () => {
   let service: MenusService;
@@ -70,7 +70,7 @@ describe('MenusService', () => {
     it('アレルギー情報が入力されるとそのアレルギー情報を含まないメニューを取得する', async () => {
       const data = await service.findAll(
         { ingredientIds: [eggIndredient.id] },
-        restaurant.id,
+        restaurant.id
       );
 
       expect(data.length).toBe(1);
@@ -79,7 +79,7 @@ describe('MenusService', () => {
     it('アレルギー情報が複数入力されるとどのアレルギー情報も含まないメニューを取得する', async () => {
       const data = await service.findAll(
         { ingredientIds: [eggIndredient.id, milkIngredient.id] },
-        restaurant.id,
+        restaurant.id
       );
 
       expect(data.length).toBe(1);

@@ -8,9 +8,9 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { RestaurantsService } from './restaurants.service';
-import { RestaurantDto } from './restaurants.dto';
 import { CreateRestaurantDto } from './create-restaurant.dto';
+import { RestaurantDto } from './restaurants.dto';
+import { RestaurantsService } from './restaurants.service';
 import { UpdateRestaurantDto } from './update-restaurant.dto';
 
 @Injectable()
@@ -34,7 +34,7 @@ export class RestaurantsController {
   @Patch(':id')
   async update(
     @Param('id') id: string,
-    @Body() data: UpdateRestaurantDto,
+    @Body() data: UpdateRestaurantDto
   ): Promise<RestaurantDto> {
     const restaurant = await this.restaurantsService.update(id, data);
 

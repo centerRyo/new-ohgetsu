@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { CreateMenuDto } from './create-menu.dto';
-import { MenusService } from './menus.service';
 import { MenuDto, findMenusQuery } from './menus.dto';
+import { MenusService } from './menus.service';
 
 @Controller('menus')
 export class MenusController {
@@ -14,7 +14,7 @@ export class MenusController {
   })
   async findAll(
     @Query() query: findMenusQuery,
-    @Body('restaurantId') resutaurantId: string,
+    @Body('restaurantId') resutaurantId: string
   ): Promise<MenuDto[]> {
     const menus = await this.menusService.findAll(query, resutaurantId);
 
