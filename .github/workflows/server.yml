@@ -37,7 +37,7 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-          path: '${{ github.workspace }}/node_modules'
+          path: '${{ github.workspace }}/server/node_modules'
           key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install dependencies
