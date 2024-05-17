@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model genres {
+  id   String @id @unique @default(uuid()) @db.Uuid
+  name String @db.VarChar(255)
+
+  restaurants restaurants[]
+}
+
+model ingredients {
+  id   String @id @unique @default(uuid()) @db.Uuid
+  name String @db.VarChar(255)
+  pic  String @db.VarChar(255)
+
+  menus menus[]
+}
+
+model restaurants {
+  id        String    @id @unique @default(uuid()) @db.Uuid
+  name      String    @db.VarChar(255)
+  address   String?   @db.VarChar(255)
+  pic       String?   @db.VarChar(255)
+  genreId   String    @db.Uuid
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  deletedAt DateTime?
+
+  genre genres @relation(fields: [genreId], references: [id])
+
+  menus menus[]
+}
+
+model menus {
+  id           String   @id @unique @default(uuid()) @db.Uuid
+  name         String   @db.VarChar(255)
+  pic          String?  @db.VarChar(255)
+  restaurantId String   @db.Uuid
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+
+  restaurant restaurants @relation(fields: [restaurantId], references: [id])
+
+  ingredients ingredients[]
+}
