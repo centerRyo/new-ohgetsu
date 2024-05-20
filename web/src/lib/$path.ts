@@ -10,6 +10,13 @@ const buildSuffix = (url?: {
 };
 
 export const pagesPath = {
+  shops: {
+    $url: (url?: { hash?: string }) => ({
+      pathname: '/shops' as const,
+      hash: url?.hash,
+      path: `/shops${buildSuffix(url)}`,
+    }),
+  },
   $url: (url?: { hash?: string }) => ({
     pathname: '/' as const,
     hash: url?.hash,
