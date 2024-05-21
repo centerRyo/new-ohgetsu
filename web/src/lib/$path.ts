@@ -1,7 +1,4 @@
-const buildSuffix = (url?: {
-  query?: Record<string, string>;
-  hash?: string;
-}) => {
+const buildSuffix = (url?: {query?: Record<string, string>, hash?: string}) => {
   const query = url?.query;
   const hash = url?.hash;
   if (!query && !hash) return '';
@@ -10,18 +7,10 @@ const buildSuffix = (url?: {
 };
 
 export const pagesPath = {
-  shops: {
-    $url: (url?: { hash?: string }) => ({
-      pathname: '/shops' as const,
-      hash: url?.hash,
-      path: `/shops${buildSuffix(url)}`,
-    }),
+  "shops": {
+    $url: (url?: { hash?: string }) => ({ pathname: '/shops' as const, hash: url?.hash, path: `/shops${buildSuffix(url)}` })
   },
-  $url: (url?: { hash?: string }) => ({
-    pathname: '/' as const,
-    hash: url?.hash,
-    path: `/${buildSuffix(url)}`,
-  }),
+  $url: (url?: { hash?: string }) => ({ pathname: '/' as const, hash: url?.hash, path: `/${buildSuffix(url)}` })
 };
 
 export type PagesPath = typeof pagesPath;

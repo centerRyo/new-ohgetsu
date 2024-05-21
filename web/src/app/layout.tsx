@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import ChakraProviders from './chakra-providers';
 
 type Props = {
   children: React.ReactNode;
@@ -7,7 +8,9 @@ type Props = {
 const RootLayout = memo(({ children }: Props) => {
   return (
     <html lang='ja'>
-      <body>{children}</body>
+      <body>
+        <ChakraProviders>{children}</ChakraProviders>
+      </body>
     </html>
   );
 });
