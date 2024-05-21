@@ -1,4 +1,4 @@
-import { SERVICE_NAME } from '@/components/constants';
+import { SERVICE_NAME } from '@/constants';
 import { Metadata } from 'next';
 import ShopsPage from './shops/page';
 

@@ -1,0 +1,17 @@
+@use '@/styles/index.module' as var;
+
+.container {
+  display: flex;
+  align-items: center;
+  height: var.$heightHeader;
+  padding: 0.5rem 1.5rem;
+  width: 100%;
+  max-width: var.$maxWidth;
+  margin: 0 auto;
+}
+
+.logo {
+  user-select: none;
+  margin: 0 auto 0 0;
+  line-height: 1;
+}
