@@ -1,3 +1,5 @@
+import type { OptionalQuery as OptionalQuery_gsgao6 } from '../app/menus/[id]/page';
+
 const buildSuffix = (url?: {query?: Record<string, string>, hash?: string}) => {
   const query = url?.query;
   const hash = url?.hash;
@@ -8,6 +10,9 @@ const buildSuffix = (url?: {query?: Record<string, string>, hash?: string}) => {
 
 export const pagesPath = {
   "menus": {
+    _id: (id: string | number) => ({
+      $url: (url?: { query?: OptionalQuery_gsgao6, hash?: string }) => ({ pathname: '/menus/[id]' as const, query: { id, ...url?.query }, hash: url?.hash, path: `/menus/${id}${buildSuffix(url)}` })
+    }),
     $url: (url?: { hash?: string }) => ({ pathname: '/menus' as const, hash: url?.hash, path: `/menus${buildSuffix(url)}` })
   },
   "shops": {
