@@ -11,9 +11,11 @@ type TUseHandlerArgs = {
 export const useHandler = ({ getValues, restaurantId }: TUseHandlerArgs) => {
   const router = useRouter();
   const handleBack = useCallback(() => router.push('/'), [router]);
+  console.log(restaurantId);
 
   const handleClickSearch = useCallback(() => {
-    // const values = getValues();
+    const values = getValues();
+    console.log(values);
     // const excludedIngredientIds = values.ingredients
     //   ? values.ingredients.join(',')
     //   : '';
