@@ -1,10 +1,13 @@
 import { Menus } from '@/features/Menus';
-import { CreateMenusSearchCondition } from '@/features/Menus/utils';
+import {
+  CreateMenusSearchCondition,
+  MenusSearchCondition,
+} from '@/features/Menus/utils';
 
 const MenusPage = ({
   searchParams,
 }: {
-  searchParams: { shopId: string; excludedIngredientIds?: string };
+  searchParams: MenusSearchCondition;
 }) => {
   const searchConditions = CreateMenusSearchCondition(searchParams);
 

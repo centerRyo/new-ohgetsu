@@ -19,9 +19,9 @@ type Props = {
 };
 
 export const Menus = ({ searchConditions }: Props) => {
-  const shop = {
+  const restaurant = {
     id: '1',
-    name: 'shop1',
+    name: 'restaunrant1',
   };
 
   const ingredients = [
@@ -47,7 +47,7 @@ export const Menus = ({ searchConditions }: Props) => {
 
   return !loading ? (
     <div className={styles.container}>
-      <Heading mb={8}>{shop?.name}</Heading>
+      <Heading mb={8}>{restaurant?.name}</Heading>
 
       <Text mb={8}>メニューを選択してください。</Text>
 

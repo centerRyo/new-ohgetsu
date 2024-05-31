@@ -34,19 +34,19 @@ export const pagesPath = {
       path: `/menus${buildSuffix(url)}`,
     }),
   },
-  shops: {
+  restaurants: {
     _id: (id: string | number) => ({
       $url: (url?: { hash?: string }) => ({
-        pathname: '/shops/[id]' as const,
+        pathname: '/restaurants/[id]' as const,
         query: { id },
         hash: url?.hash,
-        path: `/shops/${id}${buildSuffix(url)}`,
+        path: `/restaurants/${id}${buildSuffix(url)}`,
       }),
     }),
     $url: (url?: { hash?: string }) => ({
-      pathname: '/shops' as const,
+      pathname: '/restaurants' as const,
       hash: url?.hash,
-      path: `/shops${buildSuffix(url)}`,
+      path: `/restaurants${buildSuffix(url)}`,
     }),
   },
   $url: (url?: { hash?: string }) => ({

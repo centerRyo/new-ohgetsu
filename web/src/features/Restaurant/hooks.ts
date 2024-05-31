@@ -5,10 +5,10 @@ import { FormValues } from './index.d';
 
 type TUseHandlerArgs = {
   getValues: UseFormGetValues<FormValues>;
-  shopId: string;
+  restaurantId: string;
 };
 
-export const useHandler = ({ getValues, shopId }: TUseHandlerArgs) => {
+export const useHandler = ({ getValues, restaurantId }: TUseHandlerArgs) => {
   const router = useRouter();
   const handleBack = useCallback(() => router.push('/'), [router]);
 
@@ -21,10 +21,10 @@ export const useHandler = ({ getValues, shopId }: TUseHandlerArgs) => {
 
     // router.push(
     //   pagesPath.menus.$url({
-    //     query: { shopId, excludedIngredientIds },
+    //     query: { restaurantId, excludedIngredientIds },
     //   })
     // );
-  }, [getValues, router, shopId]);
+  }, [getValues, router, restaurantId]);
 
   return { handleClickSearch, handleBack };
 };

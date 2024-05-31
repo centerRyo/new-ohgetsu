@@ -16,9 +16,9 @@ type Props = {
 };
 
 export const Menu = ({ menuId, searchConditions }: Props) => {
-  const shop = {
+  const restaurant = {
     id: '1',
-    name: 'Shop 1',
+    name: 'Restaurant 1',
   };
 
   const menu = {
@@ -48,7 +48,7 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
 
   return !loading ? (
     <div className={styles.container}>
-      <Heading mb={8}>{shop?.name}</Heading>
+      <Heading mb={8}>{restaurant?.name}</Heading>
 
       <Flex mb={8} className={styles.subTitle}>
         {menu?.name}
@@ -126,7 +126,7 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
           variant='outline'
           w='336px'
           maxW='100%'
-          // onClick={handleSearchShop}
+          // onClick={handleSearchRestaurants}
         >
           店舗を再検索する
         </Button>

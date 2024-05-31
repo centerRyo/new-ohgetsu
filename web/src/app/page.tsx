@@ -1,6 +1,6 @@
 import { SERVICE_NAME } from '@/constants';
 import { Metadata } from 'next';
-import ShopsPage from './shops/page';
+import RestaurantsPage from './restaurants/page';
 
 export const metadata: Metadata = {
   title: SERVICE_NAME,
@@ -8,6 +8,6 @@ export const metadata: Metadata = {
   keywords: 'アレルギー,レストラン',
 };
 
-const App = ShopsPage;
+const App = RestaurantsPage;
 
 export default App;

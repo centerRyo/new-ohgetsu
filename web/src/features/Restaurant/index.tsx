@@ -6,13 +6,13 @@ import { FormValues } from './index.d';
 import styles from './index.module.scss';
 
 type Props = {
-  shopId: string;
+  restaurantId: string;
 };
 
-const Shop = ({ shopId }: Props) => {
-  const shop = {
+export const Restaurant = ({ restaurantId }: Props) => {
+  const restaurant = {
     id: '1',
-    name: 'Shop 1',
+    name: 'Restaurant 1',
     address: 'Address 1',
     pic: '',
   };
@@ -20,12 +20,15 @@ const Shop = ({ shopId }: Props) => {
   const loading = false;
 
   const { register, getValues } = useForm<FormValues>();
-  const { handleClickSearch, handleBack } = useHandler({ getValues, shopId });
+  const { handleClickSearch, handleBack } = useHandler({
+    getValues,
+    restaurantId,
+  });
 
   return (
     <div className={styles.container}>
       {!loading ? (
-        <Heading mb={9}>{shop.name}</Heading>
+        <Heading mb={9}>{restaurant.name}</Heading>
       ) : (
         <Skeleton height='2rem' mb={8} />
       )}
@@ -70,5 +73,3 @@ const Shop = ({ shopId }: Props) => {
     </div>
   );
 };
-
-export default Shop;

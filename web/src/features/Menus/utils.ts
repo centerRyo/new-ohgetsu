@@ -5,7 +5,7 @@ export type MenusSearchCondition = Readonly<
 >;
 
 type MenusSearchConditionRequired = Readonly<{
-  shopId: string;
+  restaurantId: string;
 }>;
 
 type MenusSearchConditionOptional = Readonly<
@@ -15,17 +15,17 @@ type MenusSearchConditionOptional = Readonly<
 >;
 
 type TCreateMenusSearchCondition = (params: {
-  shopId: string;
+  restaurantId: string;
   excludedIngredientIds?: string;
 }) => MenusSearchCondition;
 
 export const CreateMenusSearchCondition: TCreateMenusSearchCondition = (
   params
 ) => {
-  const { shopId, excludedIngredientIds } = params;
+  const { restaurantId, excludedIngredientIds } = params;
 
   const requiredParams: MenusSearchConditionRequired = {
-    shopId: getStringParams(shopId),
+    restaurantId: getStringParams(restaurantId),
   };
 
   const optionalParams: MenusSearchConditionOptional = {

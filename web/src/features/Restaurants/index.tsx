@@ -16,11 +16,11 @@ import { memo } from 'react';
 import { HiOutlineLocationMarker } from 'react-icons/hi';
 import styles from './index.module.scss';
 
-const Shops = memo(() => {
-  const shops = [
+const Restaurants = memo(() => {
+  const restaurants = [
     {
       id: 1,
-      name: 'Shop 1',
+      name: 'Restaurant 1',
       pic: '',
       genre: {
         id: 1,
@@ -38,18 +38,18 @@ const Shops = memo(() => {
         templateColumns='repeat(auto-fill, minmax(200px, 1fr))'
       >
         {!loading
-          ? shops.map((shop) => (
-              // <Link href={pagesPath.shops._id(shop.id).$url()} key={shop.id}>
+          ? restaurants.map((restaurant) => (
+              // <Link href={pagesPath.restaurants._id(restaurant.id).$url()} key={restaurant.id}>
               <Card>
                 <CardHeader>
                   <Box className={styles.imageWrap}>
                     <Image
                       src={
-                        shop.pic
-                          ? `${process.env.NEXT_PUBLIC_BACKEND_URL}${shop.pic}`
+                        restaurant.pic
+                          ? `${process.env.NEXT_PUBLIC_BACKEND_URL}${restaurant.pic}`
                           : '/images/no_image.png'
                       }
-                      alt={shop.name}
+                      alt={restaurant.name}
                       fit='fill'
                       objectFit='cover'
                       borderRadius='md'
@@ -58,13 +58,13 @@ const Shops = memo(() => {
                 </CardHeader>
                 <CardBody>
                   <Tooltip
-                    label={shop.name}
+                    label={restaurant.name}
                     hasArrow
                     bg='green'
                     fontWeight='bold'
                   >
                     <Heading size='md' noOfLines={2} height='48px'>
-                      {shop.name}
+                      {restaurant.name}
                     </Heading>
                   </Tooltip>
                   <Tag
@@ -74,12 +74,12 @@ const Shops = memo(() => {
                     borderColor='#d8d9db'
                     fontWeight='600'
                   >
-                    {shop.genre?.name}
+                    {restaurant.genre?.name}
                   </Tag>
                   <Flex mt={4} alignItems='baseline'>
                     <HiOutlineLocationMarker className={styles.location} />
                     <Text ml={2} noOfLines={2} height='48px'>
-                      {shop.address}
+                      {restaurant.address}
                     </Text>
                   </Flex>
                 </CardBody>
@@ -93,6 +93,6 @@ const Shops = memo(() => {
     </div>
   );
 });
-Shops.displayName = 'Shops';
+Restaurants.displayName = 'Restaurants';
 
-export default Shops;
+export default Restaurants;
