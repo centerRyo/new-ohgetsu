@@ -1,0 +1,30 @@
+import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
+import { UseFormGetValues } from 'react-hook-form';
+import { FormValues } from './index.d';
+
+type TUseHandlerArgs = {
+  getValues: UseFormGetValues<FormValues>;
+  restaurantId: string;
+};
+
+export const useHandler = ({ getValues, restaurantId }: TUseHandlerArgs) => {
+  const router = useRouter();
+  const handleBack = useCallback(() => router.push('/'), [router]);
+  console.log(restaurantId);
+
+  const handleClickSearch = useCallback(() => {
+    const values = getValues();
+    console.log(values);
+    // const excludedIngredientIds = values.ingredients
+    //   ? values.ingredients.join(',')
+    //   : '';
+    // router.push(
+    //   pagesPath.menus.$url({
+    //     query: { restaurantId, excludedIngredientIds },
+    //   })
+    // );
+  }, [getValues]);
+
+  return { handleClickSearch, handleBack };
+};
