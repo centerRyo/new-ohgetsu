@@ -43,7 +43,7 @@ export const Menus = ({ searchConditions }: Props) => {
     },
   ];
 
-  const loading = false;
+  const loading = !!searchConditions;
 
   return !loading ? (
     <div className={styles.container}>
@@ -84,7 +84,7 @@ export const Menus = ({ searchConditions }: Props) => {
               //     .$url({ query: searchCondition })}
               //   key={menu.id}
               // >
-              <Card>
+              <Card key={menu.id}>
                 <CardHeader>
                   <Box className={styles.imageWrap}>
                     <Image

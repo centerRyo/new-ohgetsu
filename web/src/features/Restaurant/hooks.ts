@@ -13,18 +13,16 @@ export const useHandler = ({ getValues, restaurantId }: TUseHandlerArgs) => {
   const handleBack = useCallback(() => router.push('/'), [router]);
 
   const handleClickSearch = useCallback(() => {
-    const values = getValues();
-
-    const excludedIngredientIds = values.ingredients
-      ? values.ingredients.join(',')
-      : '';
-
+    // const values = getValues();
+    // const excludedIngredientIds = values.ingredients
+    //   ? values.ingredients.join(',')
+    //   : '';
     // router.push(
     //   pagesPath.menus.$url({
     //     query: { restaurantId, excludedIngredientIds },
     //   })
     // );
-  }, [getValues, router, restaurantId]);
+  }, [getValues]);
 
   return { handleClickSearch, handleBack };
 };

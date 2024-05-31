@@ -22,7 +22,7 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
   };
 
   const menu = {
-    id: '1',
+    id: menuId,
     name: 'Menu 1',
     pic: '',
     ingredients: [
@@ -44,7 +44,7 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
     ],
   };
 
-  const loading = false;
+  const loading = !!searchConditions;
 
   return !loading ? (
     <div className={styles.container}>

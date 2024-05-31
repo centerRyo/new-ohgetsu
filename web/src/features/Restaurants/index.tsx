@@ -40,7 +40,7 @@ const Restaurants = memo(() => {
         {!loading
           ? restaurants.map((restaurant) => (
               // <Link href={pagesPath.restaurants._id(restaurant.id).$url()} key={restaurant.id}>
-              <Card>
+              <Card key={restaurant.id}>
                 <CardHeader>
                   <Box className={styles.imageWrap}>
                     <Image

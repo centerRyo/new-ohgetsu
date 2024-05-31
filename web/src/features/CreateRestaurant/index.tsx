@@ -18,10 +18,10 @@ import styles from './index.module.scss';
 export const CreateRestaurant = () => {
   const {
     register,
-    handleSubmit,
+    // handleSubmit,
     formState: { errors, isSubmitting, isValid },
     control,
-    reset,
+    // reset,
   } = useForm<FormValues>({
     mode: 'all',
     defaultValues: {
@@ -38,7 +38,8 @@ export const CreateRestaurant = () => {
     name: 'menus',
   });
 
-  const [preview, setPreview] = useState<PreviewType>({});
+  // const [preview, setPreview] = useState<PreviewType>({});
+  const [preview] = useState<PreviewType>({});
 
   // const { handleSubmit: onSubmit, handleFileChange } = useHandler({
   //   preview,
