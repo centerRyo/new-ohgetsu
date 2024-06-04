@@ -9,6 +9,12 @@
  * ---------------------------------------------------------------
  */
 
+export interface IngredientDto {
+  id: string;
+  name: string;
+  pic: string;
+}
+
 export interface GenreDto {
   id: string;
   name: string;
@@ -255,13 +261,16 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags ingredients
      * @name IngredientsControllerFindAll
+     * @summary 原材料を取得する
      * @request GET:/ingredients
      */
     ingredientsControllerFindAll: (params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<IngredientDto[], any>({
         path: `/ingredients`,
         method: "GET",
+        format: "json",
         ...params,
       }),
   };
@@ -271,7 +280,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags genres
      * @name GenresControllerFindAll
-     * @summary 原材料を取得する
+     * @summary ジャンルを取得する
      * @request GET:/genres
      */
     genresControllerFindAll: (params: RequestParams = {}) =>
