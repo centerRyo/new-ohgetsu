@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateMenuDto } from './create-menu.dto';
-import { findMenusQuery } from './menus.dto';
+import { MenuDto, findMenusQuery } from './menus.dto';
 
 @Injectable()
 export class MenusService {
@@ -38,7 +38,7 @@ export class MenusService {
       throw new BadRequestException('Restaurant not found');
     }
 
-    const menus = [];
+    const menus: MenuDto[] = [];
 
     for (const menu of data.menus) {
       const { name, pic, ingredients } = menu;

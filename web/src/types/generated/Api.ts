@@ -24,7 +24,23 @@ export type CreateRestaurantDto = object;
 
 export type UpdateRestaurantDto = object;
 
-export type CreateMenuDto = object;
+export interface MenuDto {
+  id: string;
+  name: string;
+  pic: string;
+  ingredients: IngredientDto[];
+}
+
+export interface PartialMenuDto {
+  name: string;
+  pic: string;
+  ingredients: IngredientDto[];
+}
+
+export interface CreateMenuDto {
+  restaurantId: string;
+  menus: PartialMenuDto[];
+}
 
 export type QueryParamsType = Record<string | number, any>;
 export type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
@@ -352,30 +368,46 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags menus
      * @name MenusControllerFindAll
      * @summary 指定されたアレルギー情報を含まないメニュー一覧を取得する
      * @request GET:/menus
      */
-    menusControllerFindAll: (params: RequestParams = {}) =>
-      this.request<void, any>({
+    menusControllerFindAll: (
+      query: {
+        ingredientIds: string[];
+      },
+      data: {
+        /** レストランID */
+        resutaurantId: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<MenuDto[], any>({
         path: `/menus`,
         method: "GET",
+        query: query,
+        body: data,
+        type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
     /**
      * No description
      *
+     * @tags menus
      * @name MenusControllerCreate
      * @summary アレルギー情報を含んだメニューを作成する
      * @request POST:/menus
      */
     menusControllerCreate: (data: CreateMenuDto, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<MenuDto[], any>({
         path: `/menus`,
         method: "POST",
         body: data,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
   };

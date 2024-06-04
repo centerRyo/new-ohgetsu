@@ -1,6 +1,9 @@
+import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
 import { IsUUID } from 'class-validator';
 import { MenuDto } from './menus.dto';
-import { Expose } from 'class-transformer';
+
+class PartialMenuDto extends OmitType(MenuDto, ['id']) {}
 
 export class CreateMenuDto {
   /**
@@ -8,11 +11,13 @@ export class CreateMenuDto {
    */
   @Expose()
   @IsUUID()
+  @ApiProperty()
   restaurantId: string;
 
   /**
    * メニュー
    */
   @Expose()
-  menus: Omit<MenuDto, 'id'>[];
+  @ApiProperty({ type: [PartialMenuDto] })
+  menus: PartialMenuDto[];
 }
