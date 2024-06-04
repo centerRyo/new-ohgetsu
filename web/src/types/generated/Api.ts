@@ -20,9 +20,40 @@ export interface GenreDto {
   name: string;
 }
 
-export type CreateRestaurantDto = object;
+export interface RestaurantDto {
+  /** レストランID */
+  id: string;
+  /** レストラン名 */
+  name: string;
+  /** レストランの画像URL */
+  pic: string;
+  /** ジャンル */
+  genre: GenreDto;
+}
 
-export type UpdateRestaurantDto = object;
+export interface CreateRestaurantDto {
+  /** レストラン名 */
+  name: string;
+  /** 住所 */
+  address: string;
+  /** 写真 */
+  pic: string;
+  /** ジャンルID */
+  genreId: string;
+}
+
+export interface UpdateRestaurantDto {
+  /** レストラン名 */
+  name?: string;
+  /** 住所 */
+  address?: string;
+  /** 写真 */
+  pic?: string;
+  /** ジャンルID */
+  genreId?: string;
+  /** レストラン再開フラグ */
+  isReopen: boolean;
+}
 
 export interface MenuDto {
   id: string;
@@ -260,19 +291,6 @@ export class HttpClient<SecurityDataType = unknown> {
  * ohgetsu API description
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  /**
-   * No description
-   *
-   * @name AppControllerGetHello
-   * @request GET:/
-   */
-  appControllerGetHello = (params: RequestParams = {}) =>
-    this.request<void, any>({
-      path: `/`,
-      method: "GET",
-      ...params,
-    });
-
   ingredients = {
     /**
      * No description
@@ -311,56 +329,73 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags restaurants
      * @name RestaurantsControllerFindAll
+     * @summary レストラン一覧を取得する
      * @request GET:/restaurants
      */
     restaurantsControllerFindAll: (params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<RestaurantDto[], any>({
         path: `/restaurants`,
         method: "GET",
+        format: "json",
         ...params,
       }),
 
     /**
      * No description
      *
+     * @tags restaurants
      * @name RestaurantsControllerCreate
+     * @summary レストランを作成する
      * @request POST:/restaurants
      */
     restaurantsControllerCreate: (data: CreateRestaurantDto, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<RestaurantDto, any>({
         path: `/restaurants`,
         method: "POST",
         body: data,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
     /**
      * No description
      *
+     * @tags restaurants
      * @name RestaurantsControllerUpdate
+     * @summary レストランを更新する
      * @request PATCH:/restaurants/{id}
      */
     restaurantsControllerUpdate: (id: string, data: UpdateRestaurantDto, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<RestaurantDto, any>({
         path: `/restaurants/${id}`,
         method: "PATCH",
         body: data,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
     /**
      * No description
      *
+     * @tags restaurants
      * @name RestaurantsControllerDelete
+     * @summary レストランを削除(営業停止)する
      * @request DELETE:/restaurants/{id}
      */
     restaurantsControllerDelete: (id: string, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<
+        {
+          result?: boolean;
+        },
+        any
+      >({
         path: `/restaurants/${id}`,
         method: "DELETE",
+        format: "json",
         ...params,
       }),
   };
