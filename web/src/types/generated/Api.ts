@@ -9,6 +9,11 @@
  * ---------------------------------------------------------------
  */
 
+export interface GenreDto {
+  id: string;
+  name: string;
+}
+
 export type CreateRestaurantDto = object;
 
 export type UpdateRestaurantDto = object;
@@ -264,13 +269,16 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags genres
      * @name GenresControllerFindAll
+     * @summary 原材料を取得する
      * @request GET:/genres
      */
     genresControllerFindAll: (params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<GenreDto[], any>({
         path: `/genres`,
         method: "GET",
+        format: "json",
         ...params,
       }),
   };
