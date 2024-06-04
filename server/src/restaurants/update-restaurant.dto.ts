@@ -1,7 +1,7 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateRestaurantDto } from './create-restaurant.dto';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsBoolean } from 'class-validator';
+import { IsBoolean, IsOptional } from 'class-validator';
+import { CreateRestaurantDto } from './create-restaurant.dto';
 
 export class UpdateRestaurantDto extends PartialType(CreateRestaurantDto) {
   /**
@@ -9,5 +9,7 @@ export class UpdateRestaurantDto extends PartialType(CreateRestaurantDto) {
    */
   @Expose()
   @IsBoolean()
+  @IsOptional()
+  @ApiProperty({ description: 'レストラン再開フラグ' })
   isReopen?: boolean;
 }
