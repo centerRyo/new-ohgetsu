@@ -1,9 +1,14 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsUUID } from 'class-validator';
+import { IsArray, IsUUID } from 'class-validator';
 import { MenuDto } from './menus.dto';
 
-class PartialMenuDto extends OmitType(MenuDto, ['id']) {}
+class PartialMenuDto extends OmitType(MenuDto, ['id', 'ingredients']) {
+  @Expose()
+  @IsArray()
+  @ApiProperty({ type: [String] })
+  ingredientIds: string[];
+}
 
 export class CreateMenuDto {
   /**

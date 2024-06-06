@@ -41,14 +41,14 @@ export class MenusService {
     const menus: MenuDto[] = [];
 
     for (const menu of data.menus) {
-      const { name, pic, ingredients } = menu;
+      const { name, pic, ingredientIds } = menu;
 
       const validatedIngredients = [];
 
-      for (const ingredient of ingredients) {
+      for (const ingredientId of ingredientIds) {
         const existingIngredient = await this.prisma.ingredients.findUnique({
           where: {
-            id: ingredient.id,
+            id: ingredientId,
           },
         });
 

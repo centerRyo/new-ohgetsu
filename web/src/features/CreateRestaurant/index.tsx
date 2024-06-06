@@ -12,16 +12,17 @@ import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import Genres from './Genres';
 import Ingredients from './Ingredients';
+import { useHandler } from './hooks';
 import { FormValues, PreviewType } from './index.d';
 import styles from './index.module.scss';
 
 export const CreateRestaurant = () => {
   const {
     register,
-    // handleSubmit,
+    handleSubmit,
     formState: { errors, isSubmitting, isValid },
     control,
-    // reset,
+    reset,
   } = useForm<FormValues>({
     mode: 'all',
     defaultValues: {
@@ -29,7 +30,7 @@ export const CreateRestaurant = () => {
       address: '',
       pic: undefined,
       genre_id: '',
-      menus: [{ name: '', ingredients: [], pic: undefined }],
+      menus: [{ name: '', ingredientIds: [], pic: undefined }],
     },
   });
 
@@ -38,22 +39,20 @@ export const CreateRestaurant = () => {
     name: 'menus',
   });
 
-  // const [preview, setPreview] = useState<PreviewType>({});
-  const [preview] = useState<PreviewType>({});
+  const [preview, setPreview] = useState<PreviewType>({});
 
-  // const { handleSubmit: onSubmit, handleFileChange } = useHandler({
-  //   preview,
-  //   setPreview,
-  //   reset,
-  // });
+  const { handleSubmit: onSubmit, handleFileChange } = useHandler({
+    preview,
+    setPreview,
+    reset,
+  });
 
   const handleAddMenu = () =>
-    append([{ name: '', ingredients: [], pic: undefined }]);
+    append([{ name: '', ingredientIds: [], pic: undefined }]);
 
   return (
     <div className={styles.container}>
-      {/* <form onSubmit={handleSubmit(onSubmit)}> */}
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Flex mb={6}>
           <FormControl isInvalid={!!errors.name?.message}>
             <Flex alignItems='center' gap={4} mb={2}>
@@ -104,7 +103,7 @@ export const CreateRestaurant = () => {
               type='file'
               {...register('pic')}
               accept='image/*'
-              // onChange={handleFileChange}
+              onChange={handleFileChange}
             />
             {preview.pic && (
               <Image
@@ -159,7 +158,7 @@ export const CreateRestaurant = () => {
                   type='file'
                   {...register(`menus.${index}.pic`)}
                   accept='image/*'
-                  // onChange={handleFileChange}
+                  onChange={handleFileChange}
                 />
                 {/* @ts-ignore */}
                 {preview[`menus.${index}.pic`] && (

@@ -1,4 +1,5 @@
 import { useCustomOptions } from '@/hooks/useOptions';
+import { api } from '@/lib/swagger-client';
 import {
   Checkbox,
   CheckboxGroup,
@@ -9,6 +10,7 @@ import {
   SkeletonText,
 } from '@chakra-ui/react';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
+import useSWR from 'swr';
 import { FormValues } from '../index.d';
 import styles from '../index.module.scss';
 
@@ -20,17 +22,10 @@ type Props = {
 };
 
 const Ingredients = ({ errors, control, index }: Props) => {
-  const ingredients = [
-    {
-      id: '1',
-      name: '小麦',
-      pic: '',
-    },
-    {
-      id: '2',
-      name: 'そば',
-    },
-  ];
+  const { data, isLoading } = useSWR('/test', () =>
+    api.ingredients.ingredientsControllerFindAll()
+  );
+  const ingredients = data?.data || [];
 
   const options = useCustomOptions({
     items: ingredients,
@@ -38,18 +33,16 @@ const Ingredients = ({ errors, control, index }: Props) => {
     ignoreDefault: true,
   });
 
-  const loading = false;
-
   return (
     <FormControl
-      isInvalid={errors.menus && !!errors.menus[index]?.ingredients?.message}
+      isInvalid={errors.menus && !!errors.menus[index]?.ingredientIds?.message}
     >
       <Flex mb={2}>
         <FormLabel className={styles.label}>アレルギー情報</FormLabel>
       </Flex>
-      <SkeletonText isLoaded={!loading} skeletonHeight={4} spacing='5'>
+      <SkeletonText isLoaded={!isLoading} skeletonHeight={4} spacing='5'>
         <Controller
-          name={`menus.${index}.ingredients`}
+          name={`menus.${index}.ingredientIds`}
           control={control}
           render={({ field: { ref, ...rest } }) => (
             // @ts-ignore
@@ -66,7 +59,8 @@ const Ingredients = ({ errors, control, index }: Props) => {
         />
       </SkeletonText>
       <FormErrorMessage>
-        {errors.menus && errors.menus[index]?.ingredients?.message?.toString()}
+        {errors.menus &&
+          errors.menus[index]?.ingredientIds?.message?.toString()}
       </FormErrorMessage>
     </FormControl>
   );

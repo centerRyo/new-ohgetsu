@@ -65,7 +65,7 @@ export interface MenuDto {
 export interface PartialMenuDto {
   name: string;
   pic: string;
-  ingredients: IngredientDto[];
+  ingredientIds: string[];
 }
 
 export interface CreateMenuDto {
