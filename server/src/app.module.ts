@@ -14,7 +14,7 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
       envFilePath: '.env.local',
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
+      rootPath: join(__dirname, '..', '..', 'public'),
     }),
     GlobalModule,
     IngredientsModule,

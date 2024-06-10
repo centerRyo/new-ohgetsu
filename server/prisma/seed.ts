@@ -350,111 +350,111 @@ async function main() {
     data: [
       {
         name: '卵',
-        pic: '/image/ingredients/egg.png',
+        pic: '/images/ingredients/egg.png',
       },
       {
         name: '乳',
-        pic: '/image/ingredients/milk.png',
+        pic: '/images/ingredients/milk.png',
       },
       {
         name: '小麦',
-        pic: '/image/ingredients/wheat.png',
+        pic: '/images/ingredients/wheat.png',
       },
       {
         name: 'そば',
-        pic: '/image/ingredients/soba.png',
+        pic: '/images/ingredients/soba.png',
       },
       {
         name: 'えび',
-        pic: '/image/ingredients/shrimp.png',
+        pic: '/images/ingredients/shrimp.png',
       },
       {
         name: 'かに',
-        pic: '/image/ingredients/crab.png',
+        pic: '/images/ingredients/crab.png',
       },
       {
         name: 'アーモンド',
-        pic: '/image/ingredients/almond.png',
+        pic: '/images/ingredients/almond.png',
       },
       {
         name: 'あわび',
-        pic: '/image/ingredients/shell.png',
+        pic: '/images/ingredients/shell.png',
       },
       {
         name: 'いか',
-        pic: '/image/ingredients/squid.png',
+        pic: '/images/ingredients/squid.png',
       },
       {
         name: 'いくら',
-        pic: '/image/ingredients/salmon_roe.png',
+        pic: '/images/ingredients/salmon_roe.png',
       },
       {
         name: 'オレンジ',
-        pic: '/image/ingredients/orange.png',
+        pic: '/images/ingredients/orange.png',
       },
       {
         name: 'カシューナッツ',
-        pic: '/image/ingredients/cashew.png',
+        pic: '/images/ingredients/cashew.png',
       },
       {
         name: 'キウイフルーツ',
-        pic: '/image/ingredients/kiwi.png',
+        pic: '/images/ingredients/kiwi.png',
       },
       {
         name: '牛肉',
-        pic: '/image/ingredients/cow.png',
+        pic: '/images/ingredients/cow.png',
       },
       {
         name: 'くるみ',
-        pic: '/image/ingredients/walnut.png',
+        pic: '/images/ingredients/walnut.png',
       },
       {
         name: 'ごま',
-        pic: '/image/ingredients/sesame.png',
+        pic: '/images/ingredients/sesame.png',
       },
       {
         name: 'さけ',
-        pic: '/image/ingredients/salmon.png',
+        pic: '/images/ingredients/salmon.png',
       },
       {
         name: 'さば',
-        pic: '/image/ingredients/mackerel.png',
+        pic: '/images/ingredients/mackerel.png',
       },
       {
         name: '大豆',
-        pic: '/image/ingredients/soy.png',
+        pic: '/images/ingredients/soy.png',
       },
       {
         name: '鶏肉',
-        pic: '/image/ingredients/chicken.png',
+        pic: '/images/ingredients/chicken.png',
       },
       {
         name: 'バナナ',
-        pic: '/image/ingredients/banana.png',
+        pic: '/images/ingredients/banana.png',
       },
       {
         name: '豚肉',
-        pic: '/image/ingredients/pig.png',
+        pic: '/images/ingredients/pig.png',
       },
       {
         name: 'まつたけ',
-        pic: '/image/ingredients/mushroom.png',
+        pic: '/images/ingredients/mushroom.png',
       },
       {
         name: 'もも',
-        pic: '/image/ingredients/peach.png',
+        pic: '/images/ingredients/peach.png',
       },
       {
         name: 'やまいも',
-        pic: '/image/ingredients/potato.png',
+        pic: '/images/ingredients/potato.png',
       },
       {
         name: 'りんご',
-        pic: '/image/ingredients/apple.png',
+        pic: '/images/ingredients/apple.png',
       },
       {
         name: 'ゼラチン',
-        pic: '/image/ingredients/jelly.png',
+        pic: '/images/ingredients/jelly.png',
       },
     ],
   });
