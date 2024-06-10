@@ -22,6 +22,13 @@ export class RestaurantDto {
   name: string;
 
   /**
+   * 住所
+   */
+  @Expose()
+  @ApiProperty({ description: '住所', required: false })
+  address?: string;
+
+  /**
    * レストランの画像URL
    */
   @Expose()

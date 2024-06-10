@@ -25,6 +25,8 @@ export interface RestaurantDto {
   id: string;
   /** レストラン名 */
   name: string;
+  /** 住所 */
+  address?: string;
   /** レストランの画像URL */
   pic: string;
   /** ジャンル */
