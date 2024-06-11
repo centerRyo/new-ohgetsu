@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ingredients, restaurants } from '@prisma/client';
 import { AppModule } from '../app.module';
 import { PrismaService } from '../prisma.service';
 import { MenusModule } from './menus.module';
@@ -23,9 +24,9 @@ describe('MenusService', () => {
   });
 
   describe('findAll', () => {
-    let restaurant;
-    let eggIndredient;
-    let milkIngredient;
+    let restaurant: restaurants;
+    let eggIndredient: ingredients;
+    let milkIngredient: ingredients;
 
     // TODO: beforeAllでほんとはやりたい
     beforeEach(async () => {
@@ -48,17 +49,17 @@ describe('MenusService', () => {
           {
             name: '卵を含む',
             pic: null,
-            ingredients: [eggIndredient],
+            ingredientIds: [eggIndredient.id],
           },
           {
             name: '卵、乳を含む',
             pic: null,
-            ingredients: [eggIndredient, milkIngredient],
+            ingredientIds: [eggIndredient.id, milkIngredient.id],
           },
           {
             name: '卵、乳を含まない',
             pic: null,
-            ingredients: [],
+            ingredientIds: [],
           },
         ],
       });
@@ -103,7 +104,7 @@ describe('MenusService', () => {
         {
           name: 'カレー',
           pic: null,
-          ingredients: [ingredient],
+          ingredientIds: [ingredient.id],
         },
       ],
     });

@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsString, IsUUID } from 'class-validator';
-import { GenreDto } from 'src/genres/genres.dto';
+import { GenreDto } from '../genres/genres.dto';
 
 export class RestaurantDto {
   constructor(partial: Partial<RestaurantDto>) {

@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsArray, IsOptional, IsString, IsUUID } from 'class-validator';
-import { IngredientDto } from 'src/ingredients/ingredients.dto';
+import { IngredientDto } from '../ingredients/ingredients.dto';
 
 export class MenuDto {
   constructor(partial: Partial<MenuDto>) {

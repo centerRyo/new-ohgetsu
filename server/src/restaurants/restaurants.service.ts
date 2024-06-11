@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateRestaurantDto } from './create-restaurant.dto';
 import { UpdateRestaurantDto } from './update-restaurant.dto';
@@ -18,6 +18,21 @@ export class RestaurantsService {
     });
 
     return restaurants;
+  }
+
+  async findOne(id: string) {
+    const restaurant = await this.prisma.restaurants.findFirst({
+      where: { id },
+      include: {
+        genre: true,
+      },
+    });
+
+    if (!restaurant) {
+      throw new BadRequestException('Restaurant not found');
+    }
+
+    return restaurant;
   }
 
   async create(data: CreateRestaurantDto) {

@@ -32,6 +32,17 @@ export class RestaurantsController {
     return restaurants.map((restaurant) => new RestaurantDto(restaurant));
   }
 
+  @Get(':id')
+  @ApiOperation({
+    summary: 'レストランを取得する',
+  })
+  @ApiResponse({ status: HttpStatus.OK, type: RestaurantDto })
+  async findOne(@Param('id') id: string): Promise<RestaurantDto> {
+    const restaurant = await this.restaurantsService.findOne(id);
+
+    return new RestaurantDto(restaurant);
+  }
+
   @Post()
   @ApiOperation({
     summary: 'レストランを作成する',
