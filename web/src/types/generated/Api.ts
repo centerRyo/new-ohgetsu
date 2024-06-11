@@ -366,6 +366,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags restaurants
+     * @name RestaurantsControllerFindOne
+     * @summary レストランを取得する
+     * @request GET:/restaurants/{id}
+     */
+    restaurantsControllerFindOne: (id: string, params: RequestParams = {}) =>
+      this.request<RestaurantDto, any>({
+        path: `/restaurants/${id}`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags restaurants
      * @name RestaurantsControllerUpdate
      * @summary レストランを更新する
      * @request PATCH:/restaurants/{id}
