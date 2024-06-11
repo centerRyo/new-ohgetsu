@@ -4,6 +4,8 @@ import {
   MenusSearchCondition,
 } from '@/features/Menus/utils';
 
+export type OptionalQuery = MenusSearchCondition;
+
 const MenusPage = ({
   searchParams,
 }: {
