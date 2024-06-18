@@ -69,26 +69,29 @@ describe('MenusService', () => {
       await prisma.menus.deleteMany();
     });
     it('アレルギー情報が入力されるとそのアレルギー情報を含まないメニューを取得する', async () => {
-      const data = await service.findAll(
-        { ingredientIds: [eggIndredient.id] },
-        restaurant.id
-      );
+      const data = await service.findAll({
+        restaurantId: restaurant.id,
+        ingredientIds: [eggIndredient.id],
+      });
 
       expect(data.length).toBe(1);
     });
 
     it('アレルギー情報が複数入力されるとどのアレルギー情報も含まないメニューを取得する', async () => {
-      const data = await service.findAll(
-        { ingredientIds: [eggIndredient.id, milkIngredient.id] },
-        restaurant.id
-      );
+      const data = await service.findAll({
+        restaurantId: restaurant.id,
+        ingredientIds: [eggIndredient.id, milkIngredient.id],
+      });
 
       expect(data.length).toBe(1);
       expect(data[0].name).toBe('卵、乳を含まない');
     });
 
     it('アレルギー情報が入力されないとすべてのメニューを取得する', async () => {
-      const data = await service.findAll({ ingredientIds: [] }, restaurant.id);
+      const data = await service.findAll({
+        restaurantId: restaurant.id,
+        ingredientIds: [],
+      });
 
       expect(data.length).toBe(3);
     });

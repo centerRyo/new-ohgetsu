@@ -429,10 +429,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     menusControllerFindAll: (
       query: {
         ingredientIds: string[];
-      },
-      data: {
-        /** レストランID */
-        resutaurantId: string;
+        restaurantId: string;
       },
       params: RequestParams = {},
     ) =>
@@ -440,8 +437,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/menus`,
         method: "GET",
         query: query,
-        body: data,
-        type: ContentType.Json,
         format: "json",
         ...params,
       }),

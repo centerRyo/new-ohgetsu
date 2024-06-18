@@ -7,17 +7,22 @@ import { MenuDto, findMenusQuery } from './menus.dto';
 export class MenusService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(query: findMenusQuery, restaurantId: string) {
+  async findAll(query: findMenusQuery) {
+    const ingredientIds = Array.isArray(query.ingredientIds)
+      ? query.ingredientIds
+      : [query.ingredientIds];
     const menus = await this.prisma.menus.findMany({
       where: {
-        restaurantId: restaurantId,
-        ingredients: {
-          none: {
-            id: {
-              in: query.ingredientIds,
-            },
-          },
-        },
+        restaurantId: query.restaurantId,
+        ingredients: query.ingredientIds
+          ? {
+              none: {
+                id: {
+                  in: ingredientIds,
+                },
+              },
+            }
+          : undefined,
       },
       include: {
         ingredients: true,

@@ -1,3 +1,4 @@
+import { api } from '@/lib/swagger-client';
 import {
   Box,
   Button,
@@ -11,6 +12,7 @@ import {
   Spinner,
   Text,
 } from '@chakra-ui/react';
+import useSWR from 'swr';
 import styles from './index.module.scss';
 import { MenusSearchCondition } from './utils';
 
@@ -19,10 +21,24 @@ type Props = {
 };
 
 export const Menus = ({ searchConditions }: Props) => {
-  const restaurant = {
-    id: '1',
-    name: 'restaunrant1',
-  };
+  const { data } = useSWR(`/restaurants/${searchConditions.restaurantId}`, () =>
+    api.restaurants.restaurantsControllerFindOne(searchConditions.restaurantId)
+  );
+
+  const excludedIngredientIds = searchConditions.excludedIngredientIds
+    ? searchConditions.excludedIngredientIds?.split(',')
+    : [];
+
+  const { data: menusData } = useSWR(
+    `menus/?restaurantId=${searchConditions.restaurantId}`,
+    () =>
+      api.menus.menusControllerFindAll({
+        restaurantId: searchConditions.restaurantId,
+        ingredientIds: excludedIngredientIds,
+      })
+  );
+
+  const restaurant = data?.data;
 
   const ingredients = [
     {
@@ -35,15 +51,9 @@ export const Menus = ({ searchConditions }: Props) => {
     },
   ];
 
-  const menus = [
-    {
-      id: '1',
-      name: 'menu1',
-      pic: '',
-    },
-  ];
+  const menus = menusData?.data || [];
 
-  const loading = !!searchConditions;
+  const loading = false;
 
   return !loading ? (
     <div className={styles.container}>

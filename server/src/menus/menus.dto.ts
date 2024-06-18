@@ -45,4 +45,12 @@ export class findMenusQuery {
   @IsArray()
   @ApiProperty({ type: [String] })
   ingredientIds: string[];
+
+  /**
+   * レストランID
+   */
+  @Expose()
+  @IsUUID()
+  @ApiProperty()
+  restaurantId: string;
 }
