@@ -21,15 +21,15 @@ type Props = {
 };
 
 export const Menus = ({ searchConditions }: Props) => {
-  const { data } = useSWR(`/restaurants/${searchConditions.restaurantId}`, () =>
-    api.restaurants.restaurantsControllerFindOne(searchConditions.restaurantId)
+  const { data: restaurantsData, isLoading: isRestaurantsLoading } = useSWR(
+    `/restaurants/${searchConditions.restaurantId}`,
+    () =>
+      api.restaurants.restaurantsControllerFindOne(
+        searchConditions.restaurantId
+      )
   );
 
-  const excludedIngredientIds = searchConditions.excludedIngredientIds
-    ? searchConditions.excludedIngredientIds?.split(',')
-    : [];
-
-  const { data: menusData } = useSWR(
+  const { data: menusData, isLoading: isMenusLoading } = useSWR(
     `menus/?restaurantId=${searchConditions.restaurantId}`,
     () =>
       api.menus.menusControllerFindAll({
@@ -38,22 +38,26 @@ export const Menus = ({ searchConditions }: Props) => {
       })
   );
 
-  const restaurant = data?.data;
+  const { data: ingredientsData, isLoading: isIngredientsLoading } = useSWR(
+    '/ingredients',
+    () => api.ingredients.ingredientsControllerFindAll()
+  );
 
-  const ingredients = [
-    {
-      id: '1',
-      name: 'ingredient1',
-    },
-    {
-      id: '2',
-      name: 'ingredient2',
-    },
-  ];
+  const excludedIngredientIds = searchConditions.excludedIngredientIds
+    ? searchConditions.excludedIngredientIds?.split(',')
+    : [];
+
+  const restaurant = restaurantsData?.data;
 
   const menus = menusData?.data || [];
 
-  const loading = false;
+  const ingredients =
+    ingredientsData?.data.filter((ingredient) =>
+      excludedIngredientIds.includes(ingredient.id)
+    ) || [];
+
+  const loading =
+    isRestaurantsLoading || isMenusLoading || isIngredientsLoading;
 
   return !loading ? (
     <div className={styles.container}>
