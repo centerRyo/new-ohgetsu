@@ -32,6 +32,23 @@ export class MenusService {
     return menus;
   }
 
+  async findOne(id: string) {
+    const menu = await this.prisma.menus.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        ingredients: true,
+      },
+    });
+
+    if (!menu) {
+      throw new BadRequestException(`Menu ${id} not found`);
+    }
+
+    return menu;
+  }
+
   async create(data: CreateMenuDto) {
     const restaurant = await this.prisma.restaurants.findUnique({
       where: {

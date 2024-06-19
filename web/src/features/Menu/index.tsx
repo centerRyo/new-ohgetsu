@@ -1,4 +1,5 @@
 import { Spinner } from '@/components/spinner';
+import { api } from '@/lib/swagger-client';
 import {
   Button,
   Flex,
@@ -7,6 +8,7 @@ import {
   SimpleGrid,
   Text,
 } from '@chakra-ui/react';
+import useSWR from 'swr';
 import { MenusSearchCondition } from '../Menus/utils';
 import styles from './index.module.scss';
 
@@ -16,35 +18,24 @@ type Props = {
 };
 
 export const Menu = ({ menuId, searchConditions }: Props) => {
-  const restaurant = {
-    id: '1',
-    name: 'Restaurant 1',
-  };
+  const { data: restaurantData, isLoading: isRestaurantLoading } = useSWR(
+    `/restaurants/${searchConditions.restaurantId}`,
+    () =>
+      api.restaurants.restaurantsControllerFindOne(
+        searchConditions.restaurantId
+      )
+  );
 
-  const menu = {
-    id: menuId,
-    name: 'Menu 1',
-    pic: '',
-    ingredients: [
-      {
-        id: '1',
-        name: 'Ingredient 1',
-        pic: '',
-      },
-      {
-        id: '2',
-        name: 'Ingredient 2',
-        pic: '',
-      },
-      {
-        id: '3',
-        name: 'Ingredient 3',
-        pic: '',
-      },
-    ],
-  };
+  const { data: menuData, isLoading: isMenuLoading } = useSWR(
+    `/menus/${menuId}`,
+    () => api.menus.menusControllerFindOne(menuId)
+  );
 
-  const loading = !!searchConditions;
+  const restaurant = restaurantData?.data;
+
+  const menu = menuData?.data;
+
+  const loading = isRestaurantLoading || isMenuLoading;
 
   return !loading ? (
     <div className={styles.container}>

@@ -1,4 +1,12 @@
-import { Body, Controller, Get, HttpStatus, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateMenuDto } from './create-menu.dto';
 import { MenuDto, findMenusQuery } from './menus.dto';
@@ -18,6 +26,17 @@ export class MenusController {
     const menus = await this.menusService.findAll(query);
 
     return menus.map((menu) => new MenuDto(menu));
+  }
+
+  @Get(':id')
+  @ApiOperation({
+    summary: '指定されたメニューを取得する',
+  })
+  @ApiResponse({ status: HttpStatus.OK, type: MenuDto })
+  async findOne(@Param('id') id: string): Promise<MenuDto> {
+    const menu = await this.menusService.findOne(id);
+
+    return new MenuDto(menu);
   }
 
   @Post()

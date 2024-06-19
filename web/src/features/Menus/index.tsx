@@ -24,7 +24,7 @@ type Props = {
 };
 
 export const Menus = ({ searchConditions }: Props) => {
-  const { data: restaurantsData, isLoading: isRestaurantsLoading } = useSWR(
+  const { data: restaurantData, isLoading: isRestaurantLoading } = useSWR(
     `/restaurants/${searchConditions.restaurantId}`,
     () =>
       api.restaurants.restaurantsControllerFindOne(
@@ -50,7 +50,7 @@ export const Menus = ({ searchConditions }: Props) => {
     ? searchConditions.excludedIngredientIds?.split(',')
     : [];
 
-  const restaurant = restaurantsData?.data;
+  const restaurant = restaurantData?.data;
 
   const menus = menusData?.data || [];
 
@@ -59,8 +59,7 @@ export const Menus = ({ searchConditions }: Props) => {
       excludedIngredientIds.includes(ingredient.id)
     ) || [];
 
-  const loading =
-    isRestaurantsLoading || isMenusLoading || isIngredientsLoading;
+  const loading = isRestaurantLoading || isMenusLoading || isIngredientsLoading;
 
   const { handleBack } = useHandler({
     restaurantId: searchConditions.restaurantId,
