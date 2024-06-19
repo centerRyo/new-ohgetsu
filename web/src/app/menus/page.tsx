@@ -1,8 +1,12 @@
+'use client';
+
 import { Menus } from '@/features/Menus';
 import {
   CreateMenusSearchCondition,
   MenusSearchCondition,
 } from '@/features/Menus/utils';
+
+export type OptionalQuery = MenusSearchCondition;
 
 const MenusPage = ({
   searchParams,

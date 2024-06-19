@@ -1,14 +1,12 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { IngredientsModule } from './ingredients/ingredients.module';
 import { GenresModule } from './genres/genres.module';
 import { GlobalModule } from './global.module';
-import { RestaurantsModule } from './restaurants/restaurants.module';
+import { IngredientsModule } from './ingredients/ingredients.module';
 import { MenusModule } from './menus/menus.module';
+import { RestaurantsModule } from './restaurants/restaurants.module';
 
 @Module({
   imports: [
@@ -16,7 +14,7 @@ import { MenusModule } from './menus/menus.module';
       envFilePath: '.env.local',
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
+      rootPath: join(__dirname, '..', '..', 'public'),
     }),
     GlobalModule,
     IngredientsModule,
@@ -24,8 +22,8 @@ import { MenusModule } from './menus/menus.module';
     RestaurantsModule,
     MenusModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
   exports: [],
 })
 export class AppModule {}

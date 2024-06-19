@@ -1,3 +1,4 @@
+import { pagesPath } from '@/lib/$path';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { UseFormGetValues } from 'react-hook-form';
@@ -10,21 +11,22 @@ type TUseHandlerArgs = {
 
 export const useHandler = ({ getValues, restaurantId }: TUseHandlerArgs) => {
   const router = useRouter();
+
   const handleBack = useCallback(() => router.push('/'), [router]);
-  console.log(restaurantId);
 
   const handleClickSearch = useCallback(() => {
     const values = getValues();
-    console.log(values);
-    // const excludedIngredientIds = values.ingredients
-    //   ? values.ingredients.join(',')
-    //   : '';
-    // router.push(
-    //   pagesPath.menus.$url({
-    //     query: { restaurantId, excludedIngredientIds },
-    //   })
-    // );
-  }, [getValues]);
+
+    const excludedIngredientIds = values.ingredients
+      ? values.ingredients.join(',')
+      : '';
+
+    router.push(
+      pagesPath.menus.$url({
+        query: { restaurantId, excludedIngredientIds },
+      }).path
+    );
+  }, [getValues, router, restaurantId]);
 
   return { handleClickSearch, handleBack };
 };

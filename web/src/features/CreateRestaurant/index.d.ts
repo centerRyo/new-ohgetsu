@@ -5,7 +5,7 @@ export type FormValues = {
   genre_id: string;
   menus: Array<{
     name: string;
-    ingredients: Array<string>;
+    ingredientIds: Array<string>;
     pic?: FileList;
   }>;
 };

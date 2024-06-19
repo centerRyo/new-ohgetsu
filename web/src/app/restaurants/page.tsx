@@ -1,3 +1,5 @@
+'use client';
+
 import Restaurants from '@/features/Restaurants';
 import { NextPage } from 'next';
 

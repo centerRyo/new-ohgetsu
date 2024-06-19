@@ -1,4 +1,5 @@
 import { useCustomOptionsWithPic } from '@/hooks/useOptions';
+import { api } from '@/lib/swagger-client';
 import {
   Flex,
   FormLabel,
@@ -10,6 +11,7 @@ import {
 import Image from 'next/image';
 import { memo } from 'react';
 import { UseFormRegister } from 'react-hook-form';
+import useSWR from 'swr';
 import { FormValues } from '../index.d';
 import styles from './index.module.scss';
 
@@ -18,16 +20,10 @@ type Props = {
 };
 
 const Ingredients = memo(({ register }: Props) => {
-  const ingredients = [
-    {
-      id: '1',
-      name: 'ingredient1',
-    },
-    {
-      id: '2',
-      name: 'ingredient2',
-    },
-  ];
+  const { data, isLoading } = useSWR('/ingredients', () =>
+    api.ingredients.ingredientsControllerFindAll()
+  );
+  const ingredients = data?.data || [];
 
   const options = useCustomOptionsWithPic({
     items: ingredients,
@@ -36,15 +32,13 @@ const Ingredients = memo(({ register }: Props) => {
     getKey: (item) => item.id,
   });
 
-  const loading = false;
-
   return (
     <div className={styles.container}>
       <SimpleGrid
         spacing={4}
         templateColumns='repeat(auto-fill, minmax(150px, 1fr))'
       >
-        {!loading ? (
+        {!isLoading ? (
           <>
             {options.map((option) => (
               <div key={option.key} className={styles.ingredient}>

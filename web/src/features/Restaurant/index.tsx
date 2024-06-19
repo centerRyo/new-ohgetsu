@@ -1,5 +1,7 @@
+import { api } from '@/lib/swagger-client';
 import { Button, Flex, Heading, Skeleton } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
+import useSWR from 'swr';
 import Ingredients from './Ingredients';
 import { useHandler } from './hooks';
 import { FormValues } from './index.d';
@@ -10,14 +12,10 @@ type Props = {
 };
 
 export const Restaurant = ({ restaurantId }: Props) => {
-  const restaurant = {
-    id: '1',
-    name: 'Restaurant 1',
-    address: 'Address 1',
-    pic: '',
-  };
-
-  const loading = false;
+  const { data, isLoading } = useSWR(`/restaurants/${restaurantId}`, () =>
+    api.restaurants.restaurantsControllerFindOne(restaurantId)
+  );
+  const restaurant = data?.data;
 
   const { register, getValues } = useForm<FormValues>();
   const { handleClickSearch, handleBack } = useHandler({
@@ -27,8 +25,8 @@ export const Restaurant = ({ restaurantId }: Props) => {
 
   return (
     <div className={styles.container}>
-      {!loading ? (
-        <Heading mb={9}>{restaurant.name}</Heading>
+      {!isLoading ? (
+        <Heading mb={9}>{restaurant?.name}</Heading>
       ) : (
         <Skeleton height='2rem' mb={8} />
       )}

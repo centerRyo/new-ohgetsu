@@ -1,13 +1,16 @@
+import { Spinner } from '@/components/spinner';
+import { api } from '@/lib/swagger-client';
 import {
   Button,
   Flex,
   Heading,
   Image,
   SimpleGrid,
-  Spinner,
   Text,
 } from '@chakra-ui/react';
+import useSWR from 'swr';
 import { MenusSearchCondition } from '../Menus/utils';
+import { useHandler } from './hooks';
 import styles from './index.module.scss';
 
 type Props = {
@@ -16,35 +19,28 @@ type Props = {
 };
 
 export const Menu = ({ menuId, searchConditions }: Props) => {
-  const restaurant = {
-    id: '1',
-    name: 'Restaurant 1',
-  };
+  const { data: restaurantData, isLoading: isRestaurantLoading } = useSWR(
+    `/restaurants/${searchConditions.restaurantId}`,
+    () =>
+      api.restaurants.restaurantsControllerFindOne(
+        searchConditions.restaurantId
+      )
+  );
 
-  const menu = {
-    id: menuId,
-    name: 'Menu 1',
-    pic: '',
-    ingredients: [
-      {
-        id: '1',
-        name: 'Ingredient 1',
-        pic: '',
-      },
-      {
-        id: '2',
-        name: 'Ingredient 2',
-        pic: '',
-      },
-      {
-        id: '3',
-        name: 'Ingredient 3',
-        pic: '',
-      },
-    ],
-  };
+  const { data: menuData, isLoading: isMenuLoading } = useSWR(
+    `/menus/${menuId}`,
+    () => api.menus.menusControllerFindOne(menuId)
+  );
 
-  const loading = !!searchConditions;
+  const restaurant = restaurantData?.data;
+
+  const menu = menuData?.data;
+
+  const loading = isRestaurantLoading || isMenuLoading;
+
+  const { handleBack, handleSearchMenus, handleSearchRestaurants } = useHandler(
+    { searchConditions }
+  );
 
   return !loading ? (
     <div className={styles.container}>
@@ -102,7 +98,7 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
           variant='outline'
           w='336px'
           maxW='100%'
-          // onClick={handleBack}
+          onClick={handleBack}
         >
           検索結果にもどる
         </Button>
@@ -114,7 +110,7 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
           variant='outline'
           w='336px'
           maxW='100%'
-          // onClick={handleSearchMenus}
+          onClick={handleSearchMenus}
         >
           アレルギー物質を変更して検索する
         </Button>
@@ -126,7 +122,7 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
           variant='outline'
           w='336px'
           maxW='100%'
-          // onClick={handleSearchRestaurants}
+          onClick={handleSearchRestaurants}
         >
           店舗を再検索する
         </Button>

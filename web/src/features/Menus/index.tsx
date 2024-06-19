@@ -1,3 +1,6 @@
+import { Spinner } from '@/components/spinner';
+import { pagesPath } from '@/lib/$path';
+import { api } from '@/lib/swagger-client';
 import {
   Box,
   Button,
@@ -8,9 +11,11 @@ import {
   Heading,
   Image,
   SimpleGrid,
-  Spinner,
   Text,
 } from '@chakra-ui/react';
+import Link from 'next/link';
+import useSWR from 'swr';
+import { useHandler } from './hooks';
 import styles from './index.module.scss';
 import { MenusSearchCondition } from './utils';
 
@@ -19,31 +24,46 @@ type Props = {
 };
 
 export const Menus = ({ searchConditions }: Props) => {
-  const restaurant = {
-    id: '1',
-    name: 'restaunrant1',
-  };
+  const { data: restaurantData, isLoading: isRestaurantLoading } = useSWR(
+    `/restaurants/${searchConditions.restaurantId}`,
+    () =>
+      api.restaurants.restaurantsControllerFindOne(
+        searchConditions.restaurantId
+      )
+  );
 
-  const ingredients = [
-    {
-      id: '1',
-      name: 'ingredient1',
-    },
-    {
-      id: '2',
-      name: 'ingredient2',
-    },
-  ];
+  const { data: menusData, isLoading: isMenusLoading } = useSWR(
+    `menus/?restaurantId=${searchConditions.restaurantId}`,
+    () =>
+      api.menus.menusControllerFindAll({
+        restaurantId: searchConditions.restaurantId,
+        ingredientIds: excludedIngredientIds,
+      })
+  );
 
-  const menus = [
-    {
-      id: '1',
-      name: 'menu1',
-      pic: '',
-    },
-  ];
+  const { data: ingredientsData, isLoading: isIngredientsLoading } = useSWR(
+    '/ingredients',
+    () => api.ingredients.ingredientsControllerFindAll()
+  );
 
-  const loading = !!searchConditions;
+  const excludedIngredientIds = searchConditions.excludedIngredientIds
+    ? searchConditions.excludedIngredientIds?.split(',')
+    : [];
+
+  const restaurant = restaurantData?.data;
+
+  const menus = menusData?.data || [];
+
+  const ingredients =
+    ingredientsData?.data.filter((ingredient) =>
+      excludedIngredientIds.includes(ingredient.id)
+    ) || [];
+
+  const loading = isRestaurantLoading || isMenusLoading || isIngredientsLoading;
+
+  const { handleBack } = useHandler({
+    restaurantId: searchConditions.restaurantId,
+  });
 
   return !loading ? (
     <div className={styles.container}>
@@ -78,35 +98,36 @@ export const Menus = ({ searchConditions }: Props) => {
             templateColumns='repeat(auto-fill, minmax(200px, 1fr))'
           >
             {menus.map((menu) => (
-              // <Link
-              //   href={pagesPath.menus
-              //     ._id(menu.id)
-              //     .$url({ query: searchCondition })}
-              //   key={menu.id}
-              // >
-              <Card key={menu.id}>
-                <CardHeader>
-                  <Box className={styles.imageWrap}>
-                    <Image
-                      src={
-                        menu?.pic
-                          ? `${process.env.NEXT_PUBLIC_BACKEND_URL}${menu?.pic}`
-                          : '/images/no_image.png'
-                      }
-                      fit='fill'
-                      objectFit='cover'
-                      borderRadius='md'
-                      alt={menu.name}
-                    />
-                  </Box>
-                </CardHeader>
-                <CardBody>
-                  <Heading size='md' noOfLines={3} height='72px'>
-                    {menu.name}
-                  </Heading>
-                </CardBody>
-              </Card>
-              // </Link>
+              <Link
+                href={
+                  pagesPath.menus._id(menu.id).$url({ query: searchConditions })
+                    .path
+                }
+                key={menu.id}
+              >
+                <Card key={menu.id}>
+                  <CardHeader>
+                    <Box className={styles.imageWrap}>
+                      <Image
+                        src={
+                          menu?.pic
+                            ? `${process.env.NEXT_PUBLIC_BACKEND_URL}${menu?.pic}`
+                            : '/images/no_image.png'
+                        }
+                        fit='fill'
+                        objectFit='cover'
+                        borderRadius='md'
+                        alt={menu.name}
+                      />
+                    </Box>
+                  </CardHeader>
+                  <CardBody>
+                    <Heading size='md' noOfLines={3} height='72px'>
+                      {menu.name}
+                    </Heading>
+                  </CardBody>
+                </Card>
+              </Link>
             ))}
           </SimpleGrid>
         ) : (
@@ -119,7 +140,7 @@ export const Menus = ({ searchConditions }: Props) => {
           size='lg'
           colorScheme='green'
           variant='outline'
-          // onClick={handleBack}
+          onClick={handleBack}
         >
           アレルギー物質を変更して検索する
         </Button>

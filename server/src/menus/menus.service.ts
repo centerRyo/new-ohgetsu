@@ -1,23 +1,28 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateMenuDto } from './create-menu.dto';
-import { findMenusQuery } from './menus.dto';
+import { MenuDto, findMenusQuery } from './menus.dto';
 
 @Injectable()
 export class MenusService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(query: findMenusQuery, restaurantId: string) {
+  async findAll(query: findMenusQuery) {
+    const ingredientIds = Array.isArray(query.ingredientIds)
+      ? query.ingredientIds
+      : [query.ingredientIds];
     const menus = await this.prisma.menus.findMany({
       where: {
-        restaurantId: restaurantId,
-        ingredients: {
-          none: {
-            id: {
-              in: query.ingredientIds,
-            },
-          },
-        },
+        restaurantId: query.restaurantId,
+        ingredients: query.ingredientIds
+          ? {
+              none: {
+                id: {
+                  in: ingredientIds,
+                },
+              },
+            }
+          : undefined,
       },
       include: {
         ingredients: true,
@@ -25,6 +30,23 @@ export class MenusService {
     });
 
     return menus;
+  }
+
+  async findOne(id: string) {
+    const menu = await this.prisma.menus.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        ingredients: true,
+      },
+    });
+
+    if (!menu) {
+      throw new BadRequestException(`Menu ${id} not found`);
+    }
+
+    return menu;
   }
 
   async create(data: CreateMenuDto) {
@@ -38,17 +60,17 @@ export class MenusService {
       throw new BadRequestException('Restaurant not found');
     }
 
-    const menus = [];
+    const menus: MenuDto[] = [];
 
     for (const menu of data.menus) {
-      const { name, pic, ingredients } = menu;
+      const { name, pic, ingredientIds } = menu;
 
       const validatedIngredients = [];
 
-      for (const ingredient of ingredients) {
+      for (const ingredientId of ingredientIds) {
         const existingIngredient = await this.prisma.ingredients.findUnique({
           where: {
-            id: ingredient.id,
+            id: ingredientId,
           },
         });
 

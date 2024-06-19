@@ -1,4 +1,5 @@
 import { useCustomOptions } from '@/hooks/useOptions';
+import { api } from '@/lib/swagger-client';
 import {
   Flex,
   FormControl,
@@ -8,6 +9,7 @@ import {
   Skeleton,
 } from '@chakra-ui/react';
 import { FieldErrors, UseFormRegister } from 'react-hook-form';
+import useSWR from 'swr';
 import { FormValues } from '../index.d';
 import styles from '../index.module.scss';
 
@@ -17,31 +19,16 @@ type Props = {
 };
 
 const Genres = ({ errors, register }: Props) => {
-  const genres = [
-    {
-      id: '1',
-      name: '和食',
-    },
-    {
-      id: '2',
-      name: '洋食',
-    },
-    {
-      id: '3',
-      name: '中華',
-    },
-    {
-      id: '4',
-      name: 'イタリアン',
-    },
-  ];
+  const { data, isLoading } = useSWR('/genres', () =>
+    api.genres.genresControllerFindAll()
+  );
+  const genres = data?.data || [];
 
   const options = useCustomOptions({
     items: genres,
     getLabel: (item) => item.name,
   });
 
-  const loading = false;
   return (
     <FormControl isInvalid={!!errors.genre_id?.message}>
       <Flex alignItems='center' gap={4} mb={2}>
@@ -50,7 +37,7 @@ const Genres = ({ errors, register }: Props) => {
         </FormLabel>
         <span className={styles.required}>必須</span>
       </Flex>
-      <Skeleton isLoaded={!loading}>
+      <Skeleton isLoaded={!isLoading}>
         <Select
           placeholder='ジャンルを選択してください'
           {...register('genre_id', { required: 'ジャンルは必須です' })}
@@ -68,6 +55,5 @@ const Genres = ({ errors, register }: Props) => {
     </FormControl>
   );
 };
-Genres.displayName = 'Genres';
 
 export default Genres;

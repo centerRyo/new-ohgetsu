@@ -1,6 +1,7 @@
-import { genres } from '@prisma/client';
+import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsString, IsUUID } from 'class-validator';
+import { GenreDto } from '../genres/genres.dto';
 
 export class RestaurantDto {
   constructor(partial: Partial<RestaurantDto>) {
@@ -9,6 +10,7 @@ export class RestaurantDto {
 
   @Expose()
   @IsUUID()
+  @ApiProperty({ description: 'レストランID' })
   id: string;
 
   /**
@@ -16,18 +18,28 @@ export class RestaurantDto {
    */
   @Expose()
   @IsString()
+  @ApiProperty({ description: 'レストラン名' })
   name: string;
+
+  /**
+   * 住所
+   */
+  @Expose()
+  @ApiProperty({ description: '住所', required: false })
+  address?: string;
 
   /**
    * レストランの画像URL
    */
   @Expose()
   @IsString()
+  @ApiProperty({ description: 'レストランの画像URL' })
   pic: string;
 
   /**
    * ジャンル
    */
   @Expose()
-  genre: genres;
+  @ApiProperty({ description: 'ジャンル', type: GenreDto })
+  genre: GenreDto;
 }

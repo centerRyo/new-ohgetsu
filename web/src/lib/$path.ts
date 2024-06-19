@@ -1,4 +1,5 @@
 import type { OptionalQuery as OptionalQuery_gsgao6 } from '../app/menus/[id]/page';
+import type { OptionalQuery as OptionalQuery_qbbltk } from '../app/menus/page';
 
 const buildSuffix = (url?: {
   query?: Record<string, string>;
@@ -28,8 +29,9 @@ export const pagesPath = {
         path: `/menus/${id}${buildSuffix(url)}`,
       }),
     }),
-    $url: (url?: { hash?: string }) => ({
+    $url: (url?: { query?: OptionalQuery_qbbltk; hash?: string }) => ({
       pathname: '/menus' as const,
+      query: url?.query,
       hash: url?.hash,
       path: `/menus${buildSuffix(url)}`,
     }),
