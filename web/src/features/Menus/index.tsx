@@ -1,3 +1,4 @@
+import { Spinner } from '@/components/spinner';
 import { pagesPath } from '@/lib/$path';
 import { api } from '@/lib/swagger-client';
 import {
@@ -10,7 +11,6 @@ import {
   Heading,
   Image,
   SimpleGrid,
-  Spinner,
   Text,
 } from '@chakra-ui/react';
 import Link from 'next/link';

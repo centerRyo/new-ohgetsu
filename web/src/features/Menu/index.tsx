@@ -1,10 +1,10 @@
+import { Spinner } from '@/components/spinner';
 import {
   Button,
   Flex,
   Heading,
   Image,
   SimpleGrid,
-  Spinner,
   Text,
 } from '@chakra-ui/react';
 import { MenusSearchCondition } from '../Menus/utils';
