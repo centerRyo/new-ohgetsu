@@ -26,7 +26,7 @@ export const useHandler = ({ getValues, restaurantId }: TUseHandlerArgs) => {
         query: { restaurantId, excludedIngredientIds },
       }).path
     );
-  }, [getValues, router]);
+  }, [getValues, router, restaurantId]);
 
   return { handleClickSearch, handleBack };
 };
