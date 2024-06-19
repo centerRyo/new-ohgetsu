@@ -1,3 +1,4 @@
+import { pagesPath } from '@/lib/$path';
 import { api } from '@/lib/swagger-client';
 import {
   Box,
@@ -12,7 +13,9 @@ import {
   Spinner,
   Text,
 } from '@chakra-ui/react';
+import Link from 'next/link';
 import useSWR from 'swr';
+import { useHandler } from './hooks';
 import styles from './index.module.scss';
 import { MenusSearchCondition } from './utils';
 
@@ -59,6 +62,10 @@ export const Menus = ({ searchConditions }: Props) => {
   const loading =
     isRestaurantsLoading || isMenusLoading || isIngredientsLoading;
 
+  const { handleBack } = useHandler({
+    restaurantId: searchConditions.restaurantId,
+  });
+
   return !loading ? (
     <div className={styles.container}>
       <Heading mb={8}>{restaurant?.name}</Heading>
@@ -92,35 +99,36 @@ export const Menus = ({ searchConditions }: Props) => {
             templateColumns='repeat(auto-fill, minmax(200px, 1fr))'
           >
             {menus.map((menu) => (
-              // <Link
-              //   href={pagesPath.menus
-              //     ._id(menu.id)
-              //     .$url({ query: searchCondition })}
-              //   key={menu.id}
-              // >
-              <Card key={menu.id}>
-                <CardHeader>
-                  <Box className={styles.imageWrap}>
-                    <Image
-                      src={
-                        menu?.pic
-                          ? `${process.env.NEXT_PUBLIC_BACKEND_URL}${menu?.pic}`
-                          : '/images/no_image.png'
-                      }
-                      fit='fill'
-                      objectFit='cover'
-                      borderRadius='md'
-                      alt={menu.name}
-                    />
-                  </Box>
-                </CardHeader>
-                <CardBody>
-                  <Heading size='md' noOfLines={3} height='72px'>
-                    {menu.name}
-                  </Heading>
-                </CardBody>
-              </Card>
-              // </Link>
+              <Link
+                href={
+                  pagesPath.menus._id(menu.id).$url({ query: searchConditions })
+                    .path
+                }
+                key={menu.id}
+              >
+                <Card key={menu.id}>
+                  <CardHeader>
+                    <Box className={styles.imageWrap}>
+                      <Image
+                        src={
+                          menu?.pic
+                            ? `${process.env.NEXT_PUBLIC_BACKEND_URL}${menu?.pic}`
+                            : '/images/no_image.png'
+                        }
+                        fit='fill'
+                        objectFit='cover'
+                        borderRadius='md'
+                        alt={menu.name}
+                      />
+                    </Box>
+                  </CardHeader>
+                  <CardBody>
+                    <Heading size='md' noOfLines={3} height='72px'>
+                      {menu.name}
+                    </Heading>
+                  </CardBody>
+                </Card>
+              </Link>
             ))}
           </SimpleGrid>
         ) : (
@@ -133,7 +141,7 @@ export const Menus = ({ searchConditions }: Props) => {
           size='lg'
           colorScheme='green'
           variant='outline'
-          // onClick={handleBack}
+          onClick={handleBack}
         >
           アレルギー物質を変更して検索する
         </Button>
