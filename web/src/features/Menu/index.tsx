@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 import useSWR from 'swr';
 import { MenusSearchCondition } from '../Menus/utils';
+import { useHandler } from './hooks';
 import styles from './index.module.scss';
 
 type Props = {
@@ -36,6 +37,10 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
   const menu = menuData?.data;
 
   const loading = isRestaurantLoading || isMenuLoading;
+
+  const { handleBack, handleSearchMenus, handleSearchRestaurants } = useHandler(
+    { searchConditions }
+  );
 
   return !loading ? (
     <div className={styles.container}>
@@ -93,7 +98,7 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
           variant='outline'
           w='336px'
           maxW='100%'
-          // onClick={handleBack}
+          onClick={handleBack}
         >
           検索結果にもどる
         </Button>
@@ -105,7 +110,7 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
           variant='outline'
           w='336px'
           maxW='100%'
-          // onClick={handleSearchMenus}
+          onClick={handleSearchMenus}
         >
           アレルギー物質を変更して検索する
         </Button>
@@ -117,7 +122,7 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
           variant='outline'
           w='336px'
           maxW='100%'
-          // onClick={handleSearchRestaurants}
+          onClick={handleSearchRestaurants}
         >
           店舗を再検索する
         </Button>
