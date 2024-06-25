@@ -61,7 +61,7 @@ jobs:
           scp -o StrictHostKeyChecking=no server/prisma/.env ${{ secrets.SAKURA_CLOUD_SSH_USERNAME }}@${{ secrets.SAKURA_CLOUD_SSH_HOST }}:/home/ohgetsu/server/prisma/.env
 
       - name: Execute remote commands via SSH
-        uses: appleboy/ssh-action@latest
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SAKURA_CLOUD_SSH_HOST }}
           username: ${{ secrets.SAKURA_CLOUD_SSH_USERNAME }}
