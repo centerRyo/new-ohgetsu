@@ -58,6 +58,7 @@ jobs:
 
       - name: Add SSH host key to known_hosts
         run: |
+          mkdir -p ~/.ssh
           echo "${{ secrets.SAKURA_CLOUD_SSH_KEY }}" > ssh_key.pem
           chmod 600 ssh_key.pem
           ssh-keyscan -H ${{ secrets.SAKURA_CLOUD_SSH_HOST }} >> ~/.ssh/known_hosts
