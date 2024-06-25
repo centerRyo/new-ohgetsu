@@ -58,7 +58,9 @@ jobs:
 
       - name: Upload server/prisma/.env to sakura cloud
         run: |
-          scp -o StrictHostKeyChecking=no server/prisma/.env ${{ secrets.SAKURA_CLOUD_SSH_USERNAME }}@${{ secrets.SAKURA_CLOUD_SSH_HOST }}:/home/ohgetsu/server/prisma/.env
+          echo "${{ secrets.SAKURA_CLOUD_SSH_KEY }}" > ssh_key.pem
+          chmod 600 ssh_key.pem
+          scp -i ssh_key.pem -o StrictHostKeyChecking=yes server/prisma/.env ${{ secrets.SAKURA_CLOUD_SSH_USERNAME }}@${{ secrets.SAKURA_CLOUD_SSH_HOST }}:/home/ohgetsu/server/prisma/.env
 
       - name: Execute remote commands via SSH
         uses: appleboy/ssh-action@v1.0.3
