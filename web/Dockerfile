@@ -26,6 +26,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 
 # Set the environment variable
 ENV NEXT_PUBLIC_BACKEND_URL "http://ohgetsu-server:8080"
+RUN echo "NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL" > .env
 
 # Build the Next.js app
 RUN npm run build
