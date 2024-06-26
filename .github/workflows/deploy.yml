@@ -97,5 +97,4 @@ jobs:
             # Run web container
             docker rm -f ohgetsu-web || true
             docker run -d --name ohgetsu-web --network ohgetsu_network \
-              -e NEXT_PUBLIC_BACKEND_URL="http://ohgetsu-server:8080" \
               -p 3000:3000 ${{ env.REGISTRY }}/${{ env.WEB_IMAGE_NAME }}:latest

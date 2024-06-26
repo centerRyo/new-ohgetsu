@@ -55,6 +55,7 @@ EXPOSE 3000
 # Set the environment variables
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
+ENV NEXT_PUBLIC_BACKEND_URL "http://ohgetsu-server:8080"
 
 # Run the Next.js app
 CMD ["node", "server.js"]
