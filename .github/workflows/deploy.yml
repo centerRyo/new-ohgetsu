@@ -56,17 +56,17 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.SERVER_IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.SERVER_IMAGE_NAME }}:${{ steps.set-tag.outputs.version }}
 
-      - name: Add SSH host key to known_hosts
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SAKURA_CLOUD_SSH_KEY }}" > ssh_key.pem
-          chmod 600 ssh_key.pem
-          ssh-keyscan -H ${{ secrets.SAKURA_CLOUD_SSH_HOST }} >> ~/.ssh/known_hosts
+      # - name: Add SSH host key to known_hosts
+      #   run: |
+      #     mkdir -p ~/.ssh
+      #     echo "${{ secrets.SAKURA_CLOUD_SSH_KEY }}" > ssh_key.pem
+      #     chmod 600 ssh_key.pem
+      #     ssh-keyscan -H ${{ secrets.SAKURA_CLOUD_SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Upload server/prisma/.env to sakura cloud
-        run: |
-          scp -i ssh_key.pem -o StrictHostKeyChecking=yes ${{ secrets.SAKURA_CLOUD_SSH_USERNAME}}@${{ secrets.SAKURA_CLOUD_SSH_HOST }} 'mkdir -p /home/ohgetsu/server/prisma'
-          scp -i ssh_key.pem -o StrictHostKeyChecking=yes server/prisma/.env ${{ secrets.SAKURA_CLOUD_SSH_USERNAME }}@${{ secrets.SAKURA_CLOUD_SSH_HOST }}:/home/ohgetsu/server/prisma/.env
+      # - name: Upload server/prisma/.env to sakura cloud
+      #   run: |
+      #     scp -i ssh_key.pem -o StrictHostKeyChecking=yes ${{ secrets.SAKURA_CLOUD_SSH_USERNAME}}@${{ secrets.SAKURA_CLOUD_SSH_HOST }} 'mkdir -p /home/ohgetsu/server/prisma'
+      #     scp -i ssh_key.pem -o StrictHostKeyChecking=yes server/prisma/.env ${{ secrets.SAKURA_CLOUD_SSH_USERNAME }}@${{ secrets.SAKURA_CLOUD_SSH_HOST }}:/home/ohgetsu/server/prisma/.env
 
       - name: Execute remote commands via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -87,9 +87,6 @@ jobs:
             docker run -d --name ohgetsu-db --network ohgetsu_network \
               -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=ohgetsu \
               -p 5432:5432 postgres:latest
-
-            # Update prisma/.env file for the server
-            echo "DATABASE_URL=postgres://postgres:postgres@ohgetsu-db:5432/ohgetsu" > /home/ohgetsu/server/prisma/.env
 
             # Run server container
             docker rm -f ohgetsu-server || true
