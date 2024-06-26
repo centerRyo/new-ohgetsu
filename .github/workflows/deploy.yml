@@ -90,12 +90,12 @@ jobs:
 
             # Run server container
             docker rm -f ohgetsu-server || true
-            docker run -d --name ohgetsu-server --network ohgetsu-network \
+            docker run -d --name ohgetsu-server --network ohgetsu_network \
               -e DATABASE_URL="postgres://postgres:postgres@ohgetsu-db:5432/ohgetsu" \
               -p 8080:8080 ${{ env.REGISTRY }}/${{ env.SERVER_IMAGE_NAME }}:latest
 
             # Run web container
             docker rm -f ohgetsu-web || true
-            docker run -d --name ohgetsu-web --network ohgetsu-network \
+            docker run -d --name ohgetsu-web --network ohgetsu_network \
               -e NEXT_PUBLIC_BACKEND_URL="http://ohgetsu-server:8080" \
               -p 3000:3000 ${{ env.REGISTRY }}/${{ env.WEB_IMAGE_NAME }}:latest
