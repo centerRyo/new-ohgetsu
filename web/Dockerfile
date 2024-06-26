@@ -24,6 +24,9 @@ COPY . .
 # Learn more here: https://nextjs.org/telemetry
 ENV NEXT_TELEMETRY_DISABLED 1
 
+# Set the environment variable
+ENV NEXT_PUBLIC_BACKEND_URL "http://ohgetsu-server:8080"
+
 # Build the Next.js app
 RUN npm run build
 
@@ -55,7 +58,6 @@ EXPOSE 3000
 # Set the environment variables
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
-ENV NEXT_PUBLIC_BACKEND_URL "http://ohgetsu-server:8080"
 
 # Run the Next.js app
 CMD ["node", "server.js"]
