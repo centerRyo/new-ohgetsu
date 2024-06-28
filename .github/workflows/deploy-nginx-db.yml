@@ -1,0 +1,72 @@
+name: Deploy Nginx Proxy and DB
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+
+    env:
+      NGINX_IMAGE_NAME: ohgetsu-nginx-proxy
+      REGISTRY: ohgetsu.sakuracr.jp
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # tagを取得
+      - name: Set tag to environment variables
+        id: set-tag
+        run: echo ::set-output name=version::${GITHUB_REF#refs/*/}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Sakra Cloud Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.SAKURA_CLOUD_USERNAME }}
+          password: ${{ secrets.SAKURA_CLOUD_PASSWORD }}
+
+      - name: Build and push nginx
+        uses: docker/build-push-action@v2
+        with:
+          context: ./nginx
+          platforms: linux/amd64,linux/arm64
+          push: true
+          build-args: |
+            SSL_CERT: ${{ secrets.SSL_CERT }}
+            SSL_KEY: ${{ secrets.SSL_KEY }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.NGINX_IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.NGINX_IMAGE_NAME }}:${{ steps.set-tag.outputs.version }}
+
+      - name: Execute remote commands via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SAKURA_CLOUD_SSH_HOST }}
+          username: ${{ secrets.SAKURA_CLOUD_SSH_USERNAME }}
+          key: ${{ secrets.SAKURA_CLOUD_SSH_KEY }}
+          script: |
+            # Pull the latest nginx image
+            docker pull ${{ env.REGISTRY }}/${{ env.NGINX_IMAGE_NAME }}:latest
+
+            # Create Docker network if not exists
+            docker network inspect ohgetsu_network > /dev/null 2>&1 || docker network create ohgetsu_network
+
+            # Run nginx proxy container
+            docker rm -f nginx-proxy || true
+            docker run -d --name nginx-proxy --network ohgetsu_network \
+              -p 80:80 -p 443:443 \
+              ${{ env.REGISTRY }}/${{ env.NGINX_IMAGE_NAME }}:latest
+
+            # Run PostgreSQL container
+            docker rm -f ohgetsu-db || true
+            docker run -d --name ohgetsu-db --network ohgetsu_network \
+              -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=ohgetsu \
+              -p 5432:5432 postgres:latest

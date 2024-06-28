@@ -82,12 +82,6 @@ jobs:
             # Create Docker network if not exists
             docker network inspect ohgetsu_network > /dev/null 2>&1 || docker network create ohgetsu_network
 
-            # Run PostgreSQL container
-            docker rm -f ohgetsu-db || true
-            docker run -d --name ohgetsu-db --network ohgetsu_network \
-              -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=ohgetsu \
-              -p 5432:5432 postgres:latest
-
             # Run server container
             docker rm -f ohgetsu-server || true
             docker run -d --name ohgetsu-server --network ohgetsu_network \
