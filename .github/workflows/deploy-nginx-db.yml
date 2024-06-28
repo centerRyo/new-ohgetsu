@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
 
       # tagを取得
-      -  name: Set tag to environment variables
+      - name: Set tag to environment variables
         id: set-tag
         run: echo ::set-output name=version::${GITHUB_REF#refs/*/}
 
