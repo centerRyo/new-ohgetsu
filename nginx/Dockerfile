@@ -9,5 +9,9 @@ ARG SSL_KEY
 
 RUN mkdir -p /etc/ssl/certs /etc/ssl/private
 
-RUN printf "%s" "$SSL_CERT" > /etc/ssl/certs/ohgetsu.crt
-RUN printf "%s" "$SSL_KEY" > /etc/ssl/private/ohgetsu.key
+RUN printf "%s\n" "$SSL_CERT" > /etc/ssl/certs/ohgetsu.crt
+RUN printf "%s\n" "$SSL_KEY" > /etc/ssl/private/ohgetsu.key
+
+# Debug: Check if files were created successfully
+RUN cat /etc/ssl/certs/ohgetsu.crt
+RUN cat /etc/ssl/private/ohgetsu.key
