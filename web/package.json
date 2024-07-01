@@ -54,6 +54,6 @@
     "swagger-typescript-api": "^13.0.5",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
-    "typescript": "5.4.5"
+    "typescript": "5.5.2"
   }
 }
