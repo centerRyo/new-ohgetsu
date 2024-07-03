@@ -37,6 +37,7 @@ RUN adduser --system --uid 1001 nestjs
 
 # Copy built assets from builder
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/public ./public
 
 # Set permissions
 RUN chown nestjs:nodejs dist
