@@ -44,10 +44,10 @@ RUN chown nestjs:nodejs dist
 # Switch to non-root user
 USER nestjs
 
-EXPOSE 8888
+EXPOSE 8080
 
 # Set the environment variables
-ENV PORT 8888
+ENV PORT 8080
 # The application listens on all network interfaces
 ENV HOSTNAME "0.0.0.0"
 
