@@ -1,20 +1,18 @@
-name: Deploy to Sakra Cloud
+name: Deploy server
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'web/**'
       - 'server/**'
-      - '.github/workflows/deploy.yml'
+      - '.github/workflows/deploy-server.yml'
 
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
 
     env:
-      WEB_IMAGE_NAME: ohgetsu-web
       SERVER_IMAGE_NAME: ohgetsu-server
       REGISTRY: ohgetsu.sakuracr.jp
 
@@ -40,16 +38,6 @@ jobs:
           username: ${{ secrets.SAKURA_CLOUD_USERNAME }}
           password: ${{ secrets.SAKURA_CLOUD_PASSWORD }}
 
-      - name: Build and push web
-        uses: docker/build-push-action@v2
-        with:
-          context: ./web
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: |
-            ${{ env.REGISTRY }}/${{ env.WEB_IMAGE_NAME }}:latest
-            ${{ env.REGISTRY }}/${{ env.WEB_IMAGE_NAME }}:${{ steps.set-tag.outputs.version }}
-
       - name: Build and push server
         uses: docker/build-push-action@v2
         with:
@@ -60,18 +48,6 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.SERVER_IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.SERVER_IMAGE_NAME }}:${{ steps.set-tag.outputs.version }}
 
-      # - name: Add SSH host key to known_hosts
-      #   run: |
-      #     mkdir -p ~/.ssh
-      #     echo "${{ secrets.SAKURA_CLOUD_SSH_KEY }}" > ssh_key.pem
-      #     chmod 600 ssh_key.pem
-      #     ssh-keyscan -H ${{ secrets.SAKURA_CLOUD_SSH_HOST }} >> ~/.ssh/known_hosts
-
-      # - name: Upload server/prisma/.env to sakura cloud
-      #   run: |
-      #     scp -i ssh_key.pem -o StrictHostKeyChecking=yes ${{ secrets.SAKURA_CLOUD_SSH_USERNAME}}@${{ secrets.SAKURA_CLOUD_SSH_HOST }} 'mkdir -p /home/ohgetsu/server/prisma'
-      #     scp -i ssh_key.pem -o StrictHostKeyChecking=yes server/prisma/.env ${{ secrets.SAKURA_CLOUD_SSH_USERNAME }}@${{ secrets.SAKURA_CLOUD_SSH_HOST }}:/home/ohgetsu/server/prisma/.env
-
       - name: Execute remote commands via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -80,7 +56,6 @@ jobs:
           key: ${{ secrets.SAKURA_CLOUD_SSH_KEY }}
           script: |
             # Pull the latest images
-            docker pull ${{ env.REGISTRY }}/${{ env.WEB_IMAGE_NAME }};latest
             docker pull ${{ env.REGISTRY }}/${{ env.SERVER_IMAGE_NAME }};latest
 
             # Create Docker network if not exists
@@ -91,8 +66,3 @@ jobs:
             docker run -d --name ohgetsu-server --network ohgetsu_network \
               -e DATABASE_URL="postgres://postgres:postgres@ohgetsu-db:5432/ohgetsu" \
               -p 8080:8080 ${{ env.REGISTRY }}/${{ env.SERVER_IMAGE_NAME }}:latest
-
-            # Run web container
-            docker rm -f ohgetsu-web || true
-            docker run -d --name ohgetsu-web --network ohgetsu_network \
-              -p 3000:3000 ${{ env.REGISTRY }}/${{ env.WEB_IMAGE_NAME }}:latest
