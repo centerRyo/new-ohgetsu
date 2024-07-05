@@ -39,6 +39,9 @@ RUN adduser --system --uid 1001 nestjs
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/public ./public
 
+# Create the public/index.html file
+RUN echo '<!DOCTYPE html><html><head><title>ohgetsu server</title></head><body><h1>ohgetsu server</h1></body></html>' > ./public/index.html
+
 # Set permissions
 RUN chown nestjs:nodejs dist
 
