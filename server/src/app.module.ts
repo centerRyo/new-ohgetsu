@@ -15,6 +15,7 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', 'public'),
+      exclude: ['/api*'],
     }),
     GlobalModule,
     IngredientsModule,
