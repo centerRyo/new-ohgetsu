@@ -21,12 +21,15 @@ type Props = {
 export const Menu = ({ menuId, searchConditions }: Props) => {
   const { data: restaurantData, isLoading: isRestaurantLoading } = useSWR(
     `/restaurants/${searchConditions.restaurantId}`,
-    () => api.api.restaurantsControllerFindOne(searchConditions.restaurantId)
+    () =>
+      api.restaurants.restaurantsControllerFindOne(
+        searchConditions.restaurantId
+      )
   );
 
   const { data: menuData, isLoading: isMenuLoading } = useSWR(
     `/menus/${menuId}`,
-    () => api.api.menusControllerFindOne(menuId)
+    () => api.menus.menusControllerFindOne(menuId)
   );
 
   const restaurant = restaurantData?.data;

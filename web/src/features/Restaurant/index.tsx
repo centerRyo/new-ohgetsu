@@ -13,7 +13,7 @@ type Props = {
 
 export const Restaurant = ({ restaurantId }: Props) => {
   const { data, isLoading } = useSWR(`/restaurants/${restaurantId}`, () =>
-    api.api.restaurantsControllerFindOne(restaurantId)
+    api.restaurants.restaurantsControllerFindOne(restaurantId)
   );
   const restaurant = data?.data;
 

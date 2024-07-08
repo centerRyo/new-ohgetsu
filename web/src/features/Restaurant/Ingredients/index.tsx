@@ -21,7 +21,7 @@ type Props = {
 
 const Ingredients = memo(({ register }: Props) => {
   const { data, isLoading } = useSWR('/ingredients', () =>
-    api.api.ingredientsControllerFindAll()
+    api.ingredients.ingredientsControllerFindAll()
   );
   const ingredients = data?.data || [];
 

@@ -25,7 +25,7 @@
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   },
-  "prettier.configPath": "./web/.prettierrc",
+  "prettier.configPath": ".prettierrc",
   "editor.lineNumbers": "on",
   "editor.rulers": [80],
   "editor.wordWrap": "on",
