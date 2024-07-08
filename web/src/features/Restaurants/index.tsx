@@ -22,7 +22,7 @@ import styles from './index.module.scss';
 
 const Restaurants = memo(() => {
   const { data, isLoading } = useSWR('/restaurants', () =>
-    api.api.restaurantsControllerFindAll()
+    api.restaurants.restaurantsControllerFindAll()
   );
 
   const restaurants = data?.data || [];

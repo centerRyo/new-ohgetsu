@@ -16,15 +16,16 @@ export const useHandler = ({ preview, setPreview, reset }: TUseHandlerArgs) => {
   const handleSubmit = useCallback(
     async (values: FormValues) => {
       try {
-        const { data, error } = await api.api.restaurantsControllerCreate({
-          name: values.name,
-          address: values.address,
-          // TODO: ファイルアップロードにserverが対応したら修正する
-          pic: '',
-          genreId: values.genre_id,
-        });
+        const { data, error } =
+          await api.restaurants.restaurantsControllerCreate({
+            name: values.name,
+            address: values.address,
+            // TODO: ファイルアップロードにserverが対応したら修正する
+            pic: '',
+            genreId: values.genre_id,
+          });
 
-        const { error: menuError } = await api.api.menusControllerCreate({
+        const { error: menuError } = await api.menus.menusControllerCreate({
           menus: values.menus.map((menu) => ({
             name: menu.name,
             // TODO: ファイルアップロードにserverが対応したら修正する
