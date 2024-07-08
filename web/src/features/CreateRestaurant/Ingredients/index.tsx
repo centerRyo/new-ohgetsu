@@ -23,7 +23,7 @@ type Props = {
 
 const Ingredients = ({ errors, control, index }: Props) => {
   const { data, isLoading } = useSWR('/ingredients', () =>
-    api.ingredients.ingredientsControllerFindAll()
+    api.api.ingredientsControllerFindAll()
   );
   const ingredients = data?.data || [];
 

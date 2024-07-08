@@ -22,14 +22,14 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
   const { data: restaurantData, isLoading: isRestaurantLoading } = useSWR(
     `/restaurants/${searchConditions.restaurantId}`,
     () =>
-      api.restaurants.restaurantsControllerFindOne(
+      api.api.restaurantsControllerFindOne(
         searchConditions.restaurantId
       )
   );
 
   const { data: menuData, isLoading: isMenuLoading } = useSWR(
     `/menus/${menuId}`,
-    () => api.menus.menusControllerFindOne(menuId)
+    () => api.api.menusControllerFindOne(menuId)
   );
 
   const restaurant = restaurantData?.data;
