@@ -20,7 +20,7 @@ type Props = {
 
 const Genres = ({ errors, register }: Props) => {
   const { data, isLoading } = useSWR('/genres', () =>
-    api.genres.genresControllerFindAll()
+    api.api.genresControllerFindAll()
   );
   const genres = data?.data || [];
 

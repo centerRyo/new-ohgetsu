@@ -329,52 +329,50 @@ export class HttpClient<SecurityDataType = unknown> {
 export class Api<
   SecurityDataType extends unknown,
 > extends HttpClient<SecurityDataType> {
-  ingredients = {
+  api = {
     /**
      * No description
      *
      * @tags ingredients
      * @name IngredientsControllerFindAll
      * @summary 原材料を取得する
-     * @request GET:/ingredients
+     * @request GET:/api/ingredients
      */
     ingredientsControllerFindAll: (params: RequestParams = {}) =>
       this.request<IngredientDto[], any>({
-        path: `/ingredients`,
+        path: `/api/ingredients`,
         method: 'GET',
         format: 'json',
         ...params,
       }),
-  };
-  genres = {
+
     /**
      * No description
      *
      * @tags genres
      * @name GenresControllerFindAll
      * @summary ジャンルを取得する
-     * @request GET:/genres
+     * @request GET:/api/genres
      */
     genresControllerFindAll: (params: RequestParams = {}) =>
       this.request<GenreDto[], any>({
-        path: `/genres`,
+        path: `/api/genres`,
         method: 'GET',
         format: 'json',
         ...params,
       }),
-  };
-  restaurants = {
+
     /**
      * No description
      *
      * @tags restaurants
      * @name RestaurantsControllerFindAll
      * @summary レストラン一覧を取得する
-     * @request GET:/restaurants
+     * @request GET:/api/restaurants
      */
     restaurantsControllerFindAll: (params: RequestParams = {}) =>
       this.request<RestaurantDto[], any>({
-        path: `/restaurants`,
+        path: `/api/restaurants`,
         method: 'GET',
         format: 'json',
         ...params,
@@ -386,14 +384,14 @@ export class Api<
      * @tags restaurants
      * @name RestaurantsControllerCreate
      * @summary レストランを作成する
-     * @request POST:/restaurants
+     * @request POST:/api/restaurants
      */
     restaurantsControllerCreate: (
       data: CreateRestaurantDto,
       params: RequestParams = {}
     ) =>
       this.request<RestaurantDto, any>({
-        path: `/restaurants`,
+        path: `/api/restaurants`,
         method: 'POST',
         body: data,
         type: ContentType.Json,
@@ -407,11 +405,11 @@ export class Api<
      * @tags restaurants
      * @name RestaurantsControllerFindOne
      * @summary レストランを取得する
-     * @request GET:/restaurants/{id}
+     * @request GET:/api/restaurants/{id}
      */
     restaurantsControllerFindOne: (id: string, params: RequestParams = {}) =>
       this.request<RestaurantDto, any>({
-        path: `/restaurants/${id}`,
+        path: `/api/restaurants/${id}`,
         method: 'GET',
         format: 'json',
         ...params,
@@ -423,7 +421,7 @@ export class Api<
      * @tags restaurants
      * @name RestaurantsControllerUpdate
      * @summary レストランを更新する
-     * @request PATCH:/restaurants/{id}
+     * @request PATCH:/api/restaurants/{id}
      */
     restaurantsControllerUpdate: (
       id: string,
@@ -431,7 +429,7 @@ export class Api<
       params: RequestParams = {}
     ) =>
       this.request<RestaurantDto, any>({
-        path: `/restaurants/${id}`,
+        path: `/api/restaurants/${id}`,
         method: 'PATCH',
         body: data,
         type: ContentType.Json,
@@ -445,7 +443,7 @@ export class Api<
      * @tags restaurants
      * @name RestaurantsControllerDelete
      * @summary レストランを削除(営業停止)する
-     * @request DELETE:/restaurants/{id}
+     * @request DELETE:/api/restaurants/{id}
      */
     restaurantsControllerDelete: (id: string, params: RequestParams = {}) =>
       this.request<
@@ -454,20 +452,19 @@ export class Api<
         },
         any
       >({
-        path: `/restaurants/${id}`,
+        path: `/api/restaurants/${id}`,
         method: 'DELETE',
         format: 'json',
         ...params,
       }),
-  };
-  menus = {
+
     /**
      * No description
      *
      * @tags menus
      * @name MenusControllerFindAll
      * @summary 指定されたアレルギー情報を含まないメニュー一覧を取得する
-     * @request GET:/menus
+     * @request GET:/api/menus
      */
     menusControllerFindAll: (
       query: {
@@ -477,7 +474,7 @@ export class Api<
       params: RequestParams = {}
     ) =>
       this.request<MenuDto[], any>({
-        path: `/menus`,
+        path: `/api/menus`,
         method: 'GET',
         query: query,
         format: 'json',
@@ -490,11 +487,11 @@ export class Api<
      * @tags menus
      * @name MenusControllerCreate
      * @summary アレルギー情報を含んだメニューを作成する
-     * @request POST:/menus
+     * @request POST:/api/menus
      */
     menusControllerCreate: (data: CreateMenuDto, params: RequestParams = {}) =>
       this.request<MenuDto[], any>({
-        path: `/menus`,
+        path: `/api/menus`,
         method: 'POST',
         body: data,
         type: ContentType.Json,
@@ -508,11 +505,11 @@ export class Api<
      * @tags menus
      * @name MenusControllerFindOne
      * @summary 指定されたメニューを取得する
-     * @request GET:/menus/{id}
+     * @request GET:/api/menus/{id}
      */
     menusControllerFindOne: (id: string, params: RequestParams = {}) =>
       this.request<MenuDto, any>({
-        path: `/menus/${id}`,
+        path: `/api/menus/${id}`,
         method: 'GET',
         format: 'json',
         ...params,
