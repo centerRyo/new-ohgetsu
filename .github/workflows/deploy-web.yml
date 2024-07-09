@@ -47,6 +47,9 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ env.WEB_IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.WEB_IMAGE_NAME }}:${{ steps.set-tag.outputs.version }}
+          build-args: |
+            NEXT_PUBLIC_BASIC_AUTH_USER=${{ secrets.NEXT_PUBLIC_BASIC_AUTH_USER }}
+            NEXT_PUBLIC_BASIC_AUTH_PASSWORD=${{ secrets.NEXT_PUBLIC_BASIC_AUTH_PASSWORD }}
 
       - name: Execute remote commands via SSH
         uses: appleboy/ssh-action@v1.0.3
