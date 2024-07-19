@@ -42,8 +42,11 @@ COPY --from=builder /app/public ./public
 # Create the public/index.html file
 RUN echo '<!DOCTYPE html><html><head><title>ohgetsu server</title></head><body><h1>ohgetsu server</h1></body></html>' > ./public/index.html
 
+# Create the public/images/uploads directory
+RUN mkdir -p ./public/images/uploads
+
 # Set permissions
-RUN chown nestjs:nodejs dist
+RUN chown nestjs:nodejs dist public
 
 # Switch to non-root user
 USER nestjs
