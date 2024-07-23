@@ -365,6 +365,10 @@ async function main() {
         pic: '/images/ingredients/soba.png',
       },
       {
+        name: '落花生',
+        pic: '/images/ingredients/peanuts.png',
+      },
+      {
         name: 'えび',
         pic: '/images/ingredients/shrimp.png',
       },
