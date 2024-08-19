@@ -76,5 +76,5 @@ jobs:
             # Run PostgreSQL container
             docker rm -f ohgetsu-db || true
             docker run -d --name ohgetsu-db --network ohgetsu_network \
-              -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=ohgetsu \
+              -e POSTGRES_USER=${{ secrets.DB_USER }} -e POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }} -e POSTGRES_DB=ohgetsu \
               -p 5432:5432 postgres:latest
