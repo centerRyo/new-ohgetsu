@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateMenuDto } from './create-menu.dto';
 import { MenuDto, findMenusQuery } from './menus.dto';
@@ -43,7 +43,7 @@ export class MenusService {
     });
 
     if (!menu) {
-      throw new BadRequestException(`Menu ${id} not found`);
+      throw new NotFoundException(`Menu ${id} not found`);
     }
 
     return menu;
@@ -57,7 +57,7 @@ export class MenusService {
     });
 
     if (!restaurant) {
-      throw new BadRequestException('Restaurant not found');
+      throw new NotFoundException('Restaurant not found');
     }
 
     const menus: MenuDto[] = [];
@@ -75,7 +75,7 @@ export class MenusService {
         });
 
         if (!existingIngredient) {
-          throw new BadRequestException('Ingredient not found');
+          throw new NotFoundException('Ingredient not found');
         }
 
         validatedIngredients.push({ id: existingIngredient.id });
