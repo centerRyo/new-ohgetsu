@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateRestaurantDto } from './create-restaurant.dto';
 import { UpdateRestaurantDto } from './update-restaurant.dto';
@@ -29,7 +29,7 @@ export class RestaurantsService {
     });
 
     if (!restaurant) {
-      throw new BadRequestException('Restaurant not found');
+      throw new NotFoundException('Restaurant not found');
     }
 
     return restaurant;
