@@ -1,5 +1,6 @@
 import { STATUS_CODES } from '@/constants';
 import { ReactNode } from 'react';
+import { Error404 } from './404';
 import { Error500 } from './500';
 
 type ErrorProps = {
@@ -8,6 +9,8 @@ type ErrorProps = {
 
 const Error = ({ statusCode }: ErrorProps) => {
   switch (statusCode) {
+    case STATUS_CODES.NOT_FOUND.code:
+      return <Error404 />;
     case STATUS_CODES.INTERNAL_SERVER_ERROR.code:
     default:
       return <Error500 />;
@@ -15,7 +18,7 @@ const Error = ({ statusCode }: ErrorProps) => {
 };
 
 type ErrorSafePageProps = {
-  error: { message: string; statusCode: number };
+  error: { error: { message: string; statusCode: number } };
   children: ReactNode;
 };
 
@@ -25,7 +28,7 @@ export const ErrorSafePage = ({ error, children }: ErrorSafePageProps) => {
     return children;
   }
 
-  const statusCode = error.statusCode;
+  const statusCode = error.error.statusCode;
 
   return <Error statusCode={statusCode} />;
 };
