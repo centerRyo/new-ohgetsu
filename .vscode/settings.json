@@ -31,5 +31,14 @@
   "editor.wordWrap": "on",
   "files.trimTrailingWhitespace": true,
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "typescript.tsdk": "frontend/node_modules/typescript/lib"
+  "typescript.tsdk": "frontend/node_modules/typescript/lib",
+  "jestrunner.jestCommand": "npx dotenv -e ./prisma/.env.test jest --watch --",
+  "jestrunner.runOptions": ["--watch"],
+  "jestrunner.debugOptions": {
+    "env": {
+      "DB_DATABASE": "ohgetsu-test",
+      "DATABASE_URL": "postgresql://postgres:postgres@127.0.0.1:5433/ohgetsu-test"
+    },
+    "skipFiles": ["<node_internals>/**/*.js", "node_modules/"]
+  }
 }

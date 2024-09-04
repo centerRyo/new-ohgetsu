@@ -9,7 +9,7 @@ describe('MenusService', () => {
   let service: MenusService;
   let prisma: PrismaService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [MenusModule, AppModule],
     }).compile();
@@ -19,26 +19,43 @@ describe('MenusService', () => {
     prisma = module.get<PrismaService>(PrismaService);
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     await prisma.menus.deleteMany();
+    await prisma.restaurants.deleteMany();
+    await prisma.genres.deleteMany();
+    await prisma.ingredients.deleteMany();
   });
 
   describe('findAll', () => {
     let restaurant: restaurants;
-    let eggIndredient: ingredients;
-    let milkIngredient: ingredients;
+    let ingredient1: ingredients;
+    let ingredient2: ingredients;
 
-    // TODO: beforeAllでほんとはやりたい
-    beforeEach(async () => {
-      restaurant = await prisma.restaurants.findFirst();
-      eggIndredient = await prisma.ingredients.findFirst({
-        where: {
-          name: '卵',
+    beforeAll(async () => {
+      const genre = await prisma.genres.create({
+        data: {
+          name: 'test genre',
         },
       });
-      milkIngredient = await prisma.ingredients.findFirst({
-        where: {
-          name: '乳',
+
+      restaurant = await prisma.restaurants.create({
+        data: {
+          name: 'test restaurant',
+          genreId: genre.id,
+        },
+      });
+
+      ingredient1 = await prisma.ingredients.create({
+        data: {
+          name: 'ingredient1',
+          pic: 'pic1',
+        },
+      });
+
+      ingredient2 = await prisma.ingredients.create({
+        data: {
+          name: 'ingredient2',
+          pic: 'pic2',
         },
       });
 
@@ -47,17 +64,17 @@ describe('MenusService', () => {
         restaurantId: restaurant.id,
         menus: [
           {
-            name: '卵を含む',
+            name: 'ingredient1を含む',
             pic: null,
-            ingredientIds: [eggIndredient.id],
+            ingredientIds: [ingredient1.id],
           },
           {
-            name: '卵、乳を含む',
+            name: 'ingredient1、ingredient2を含む',
             pic: null,
-            ingredientIds: [eggIndredient.id, milkIngredient.id],
+            ingredientIds: [ingredient1.id, ingredient2.id],
           },
           {
-            name: '卵、乳を含まない',
+            name: 'ingredient1、ingredient2を含まない',
             pic: null,
             ingredientIds: [],
           },
@@ -65,13 +82,10 @@ describe('MenusService', () => {
       });
     });
 
-    afterEach(async () => {
-      await prisma.menus.deleteMany();
-    });
     it('アレルギー情報が入力されるとそのアレルギー情報を含まないメニューを取得する', async () => {
       const data = await service.findAll({
         restaurantId: restaurant.id,
-        ingredientIds: [eggIndredient.id],
+        ingredientIds: [ingredient1.id],
       });
 
       expect(data.length).toBe(1);
@@ -80,11 +94,11 @@ describe('MenusService', () => {
     it('アレルギー情報が複数入力されるとどのアレルギー情報も含まないメニューを取得する', async () => {
       const data = await service.findAll({
         restaurantId: restaurant.id,
-        ingredientIds: [eggIndredient.id, milkIngredient.id],
+        ingredientIds: [ingredient1.id, ingredient2.id],
       });
 
       expect(data.length).toBe(1);
-      expect(data[0].name).toBe('卵、乳を含まない');
+      expect(data[0].name).toBe('ingredient1、ingredient2を含まない');
     });
 
     it('アレルギー情報が入力されないとすべてのメニューを取得する', async () => {

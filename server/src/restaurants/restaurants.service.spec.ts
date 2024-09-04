@@ -20,6 +20,7 @@ describe('RestaurantsService', () => {
 
   afterEach(async () => {
     await prisma.restaurants.deleteMany();
+    await prisma.genres.deleteMany();
   });
 
   describe('findOne', () => {
