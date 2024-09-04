@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma.service';
 import { GenresModule } from './genres.module';
 import { GenresService } from './genres.service';
 
-describe('IngredientsService', () => {
+describe('GenresService', () => {
   let service: GenresService;
   let prisma: PrismaService;
 
