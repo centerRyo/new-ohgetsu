@@ -8,7 +8,7 @@ describe('RestaurantsService', () => {
   let service: RestaurantsService;
   let prisma: PrismaService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [RestaurantsModule, AppModule],
     }).compile();
@@ -18,8 +18,11 @@ describe('RestaurantsService', () => {
     prisma = module.get<PrismaService>(PrismaService);
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
+    await prisma.menus.deleteMany();
     await prisma.restaurants.deleteMany();
+    await prisma.genres.deleteMany();
+    await prisma.ingredients.deleteMany();
   });
 
   describe('findOne', () => {
