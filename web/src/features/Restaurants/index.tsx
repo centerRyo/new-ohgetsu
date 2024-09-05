@@ -33,7 +33,7 @@ const Restaurants = memo(() => {
       <div className={styles.container}>
         <SimpleGrid
           spacing={4}
-          templateColumns='repeat(auto-fill, minmax(200px, 1fr))'
+          templateColumns='repeat(auto-fill, minmax(125px, 1fr))'
         >
           {!isLoading
             ? restaurants.map((restaurant) => (

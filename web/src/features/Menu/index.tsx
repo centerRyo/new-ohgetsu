@@ -75,7 +75,7 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
         <section className={styles.ingredients}>
           <SimpleGrid
             spacing={4}
-            templateColumns='repeat(auto-fill, minmax(200px, 1fr))'
+            templateColumns='repeat(auto-fill, minmax(125px, 1fr))'
           >
             {menu?.ingredients.map((ingredient) => (
               <Flex
