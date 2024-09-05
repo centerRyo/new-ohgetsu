@@ -104,7 +104,7 @@ export const Menus = ({ searchConditions }: Props) => {
           {menus.length > 0 ? (
             <SimpleGrid
               spacing={4}
-              templateColumns='repeat(auto-fill, minmax(200px, 1fr))'
+              templateColumns='repeat(auto-fill, minmax(125px, 1fr))'
             >
               {menus.map((menu) => (
                 <Link
