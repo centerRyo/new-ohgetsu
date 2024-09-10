@@ -76,9 +76,19 @@ $ npx prisma db seed
 
 ### for web
 
+```
+$ cd web/
+$ npm run dev:next
+```
+
 http://localhost:3000
 
 ### for server(swagger)
+
+```
+$ cd server/
+$ npm run start:dev
+```
 
 http://localhost:8080/api
 
