@@ -5,18 +5,15 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Flex,
   Heading,
   Image,
   SimpleGrid,
   Skeleton,
   Tag,
-  Text,
   Tooltip,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { memo } from 'react';
-import { HiOutlineLocationMarker } from 'react-icons/hi';
 import useSWR from 'swr';
 import { ErrorSafePage } from '../Error';
 import styles from './index.module.scss';
@@ -80,12 +77,6 @@ const Restaurants = memo(() => {
                       >
                         {restaurant.genre?.name}
                       </Tag>
-                      <Flex mt={4} alignItems='baseline'>
-                        <HiOutlineLocationMarker className={styles.location} />
-                        <Text ml={2} noOfLines={2} height='48px'>
-                          {restaurant.address}
-                        </Text>
-                      </Flex>
                     </CardBody>
                   </Card>
                 </Link>

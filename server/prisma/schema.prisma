@@ -25,7 +25,6 @@ model ingredients {
 model restaurants {
   id        String    @id @unique @default(uuid()) @db.Uuid
   name      String    @db.VarChar(255)
-  address   String?   @db.VarChar(255)
   pic       String?   @db.VarChar(255)
   genreId   String    @db.Uuid
   createdAt DateTime  @default(now())
