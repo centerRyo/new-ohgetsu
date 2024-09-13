@@ -25,8 +25,6 @@ export interface RestaurantDto {
   id: string;
   /** レストラン名 */
   name: string;
-  /** 住所 */
-  address?: string;
   /** レストランの画像URL */
   pic: string;
   /** ジャンル */
@@ -36,8 +34,6 @@ export interface RestaurantDto {
 export interface CreateRestaurantDto {
   /** レストラン名 */
   name: string;
-  /** 住所 */
-  address: string;
   /** 写真 */
   pic: string;
   /** ジャンルID */
@@ -47,8 +43,6 @@ export interface CreateRestaurantDto {
 export interface UpdateRestaurantDto {
   /** レストラン名 */
   name?: string;
-  /** 住所 */
-  address?: string;
   /** 写真 */
   pic?: string;
   /** ジャンルID */

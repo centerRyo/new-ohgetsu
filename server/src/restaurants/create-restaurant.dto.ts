@@ -12,15 +12,6 @@ export class CreateRestaurantDto {
   name: string;
 
   /**
-   * 住所
-   */
-  @Expose()
-  @IsString()
-  @IsOptional()
-  @ApiProperty({ description: '住所' })
-  address?: string;
-
-  /**
    * 写真
    */
   @Expose()

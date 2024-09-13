@@ -35,14 +35,12 @@ describe('RestaurantsService', () => {
 
       const restaurant = await service.create({
         name: 'test',
-        address: 'test address',
         pic: 'test pic',
         genreId: genre.id,
       });
       const res = await service.findOne(restaurant.id);
 
       expect(res.name).toBe(restaurant.name);
-      expect(res.address).toBe(restaurant.address);
       expect(res.pic).toBe(restaurant.pic);
       expect(res.genre.name).toBe(genre.name);
     });

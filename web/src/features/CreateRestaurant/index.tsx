@@ -3,7 +3,6 @@ import {
   Flex,
   FormControl,
   FormErrorMessage,
-  FormHelperText,
   FormLabel,
   Image,
   Input,
@@ -27,7 +26,6 @@ export const CreateRestaurant = () => {
     mode: 'all',
     defaultValues: {
       name: '',
-      address: '',
       pic: undefined,
       genre_id: '',
       menus: [{ name: '', ingredientIds: [], pic: undefined }],
@@ -70,25 +68,6 @@ export const CreateRestaurant = () => {
             />
             <FormErrorMessage>
               {errors.name?.message?.toString()}
-            </FormErrorMessage>
-          </FormControl>
-        </Flex>
-        <Flex mb={6}>
-          <FormControl isInvalid={!!errors.address?.message}>
-            <Flex alignItems='center' gap={4} mb={2}>
-              <FormLabel htmlFor='address' className={styles.label}>
-                住所
-              </FormLabel>
-              <span className={styles.required}>必須</span>
-            </Flex>
-            <Input
-              id='address'
-              type='text'
-              {...register('address', { required: '住所は必須です' })}
-            />
-            <FormHelperText>東京都千代田区丸の内１丁目</FormHelperText>
-            <FormErrorMessage>
-              {errors.address?.message?.toString()}
             </FormErrorMessage>
           </FormControl>
         </Flex>

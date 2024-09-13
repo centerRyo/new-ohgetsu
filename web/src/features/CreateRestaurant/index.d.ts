@@ -1,6 +1,5 @@
 export type FormValues = {
   name: string;
-  address: string;
   pic?: FileList;
   genre_id: string;
   menus: Array<{
