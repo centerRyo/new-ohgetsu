@@ -9,6 +9,5 @@ export type FormValues = {
 
 // TODO: メニュー写真の型を動的につける
 export type PreviewType = {
-  pic?: string;
   'menus.0.pic'?: string;
 };

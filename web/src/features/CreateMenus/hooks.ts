@@ -36,7 +36,7 @@ export const useHandler = ({
 
         reset();
 
-        setPreview({ pic: undefined, 'menus.0.pic': undefined });
+        setPreview({ 'menus.0.pic': undefined });
 
         toast({
           title: 'メニューを作成しました',
