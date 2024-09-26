@@ -13,6 +13,13 @@ const buildSuffix = (url?: {
 };
 
 export const pagesPath = {
+  create_menus: {
+    $url: (url?: { hash?: string }) => ({
+      pathname: '/create-menus' as const,
+      hash: url?.hash,
+      path: `/create-menus${buildSuffix(url)}`,
+    }),
+  },
   create_restaurant: {
     $url: (url?: { hash?: string }) => ({
       pathname: '/create-restaurant' as const,

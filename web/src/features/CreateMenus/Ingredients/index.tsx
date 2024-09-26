@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 import useSWR from 'swr';
-import { FormValues } from '../index.d';
+import { FormValues } from '../../CreateMenus/index.d';
 import styles from '../index.module.scss';
 
 type Props = {
