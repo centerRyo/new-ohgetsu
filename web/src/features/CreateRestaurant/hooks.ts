@@ -16,30 +16,18 @@ export const useHandler = ({ preview, setPreview, reset }: TUseHandlerArgs) => {
   const handleSubmit = useCallback(
     async (values: FormValues) => {
       try {
-        const { data, error } =
-          await api.restaurants.restaurantsControllerCreate({
-            name: values.name,
-            // TODO: ファイルアップロードにserverが対応したら修正する
-            pic: '',
-            genreId: values.genre_id,
-          });
-
-        const { error: menuError } = await api.menus.menusControllerCreate({
-          menus: values.menus.map((menu) => ({
-            name: menu.name,
-            // TODO: ファイルアップロードにserverが対応したら修正する
-            pic: '',
-            ingredientIds: menu.ingredientIds,
-          })),
-          restaurantId: data.id,
+        const { error } = await api.restaurants.restaurantsControllerCreate({
+          name: values.name,
+          // TODO: ファイルアップロードにserverが対応したら修正する
+          pic: '',
+          genreId: values.genre_id,
         });
 
         if (error) throw error;
-        if (menuError) throw menuError;
 
         reset();
 
-        setPreview({ pic: undefined, 'menus.0.pic': undefined });
+        setPreview({ pic: undefined });
 
         toast({
           title: 'レストランを作成しました',
