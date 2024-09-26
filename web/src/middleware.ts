@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export const config = {
-  matcher: '/create-restaurant/:path*',
+  matcher: ['/create-restaurant/:path*', '/create-menus/:path*'],
 };
 
 export function middleware(req: NextRequest) {

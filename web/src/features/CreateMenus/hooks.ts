@@ -1,42 +1,51 @@
 import { api } from '@/lib/swagger-client';
 import { useToast } from '@chakra-ui/react';
 import React, { useCallback } from 'react';
-import { UseFormReset } from 'react-hook-form';
+import { UseFieldArrayAppend, UseFormReset } from 'react-hook-form';
 import { FormValues, PreviewType } from './index.d';
 
 type TUseHandlerArgs = {
   preview: PreviewType;
   setPreview: (preview: PreviewType) => void;
   reset: UseFormReset<FormValues>;
+  append: UseFieldArrayAppend<FormValues, 'menus'>;
 };
 
-export const useHandler = ({ preview, setPreview, reset }: TUseHandlerArgs) => {
+export const useHandler = ({
+  preview,
+  setPreview,
+  reset,
+  append,
+}: TUseHandlerArgs) => {
   const toast = useToast();
 
   const handleSubmit = useCallback(
     async (values: FormValues) => {
       try {
-        const { error } = await api.restaurants.restaurantsControllerCreate({
-          name: values.name,
-          // TODO: ファイルアップロードにserverが対応したら修正する
-          pic: '',
-          genreId: values.genre_id,
+        const { error } = await api.menus.menusControllerCreate({
+          menus: values.menus.map((menu) => ({
+            name: menu.name,
+            // TODO: ファイルアップロードにserverが対応したら修正する
+            pic: '',
+            ingredientIds: menu.ingredientIds,
+          })),
+          restaurantId: values.restaurantId,
         });
 
         if (error) throw error;
 
         reset();
 
-        setPreview({ pic: undefined });
+        setPreview({ 'menus.0.pic': undefined });
 
         toast({
-          title: 'レストランを作成しました',
+          title: 'メニューを作成しました',
           status: 'success',
           isClosable: true,
         });
       } catch (error) {
         toast({
-          title: 'レストランを作成できませんでした',
+          title: 'メニューを作成できませんでした',
           status: 'error',
           isClosable: true,
         });
@@ -45,7 +54,7 @@ export const useHandler = ({ preview, setPreview, reset }: TUseHandlerArgs) => {
     [toast, reset, setPreview]
   );
 
-  const handleFileChange = useCallback(
+  const handleChangeFile = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { files } = e.target;
 
@@ -58,5 +67,8 @@ export const useHandler = ({ preview, setPreview, reset }: TUseHandlerArgs) => {
     [preview, setPreview]
   );
 
-  return { handleSubmit, handleFileChange };
+  const handleAddMenu = () =>
+    append([{ name: '', ingredientIds: [], pic: undefined }]);
+
+  return { handleSubmit, handleChangeFile, handleAddMenu };
 };
