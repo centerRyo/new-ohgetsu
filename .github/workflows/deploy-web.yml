@@ -50,6 +50,7 @@ jobs:
           build-args: |
             NEXT_PUBLIC_BASIC_AUTH_USER=${{ secrets.NEXT_PUBLIC_BASIC_AUTH_USER }}
             NEXT_PUBLIC_BASIC_AUTH_PASSWORD=${{ secrets.NEXT_PUBLIC_BASIC_AUTH_PASSWORD }}
+            NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=${{ secrets.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID }}
 
       - name: Execute remote commands via SSH
         uses: appleboy/ssh-action@v1.0.3
