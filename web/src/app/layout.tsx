@@ -1,4 +1,5 @@
 import Header from '@/components/header';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { memo } from 'react';
 import ChakraProviders from './chakra-providers';
 import styles from './layout.module.scss';
@@ -11,6 +12,10 @@ const RootLayout = memo(({ children }: Props) => {
   return (
     <html lang='ja'>
       <body>
+        <GoogleAnalytics
+          gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID as string}
+        />
+
         <ChakraProviders>
           <div className={styles.container}>
             <div className={styles.header}>
