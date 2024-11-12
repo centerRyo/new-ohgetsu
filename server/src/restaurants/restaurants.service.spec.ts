@@ -26,6 +26,11 @@ describe('RestaurantsService', () => {
   });
 
   describe('findOne', () => {
+    afterEach(async () => {
+      await prisma.restaurants.deleteMany();
+      await prisma.genres.deleteMany();
+    });
+
     it('指定したIDのレストランを取得できる', async () => {
       const genre = await prisma.genres.create({
         data: {
@@ -43,6 +48,40 @@ describe('RestaurantsService', () => {
       expect(res.name).toBe(restaurant.name);
       expect(res.pic).toBe(restaurant.pic);
       expect(res.genre.name).toBe(genre.name);
+    });
+  });
+
+  describe('search', () => {
+    afterEach(async () => {
+      await prisma.restaurants.deleteMany();
+      await prisma.genres.deleteMany();
+    });
+
+    it('キーワードを含むレストランを取得できる', async () => {
+      const genre = await prisma.genres.create({
+        data: {
+          name: 'ジャンル01',
+        },
+      });
+
+      const restaurant1 = await prisma.restaurants.create({
+        data: {
+          name: 'キーワードレストラン01キーワード',
+          genreId: genre.id,
+        },
+      });
+
+      await prisma.restaurants.create({
+        data: {
+          name: 'レストラン02',
+          genreId: genre.id,
+        },
+      });
+
+      const res = await service.search('キーワード');
+
+      expect(res.length).toBe(1);
+      expect(res[0].name).toBe(restaurant1.name);
     });
   });
 });
