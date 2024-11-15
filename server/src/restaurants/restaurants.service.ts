@@ -66,4 +66,16 @@ export class RestaurantsService {
       },
     });
   }
+
+  async search(keyword: string) {
+    const restaurants = await this.prisma.restaurants.findMany({
+      where: {
+        name: {
+          contains: keyword,
+        },
+      },
+    });
+
+    return restaurants;
+  }
 }

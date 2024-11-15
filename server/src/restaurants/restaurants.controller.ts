@@ -13,6 +13,7 @@ import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateRestaurantDto } from './create-restaurant.dto';
 import { RestaurantDto } from './restaurants.dto';
 import { RestaurantsService } from './restaurants.service';
+import { SearchRestaurantsDto } from './search-restaurants.dto';
 import { UpdateRestaurantDto } from './update-restaurant.dto';
 
 @Injectable()
@@ -86,5 +87,16 @@ export class RestaurantsController {
     await this.restaurantsService.delete(id);
 
     return { result: true };
+  }
+
+  @Post('/search')
+  @ApiOperation({
+    summary: 'レストランを検索する',
+    description: 'レストラン名で部分一致検索を行う',
+  })
+  async search(@Body() data: SearchRestaurantsDto): Promise<RestaurantDto[]> {
+    const restaurants = await this.restaurantsService.search(data.keyword);
+
+    return restaurants.map((restaurant) => new RestaurantDto(restaurant));
   }
 }
