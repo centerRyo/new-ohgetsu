@@ -35,7 +35,7 @@ describe('RestaurantsService', () => {
 
       await prisma.restaurants.create({
         data: {
-          name: 'レストラン01',
+          name: 'キーワードレストラン01キーワード',
           genreId: genre.id,
           ...(withDeleted ? { deletedAt: new Date() } : {}),
         },
@@ -61,7 +61,10 @@ describe('RestaurantsService', () => {
 
       expect(res.length).toBe(2);
       expect(res.map((r) => r.name)).toEqual(
-        expect.arrayContaining(['レストラン01', 'レストラン02'])
+        expect.arrayContaining([
+          'キーワードレストラン01キーワード',
+          'レストラン02',
+        ])
       );
     });
 
@@ -72,6 +75,15 @@ describe('RestaurantsService', () => {
 
       expect(res.length).toBe(1);
       expect(res[0].name).toBe('レストラン02');
+    });
+
+    it('検索キーワードを含むレストランを取得できる', async () => {
+      await createGenreAndRestaurants();
+
+      const res = await service.find('キーワード');
+
+      expect(res.length).toBe(1);
+      expect(res[0].name).toBe('キーワードレストラン01キーワード');
     });
   });
 
