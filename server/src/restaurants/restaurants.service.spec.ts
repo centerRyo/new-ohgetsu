@@ -26,58 +26,47 @@ describe('RestaurantsService', () => {
   });
 
   describe('find', () => {
+    const createGenreAndRestaurants = async (withDeleted?: boolean) => {
+      const genre = await prisma.genres.create({
+        data: {
+          name: 'ジャンル01',
+        },
+      });
+
+      await prisma.restaurants.create({
+        data: {
+          name: 'レストラン01',
+          genreId: genre.id,
+          ...(withDeleted ? { deletedAt: new Date() } : {}),
+        },
+      });
+
+      await prisma.restaurants.create({
+        data: {
+          name: 'レストラン02',
+          genreId: genre.id,
+        },
+      });
+    };
+
     afterEach(async () => {
       await prisma.restaurants.deleteMany();
       await prisma.genres.deleteMany();
     });
 
     it('検索キーワードがない場合、全件取得できる', async () => {
-      const genre = await prisma.genres.create({
-        data: {
-          name: 'ジャンル01',
-        },
-      });
-
-      await prisma.restaurants.create({
-        data: {
-          name: 'レストラン01',
-          genreId: genre.id,
-        },
-      });
-
-      await prisma.restaurants.create({
-        data: {
-          name: 'レストラン02',
-          genreId: genre.id,
-        },
-      });
+      await createGenreAndRestaurants();
 
       const res = await service.find();
 
       expect(res.length).toBe(2);
+      expect(res.map((r) => r.name)).toEqual(
+        expect.arrayContaining(['レストラン01', 'レストラン02'])
+      );
     });
 
     it('deletedAtが null でない レストランは取得しない', async () => {
-      const genre = await prisma.genres.create({
-        data: {
-          name: 'ジャンル01',
-        },
-      });
-
-      await prisma.restaurants.create({
-        data: {
-          name: 'レストラン01',
-          genreId: genre.id,
-          deletedAt: new Date(),
-        },
-      });
-
-      await prisma.restaurants.create({
-        data: {
-          name: 'レストラン02',
-          genreId: genre.id,
-        },
-      });
+      await createGenreAndRestaurants(true);
 
       const res = await service.find();
 
