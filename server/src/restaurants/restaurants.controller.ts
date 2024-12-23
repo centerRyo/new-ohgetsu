@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateRestaurantDto } from './create-restaurant.dto';
@@ -25,10 +26,12 @@ export class RestaurantsController {
   @Get()
   @ApiOperation({
     summary: 'レストラン一覧を取得する',
+    description:
+      '検索キーワードがある場合、レストラン名で部分一致検索を行う。ない場合は全件取得する',
   })
   @ApiResponse({ status: HttpStatus.OK, type: [RestaurantDto] })
-  async findAll(): Promise<RestaurantDto[]> {
-    const restaurants = await this.restaurantsService.findAll();
+  async find(@Query() query: SearchRestaurantsDto): Promise<RestaurantDto[]> {
+    const restaurants = await this.restaurantsService.find(query.search_query);
 
     return restaurants.map((restaurant) => new RestaurantDto(restaurant));
   }
@@ -87,16 +90,5 @@ export class RestaurantsController {
     await this.restaurantsService.delete(id);
 
     return { result: true };
-  }
-
-  @Post('/search')
-  @ApiOperation({
-    summary: 'レストランを検索する',
-    description: 'レストラン名で部分一致検索を行う',
-  })
-  async search(@Body() data: SearchRestaurantsDto): Promise<RestaurantDto[]> {
-    const restaurants = await this.restaurantsService.search(data.keyword);
-
-    return restaurants.map((restaurant) => new RestaurantDto(restaurant));
   }
 }

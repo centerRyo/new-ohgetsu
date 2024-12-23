@@ -6,5 +6,5 @@ export class SearchRestaurantsDto {
   @Expose()
   @IsString()
   @ApiProperty({ description: '検索キーワード' })
-  keyword: string;
+  search_query: string;
 }
