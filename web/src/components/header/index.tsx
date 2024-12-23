@@ -1,16 +1,85 @@
+'use client';
+
+import {
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  IconButton,
+  Input,
+  InputGroup,
+  InputRightElement,
+  useBreakpointValue,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react';
 import Link from 'next/link';
 import { FC, memo } from 'react';
+import { FaSearch } from 'react-icons/fa';
+import { GiHamburgerMenu } from 'react-icons/gi';
 import styles from './index.module.scss';
 
 const Header: FC = memo(() => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const isMobile = useBreakpointValue({ base: true, md: false });
+
   return (
-    <header className={styles.container}>
-      <h1 className={styles.logo}>
-        <Link href='/'>
-          <Logo />
-        </Link>
-      </h1>
-    </header>
+    <>
+      <header className={styles.container}>
+        <h1 className={styles.logo}>
+          <Link href='/'>
+            <Logo />
+          </Link>
+        </h1>
+
+        {isMobile ? (
+          <IconButton
+            aria-label='Open menu'
+            icon={<GiHamburgerMenu />}
+            onClick={onOpen}
+            bg='white'
+          />
+        ) : (
+          <InputGroup w='300px' bg='white' h='100%'>
+            <Input
+              placeholder='レストランを探す...'
+              variant='outline'
+              color='black'
+              _placeholder={{ color: 'gray.500' }}
+              h='100%'
+            />
+            <InputRightElement h='100%'>
+              <IconButton aria-label='search' icon={<FaSearch />} h='100%' />
+            </InputRightElement>
+          </InputGroup>
+        )}
+      </header>
+
+      <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>レストランを検索</DrawerHeader>
+          <DrawerBody>
+            <VStack spacing={4} align='stretch'>
+              <InputGroup bg='white'>
+                <Input
+                  placeholder='レストランを探す...'
+                  variant='outline'
+                  color='black'
+                  _placeholder={{ color: 'gray.500' }}
+                />
+                <InputRightElement>
+                  <IconButton aria-label='search' icon={<FaSearch />} />
+                </InputRightElement>
+              </InputGroup>
+            </VStack>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+    </>
   );
 });
 Header.displayName = 'Header';
