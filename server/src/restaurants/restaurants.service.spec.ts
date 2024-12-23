@@ -40,7 +40,7 @@ describe('RestaurantsService', () => {
 
       await prisma.restaurants.create({
         data: {
-          name: 'キーワードレストラン01キーワード',
+          name: 'レストラン01',
           genreId: genre.id,
         },
       });
@@ -55,6 +55,34 @@ describe('RestaurantsService', () => {
       const res = await service.find();
 
       expect(res.length).toBe(2);
+    });
+
+    it('deletedAtが null でない レストランは取得しない', async () => {
+      const genre = await prisma.genres.create({
+        data: {
+          name: 'ジャンル01',
+        },
+      });
+
+      await prisma.restaurants.create({
+        data: {
+          name: 'レストラン01',
+          genreId: genre.id,
+          deletedAt: new Date(),
+        },
+      });
+
+      await prisma.restaurants.create({
+        data: {
+          name: 'レストラン02',
+          genreId: genre.id,
+        },
+      });
+
+      const res = await service.find();
+
+      expect(res.length).toBe(1);
+      expect(res[0].name).toBe('レストラン02');
     });
   });
 
