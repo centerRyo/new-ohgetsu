@@ -13,14 +13,24 @@ import {
   Tooltip,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import { memo } from 'react';
 import useSWR from 'swr';
+import { RestaurantsSearchCondition } from '../CreateMenus/Restaurants/utils';
 import { ErrorSafePage } from '../Error';
 import styles from './index.module.scss';
 
-const Restaurants = memo(() => {
-  const { data, error, isLoading } = useSWR('/restaurants', () =>
-    api.restaurants.restaurantsControllerFindAll()
+type Props = {
+  searchConditions: RestaurantsSearchCondition;
+};
+
+export const Restaurants = ({ searchConditions }: Props): JSX.Element => {
+  const { search_query } = searchConditions;
+
+  const { data, error, isLoading } = useSWR(
+    search_query ? `/restaurants?search_query=${search_query}` : '/restaurants',
+    () =>
+      api.restaurants.restaurantsControllerFind({
+        search_query,
+      })
   );
 
   const restaurants = data?.data || [];
@@ -88,7 +98,4 @@ const Restaurants = memo(() => {
       </div>
     </ErrorSafePage>
   );
-});
-Restaurants.displayName = 'Restaurants';
-
-export default Restaurants;
+};

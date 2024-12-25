@@ -1,10 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class SearchRestaurantsDto {
   @Expose()
   @IsString()
-  @ApiProperty({ description: '検索キーワード' })
-  keyword: string;
+  @IsOptional()
+  @ApiPropertyOptional({ description: '検索キーワード', required: false })
+  search_query?: string;
 }

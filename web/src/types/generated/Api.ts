@@ -359,17 +359,24 @@ export class Api<
   };
   restaurants = {
     /**
-     * No description
+     * @description 検索キーワードがある場合、レストラン名で部分一致検索を行う。ない場合は全件取得する
      *
      * @tags restaurants
-     * @name RestaurantsControllerFindAll
+     * @name RestaurantsControllerFind
      * @summary レストラン一覧を取得する
      * @request GET:/restaurants
      */
-    restaurantsControllerFindAll: (params: RequestParams = {}) =>
+    restaurantsControllerFind: (
+      query?: {
+        /** 検索キーワード */
+        search_query?: string;
+      },
+      params: RequestParams = {}
+    ) =>
       this.request<RestaurantDto[], any>({
         path: `/restaurants`,
         method: 'GET',
+        query: query,
         format: 'json',
         ...params,
       }),

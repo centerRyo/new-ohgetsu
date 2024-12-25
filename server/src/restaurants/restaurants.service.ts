@@ -7,6 +7,26 @@ import { UpdateRestaurantDto } from './update-restaurant.dto';
 export class RestaurantsService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async find(keyword?: string) {
+    const restaurants = await this.prisma.restaurants.findMany({
+      where: {
+        deletedAt: null,
+        ...(keyword
+          ? {
+              name: {
+                contains: keyword,
+              },
+            }
+          : {}),
+      },
+      include: {
+        genre: true,
+      },
+    });
+
+    return restaurants;
+  }
+
   async findAll() {
     const restaurants = await this.prisma.restaurants.findMany({
       where: {

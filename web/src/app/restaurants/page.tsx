@@ -1,8 +1,21 @@
 'use client';
 
-import Restaurants from '@/features/Restaurants';
-import { NextPage } from 'next';
+import {
+  CreateRestaurantsSearchCondition,
+  RestaurantsSearchCondition,
+} from '@/features/CreateMenus/Restaurants/utils';
+import { Restaurants } from '@/features/Restaurants';
 
-const RestaurantsPage: NextPage = () => <Restaurants />;
+export type OptionalQuery = RestaurantsSearchCondition;
+
+const RestaurantsPage = ({
+  searchParams,
+}: {
+  searchParams: RestaurantsSearchCondition;
+}) => {
+  const searchConditions = CreateRestaurantsSearchCondition(searchParams);
+
+  return <Restaurants searchConditions={searchConditions} />;
+};
 
 export default RestaurantsPage;
