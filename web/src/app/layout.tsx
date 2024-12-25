@@ -1,4 +1,4 @@
-import Header from '@/components/header';
+import { Header } from '@/components/header';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { memo } from 'react';
 import ChakraProviders from './chakra-providers';
