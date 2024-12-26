@@ -56,7 +56,7 @@ jobs:
           key: ${{ secrets.SAKURA_CLOUD_SSH_KEY }}
           script: |
             # Pull the latest images
-            docker pull ${{ env.REGISTRY }}/${{ env.SERVER_IMAGE_NAME }};latest
+            docker pull ${{ env.REGISTRY }}/${{ env.SERVER_IMAGE_NAME }}:latest
 
             # Create Docker network if not exists
             docker network inspect ohgetsu_network > /dev/null 2>&1 || docker network create ohgetsu_network
