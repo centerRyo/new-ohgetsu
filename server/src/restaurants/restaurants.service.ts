@@ -55,9 +55,12 @@ export class RestaurantsService {
     return restaurant;
   }
 
-  async create(data: CreateRestaurantDto) {
+  async create(data: CreateRestaurantDto, pic: string | null) {
     const restaurant = await this.prisma.restaurants.create({
-      data,
+      data: {
+        ...data,
+        pic,
+      },
     });
 
     return restaurant;

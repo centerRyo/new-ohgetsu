@@ -9,8 +9,13 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { diskStorage } from 'multer';
+import { join, relative } from 'path';
 import { CreateRestaurantDto } from './create-restaurant.dto';
 import { RestaurantDto } from './restaurants.dto';
 import { RestaurantsService } from './restaurants.service';
@@ -55,8 +60,41 @@ export class RestaurantsController {
   @ApiBody({
     type: CreateRestaurantDto,
   })
-  async create(@Body() data: CreateRestaurantDto): Promise<RestaurantDto> {
-    const restaurant = await this.restaurantsService.create(data);
+  @UseInterceptors(
+    FileInterceptor('pic', {
+      storage: diskStorage({
+        destination: (_, __, cb) => {
+          const uploadPath = join(
+            __dirname,
+            '..',
+            '..',
+            '..',
+            'public',
+            'images',
+            'uploads'
+          );
+
+          cb(null, uploadPath);
+        },
+        filename: (_, file, cb) => {
+          const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+
+          cb(null, `${uniqueSuffix}-${file.originalname}`);
+        },
+      }),
+    })
+  )
+  async create(
+    @Body() data: CreateRestaurantDto,
+    @UploadedFile() pic?: Express.Multer.File
+  ): Promise<RestaurantDto> {
+    const picPath = pic
+      ? `/${relative(join(__dirname, '..', '..', '..', 'public'), pic.path)}`
+      : null;
+
+    console.log(picPath);
+    console.log(pic);
+    const restaurant = await this.restaurantsService.create(data, picPath);
 
     return new RestaurantDto(restaurant);
   }
