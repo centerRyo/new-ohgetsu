@@ -15,9 +15,13 @@ export class CreateRestaurantDto {
    * 写真
    */
   @Expose()
-  @IsString()
   @IsOptional()
-  @ApiProperty({ description: '写真' })
+  @ApiProperty({
+    description: '写真',
+    type: 'string',
+    format: 'binary',
+    required: false,
+  })
   pic?: string;
 
   /**

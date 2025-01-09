@@ -18,8 +18,7 @@ export const useHandler = ({ preview, setPreview, reset }: TUseHandlerArgs) => {
       try {
         const { error } = await api.restaurants.restaurantsControllerCreate({
           name: values.name,
-          // TODO: ファイルアップロードにserverが対応したら修正する
-          pic: '',
+          pic: values.pic ? values.pic[0] : undefined,
           genreId: values.genre_id,
         });
 

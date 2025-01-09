@@ -13,7 +13,13 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { join, relative } from 'path';
 import { CreateRestaurantDto } from './create-restaurant.dto';
@@ -60,6 +66,7 @@ export class RestaurantsController {
   @ApiBody({
     type: CreateRestaurantDto,
   })
+  @ApiConsumes('multipart/form-data')
   @UseInterceptors(
     FileInterceptor('pic', {
       storage: diskStorage({
@@ -92,8 +99,6 @@ export class RestaurantsController {
       ? `/${relative(join(__dirname, '..', '..', '..', 'public'), pic.path)}`
       : null;
 
-    console.log(picPath);
-    console.log(pic);
     const restaurant = await this.restaurantsService.create(data, picPath);
 
     return new RestaurantDto(restaurant);
