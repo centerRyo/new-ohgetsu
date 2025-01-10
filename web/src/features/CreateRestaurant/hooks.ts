@@ -17,9 +17,8 @@ export const useHandler = ({ preview, setPreview, reset }: TUseHandlerArgs) => {
     async (values: FormValues) => {
       try {
         const { error } = await api.restaurants.restaurantsControllerCreate({
-          name: values.name,
+          ...values,
           pic: values.pic ? values.pic[0] : undefined,
-          genreId: values.genre_id,
         });
 
         if (error) throw error;
