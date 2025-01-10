@@ -25,7 +25,7 @@ export const CreateRestaurant = () => {
     defaultValues: {
       name: '',
       pic: undefined,
-      genre_id: '',
+      genreId: '',
     },
   });
 

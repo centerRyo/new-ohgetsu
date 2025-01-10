@@ -1,7 +1,7 @@
 export type FormValues = {
   name: string;
   pic?: FileList;
-  genre_id: string;
+  genreId: string;
 };
 
 export type PreviewType = {

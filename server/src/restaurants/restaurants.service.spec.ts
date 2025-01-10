@@ -100,11 +100,14 @@ describe('RestaurantsService', () => {
         },
       });
 
-      const restaurant = await service.create({
-        name: 'test',
-        pic: 'test pic',
-        genreId: genre.id,
-      });
+      const restaurant = await service.create(
+        {
+          name: 'test',
+          pic: 'test pic',
+          genreId: genre.id,
+        },
+        'test pic'
+      );
       const res = await service.findOne(restaurant.id);
 
       expect(res.name).toBe(restaurant.name);

@@ -34,8 +34,11 @@ export interface RestaurantDto {
 export interface CreateRestaurantDto {
   /** レストラン名 */
   name: string;
-  /** 写真 */
-  pic: string;
+  /**
+   * 写真
+   * @format binary
+   */
+  pic?: File;
   /** ジャンルID */
   genreId: string;
 }
@@ -43,8 +46,11 @@ export interface CreateRestaurantDto {
 export interface UpdateRestaurantDto {
   /** レストラン名 */
   name?: string;
-  /** 写真 */
-  pic?: string;
+  /**
+   * 写真
+   * @format binary
+   */
+  pic?: File;
   /** ジャンルID */
   genreId?: string;
   /** レストラン再開フラグ */
@@ -397,7 +403,7 @@ export class Api<
         path: `/restaurants`,
         method: 'POST',
         body: data,
-        type: ContentType.Json,
+        type: ContentType.FormData,
         format: 'json',
         ...params,
       }),

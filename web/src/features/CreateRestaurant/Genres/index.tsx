@@ -30,9 +30,9 @@ const Genres = ({ errors, register }: Props) => {
   });
 
   return (
-    <FormControl isInvalid={!!errors.genre_id?.message}>
+    <FormControl isInvalid={!!errors.genreId?.message}>
       <Flex alignItems='center' gap={4} mb={2}>
-        <FormLabel htmlFor='genre_id' className={styles.label}>
+        <FormLabel htmlFor='genreId' className={styles.label}>
           ジャンル
         </FormLabel>
         <span className={styles.required}>必須</span>
@@ -40,7 +40,7 @@ const Genres = ({ errors, register }: Props) => {
       <Skeleton isLoaded={!isLoading}>
         <Select
           placeholder='ジャンルを選択してください'
-          {...register('genre_id', { required: 'ジャンルは必須です' })}
+          {...register('genreId', { required: 'ジャンルは必須です' })}
         >
           {options.map((option) => (
             <option key={option.key} value={option.value}>
@@ -49,9 +49,7 @@ const Genres = ({ errors, register }: Props) => {
           ))}
         </Select>
       </Skeleton>
-      <FormErrorMessage>
-        {errors.genre_id?.message?.toString()}
-      </FormErrorMessage>
+      <FormErrorMessage>{errors.genreId?.message?.toString()}</FormErrorMessage>
     </FormControl>
   );
 };
