@@ -28,6 +28,7 @@ export const Restaurants = ({ errors, register }: Props) => {
   const options = useCustomOptions({
     items: restaurants,
     getLabel: (item) => item.name,
+    getKey: (item) => item.id,
   });
 
   return (
