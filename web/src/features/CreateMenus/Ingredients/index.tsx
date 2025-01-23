@@ -4,7 +4,6 @@ import {
   Checkbox,
   CheckboxGroup,
   Flex,
-  FormControl,
   FormErrorMessage,
   FormLabel,
   SkeletonText,
@@ -34,9 +33,7 @@ const Ingredients = ({ errors, control, index }: Props) => {
   });
 
   return (
-    <FormControl
-      isInvalid={errors.menus && !!errors.menus[index]?.ingredientIds?.message}
-    >
+    <div>
       <Flex mb={2}>
         <FormLabel className={styles.label}>アレルギー情報</FormLabel>
       </Flex>
@@ -62,7 +59,7 @@ const Ingredients = ({ errors, control, index }: Props) => {
         {errors.menus &&
           errors.menus[index]?.ingredientIds?.message?.toString()}
       </FormErrorMessage>
-    </FormControl>
+    </div>
   );
 };
 
