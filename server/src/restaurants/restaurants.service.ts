@@ -1,11 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { S3Service } from 'src/common/services/s3.service';
 import { PrismaService } from '../prisma.service';
 import { CreateRestaurantDto } from './create-restaurant.dto';
 import { UpdateRestaurantDto } from './update-restaurant.dto';
 
 @Injectable()
 export class RestaurantsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly s3Service: S3Service
+  ) {}
 
   async find(keyword?: string) {
     const restaurants = await this.prisma.restaurants.findMany({
@@ -55,11 +59,16 @@ export class RestaurantsService {
     return restaurant;
   }
 
-  async create(data: CreateRestaurantDto, pic: string | null) {
+  async create(data: CreateRestaurantDto, pic: Express.Multer.File | null) {
+    // picがあればさくらのクラウドオブジェクトストレージにアップロード
+    const picPath = pic
+      ? await this.s3Service.uploadFile({ file: pic, folder: 'restaurants' })
+      : null;
+
     const restaurant = await this.prisma.restaurants.create({
       data: {
         ...data,
-        pic,
+        pic: picPath,
       },
     });
 

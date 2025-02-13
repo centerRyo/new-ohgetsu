@@ -55,11 +55,7 @@ export const Restaurants = ({ searchConditions }: Props): JSX.Element => {
                     <CardHeader>
                       <Box className={styles.imageWrap}>
                         <Image
-                          src={
-                            restaurant.pic
-                              ? `${process.env.NEXT_PUBLIC_BACKEND_URL}${restaurant.pic}`
-                              : '/images/no_image.png'
-                          }
+                          src={restaurant.pic ?? '/images/no_image.png'}
                           alt={restaurant.name}
                           fit='fill'
                           objectFit='cover'

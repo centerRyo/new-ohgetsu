@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { CommonModule } from './common/services/common.module';
 import { GenresModule } from './genres/genres.module';
 import { GlobalModule } from './global.module';
 import { IngredientsModule } from './ingredients/ingredients.module';
@@ -22,6 +23,7 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
     GenresModule,
     RestaurantsModule,
     MenusModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],
