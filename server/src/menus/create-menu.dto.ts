@@ -1,9 +1,28 @@
-import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsArray, IsUUID } from 'class-validator';
-import { MenuDto } from './menus.dto';
+import { IsArray, IsOptional, IsUUID } from 'class-validator';
 
-class PartialMenuDto extends OmitType(MenuDto, ['id', 'ingredients']) {
+class PartialMenuDto {
+  /**
+   * メニュー名
+   */
+  @Expose()
+  @ApiProperty()
+  name: string;
+
+  /**
+   * 写真
+   */
+  @Expose()
+  @IsOptional()
+  @ApiProperty({
+    description: '写真',
+    type: 'string',
+    format: 'byte',
+    required: false,
+  })
+  pic?: string;
+
   @Expose()
   @IsArray()
   @ApiProperty({ type: [String] })

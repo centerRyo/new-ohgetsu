@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { MenusService } from './menus.service';
+import { S3Service } from 'src/common/services/s3.service';
 import { MenusController } from './menus.controller';
+import { MenusService } from './menus.service';
 
 @Module({
   controllers: [MenusController],
-  providers: [MenusService],
+  providers: [MenusService, S3Service],
 })
 export class MenusModule {}
