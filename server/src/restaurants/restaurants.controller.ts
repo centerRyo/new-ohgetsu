@@ -20,8 +20,6 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { diskStorage } from 'multer';
-import { join, relative } from 'path';
 import { CreateRestaurantDto } from './create-restaurant.dto';
 import { RestaurantDto } from './restaurants.dto';
 import { RestaurantsService } from './restaurants.service';
@@ -67,39 +65,12 @@ export class RestaurantsController {
     type: CreateRestaurantDto,
   })
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(
-    FileInterceptor('pic', {
-      storage: diskStorage({
-        destination: (_, __, cb) => {
-          const uploadPath = join(
-            __dirname,
-            '..',
-            '..',
-            '..',
-            'public',
-            'images',
-            'uploads'
-          );
-
-          cb(null, uploadPath);
-        },
-        filename: (_, file, cb) => {
-          const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-
-          cb(null, `${uniqueSuffix}-${file.originalname}`);
-        },
-      }),
-    })
-  )
+  @UseInterceptors(FileInterceptor('pic'))
   async create(
     @Body() data: CreateRestaurantDto,
     @UploadedFile() pic?: Express.Multer.File
   ): Promise<RestaurantDto> {
-    const picPath = pic
-      ? `/${relative(join(__dirname, '..', '..', '..', 'public'), pic.path)}`
-      : null;
-
-    const restaurant = await this.restaurantsService.create(data, picPath);
+    const restaurant = await this.restaurantsService.create(data, pic);
 
     return new RestaurantDto(restaurant);
   }

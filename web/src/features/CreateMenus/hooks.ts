@@ -1,3 +1,4 @@
+import { fileToBase64 } from '@/lib/file-util';
 import { api } from '@/lib/swagger-client';
 import { useToast } from '@chakra-ui/react';
 import React, { useCallback } from 'react';
@@ -22,13 +23,18 @@ export const useHandler = ({
   const handleSubmit = useCallback(
     async (values: FormValues) => {
       try {
+        const menus = await Promise.all(
+          values.menus.map(async (menu) => ({
+            ...menu,
+            pic:
+              menu.pic && menu.pic.length > 0
+                ? await fileToBase64(menu.pic[0])
+                : undefined,
+          }))
+        );
+
         const { error } = await api.menus.menusControllerCreate({
-          menus: values.menus.map((menu) => ({
-            name: menu.name,
-            // TODO: ファイルアップロードにserverが対応したら修正する
-            pic: '',
-            ingredientIds: menu.ingredientIds,
-          })),
+          menus,
           restaurantId: values.restaurantId,
         });
 

@@ -106,7 +106,7 @@ describe('RestaurantsService', () => {
           pic: 'test pic',
           genreId: genre.id,
         },
-        'test pic'
+        null
       );
       const res = await service.findOne(restaurant.id);
 

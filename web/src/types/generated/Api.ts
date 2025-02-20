@@ -66,7 +66,11 @@ export interface MenuDto {
 
 export interface PartialMenuDto {
   name: string;
-  pic: string;
+  /**
+   * 写真
+   * @format byte
+   */
+  pic?: string;
   ingredientIds: string[];
 }
 

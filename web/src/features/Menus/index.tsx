@@ -122,11 +122,7 @@ export const Menus = ({ searchConditions }: Props) => {
                     <CardHeader>
                       <Box className={styles.imageWrap}>
                         <Image
-                          src={
-                            menu?.pic
-                              ? `${process.env.NEXT_PUBLIC_BACKEND_URL}${menu?.pic}`
-                              : '/images/no_image.png'
-                          }
+                          src={menu.pic ?? '/images/no_image.png'}
                           fit='fill'
                           objectFit='cover'
                           borderRadius='md'

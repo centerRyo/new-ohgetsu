@@ -6,7 +6,9 @@ import {
   Param,
   Post,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateMenuDto } from './create-menu.dto';
 import { MenuDto, findMenusQuery } from './menus.dto';
@@ -45,6 +47,7 @@ export class MenusController {
   })
   @ApiResponse({ status: HttpStatus.OK, type: [MenuDto] })
   @ApiBody({ type: CreateMenuDto })
+  @UseInterceptors(AnyFilesInterceptor())
   async create(@Body() data: CreateMenuDto): Promise<MenuDto[]> {
     const menus = await this.menusService.create(data);
 

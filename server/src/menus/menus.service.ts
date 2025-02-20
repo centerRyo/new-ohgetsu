@@ -1,11 +1,20 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { Readable } from 'stream';
+import { S3Service } from '../common/services/s3.service';
 import { PrismaService } from '../prisma.service';
 import { CreateMenuDto } from './create-menu.dto';
 import { MenuDto, findMenusQuery } from './menus.dto';
 
 @Injectable()
 export class MenusService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly s3Service: S3Service
+  ) {}
 
   async findAll(query: findMenusQuery) {
     const ingredientIds = Array.isArray(query.ingredientIds)
@@ -81,10 +90,43 @@ export class MenusService {
         validatedIngredients.push({ id: existingIngredient.id });
       }
 
+      let uploadedPic: string | null = null;
+
+      if (pic) {
+        // picは"data:image/png;base64,iVBORw0KGgoAAAANSUhEUg..."のような形で送られてくる
+        const base64Data = pic.split(';base64,').pop();
+        const contentType = pic.substring(5, pic.indexOf(';'));
+        const buffer = Buffer.from(base64Data, 'base64');
+
+        const uploadFile: Express.Multer.File = {
+          fieldname: 'pic',
+          originalname: `${Date.now()}-${name.replace(/\s+/g, '_')}.png`,
+          encoding: '7bit',
+          buffer,
+          mimetype: contentType,
+          size: buffer.length,
+          stream: Readable.from(buffer),
+          destination: '',
+          filename: '',
+          path: '',
+        };
+
+        try {
+          uploadedPic = await this.s3Service.uploadFile({
+            file: uploadFile,
+            folder: 'menus',
+          });
+        } catch (error) {
+          throw new InternalServerErrorException(
+            `さくらのクラウドオブジェクトストレージへのファイルアップロードに失敗しました: ${error}`
+          );
+        }
+      }
+
       const createdMenu = await this.prisma.menus.create({
         data: {
           name,
-          pic,
+          pic: uploadedPic,
           restaurant: {
             connect: {
               id: restaurant.id,
