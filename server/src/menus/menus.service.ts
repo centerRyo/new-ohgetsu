@@ -3,8 +3,8 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { S3Service } from 'src/common/services/s3.service';
 import { Readable } from 'stream';
+import { S3Service } from '../common/services/s3.service';
 import { PrismaService } from '../prisma.service';
 import { CreateMenuDto } from './create-menu.dto';
 import { MenuDto, findMenusQuery } from './menus.dto';

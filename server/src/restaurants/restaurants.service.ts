@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { S3Service } from 'src/common/services/s3.service';
+import { S3Service } from '../common/services/s3.service';
 import { PrismaService } from '../prisma.service';
 import { CreateRestaurantDto } from './create-restaurant.dto';
 import { UpdateRestaurantDto } from './update-restaurant.dto';
