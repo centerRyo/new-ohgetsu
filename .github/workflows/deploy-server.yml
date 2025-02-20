@@ -47,6 +47,11 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ env.SERVER_IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.SERVER_IMAGE_NAME }}:${{ steps.set-tag.outputs.version }}
+          build-args: |
+            SAKURA_OBJECT_STORAGE_ACCESS_KEY=${{ secrets.SAKURA_OBJECT_STORAGE_ACCESS_KEY}}
+            SAKURA_OBJECT_STORAGE_SECRET_KEY=${{ secrets.SAKURA_OBJECT_STORAGE_SECRET_KEY}}
+            SAKURA_OBJECT_STORAGE_ENDPOINT=${{ secrets.SAKURA_OBJECT_STORAGE_ENDPOINT}}
+            SAKURA_OBJECT_STORAGE_BUCKET_NAME=${{ secrets.SAKURA_OBJECT_STORAGE_BUCKET_NAME}}
 
       - name: Execute remote commands via SSH
         uses: appleboy/ssh-action@v1.0.3
