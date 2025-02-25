@@ -43,6 +43,9 @@ FROM base AS runner
 
 WORKDIR /app
 
+# Copy the .env file from builder
+COPY --from=builder /app/.env ./
+
 # Set the environment to production
 ENV NODE_ENV production
 
