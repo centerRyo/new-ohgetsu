@@ -12,7 +12,8 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env.local',
+      envFilePath:
+        process.env.NODE_ENV === 'development' ? '.env.local' : '.env',
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', 'public'),
