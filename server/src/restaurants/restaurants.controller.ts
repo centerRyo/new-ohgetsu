@@ -70,7 +70,6 @@ export class RestaurantsController {
     @Body() data: CreateRestaurantDto,
     @UploadedFile() pic?: Express.Multer.File
   ): Promise<RestaurantDto> {
-    console.log('🔴🔴🔴🔴🔴🔴🔴', process.env.SAKURA_OBJECT_STORAGE_ENDPOINT);
     const restaurant = await this.restaurantsService.create(data, pic);
 
     return new RestaurantDto(restaurant);
