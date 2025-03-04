@@ -1,59 +1,76 @@
+import {
+  SelectContent,
+  SelectRoot,
+  SelectTrigger,
+  SelectValueText,
+} from '@/components/select';
+import { Skeleton } from '@/components/skeleton';
 import { useCustomOptions } from '@/hooks/useOptions';
 import { api } from '@/lib/swagger-client';
-import {
-  Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Select,
-  Skeleton,
-} from '@chakra-ui/react';
-import { FieldErrors, UseFormRegister } from 'react-hook-form';
+import { createListCollection, Field, Flex } from '@chakra-ui/react';
+import { Control, Controller, FieldErrors } from 'react-hook-form';
 import useSWR from 'swr';
 import { FormValues } from '../index.d';
 import styles from '../index.module.scss';
 
 type Props = {
   errors: FieldErrors<FormValues>;
-  register: UseFormRegister<FormValues>;
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
+  control: Control<FormValues, any>;
 };
 
-export const Restaurants = ({ errors, register }: Props) => {
+export const Restaurants = ({ errors, control }: Props) => {
   const { data, isLoading } = useSWR('/restaurants', () =>
     api.restaurants.restaurantsControllerFind()
   );
 
   const restaurants = data?.data || [];
 
-  const options = useCustomOptions({
-    items: restaurants,
-    getLabel: (item) => item.name,
-    getKey: (item) => item.id,
+  const options = createListCollection({
+    items: useCustomOptions({
+      items: restaurants,
+      getLabel: (item) => item.name,
+      getKey: (item) => item.id,
+    }),
   });
 
   return (
-    <FormControl isInvalid={!!errors.restaurantId?.message}>
+    <Field.Root invalid={!!errors.restaurantId?.message}>
       <Flex alignItems='center' gap={4} mb={2}>
-        <FormLabel htmlFor='restaurantId' className={styles.label}>
+        <Field.Label htmlFor='restaurantId' className={styles.label}>
           レストラン
-        </FormLabel>
+        </Field.Label>
         <span className={styles.required}>必須</span>
       </Flex>
-      <Skeleton isLoaded={!isLoading}>
-        <Select
-          placeholder='レストランを選択してください'
-          {...register('restaurantId', { required: 'レストランは必須です' })}
-        >
-          {options.map((option) => (
-            <option key={option.key} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </Select>
+      <Skeleton loading={!isLoading}>
+        <Controller
+          control={control}
+          name='restaurantId'
+          rules={{ required: 'レストランは必須です' }}
+          render={({ field }) => (
+            <SelectRoot
+              name={field.name}
+              value={[field.value]}
+              onValueChange={({ value }) => field.onChange(value)}
+              collection={options}
+            >
+              <SelectTrigger>
+                <SelectValueText placeholder='レストランを選択してください' />
+              </SelectTrigger>
+              <SelectContent>
+                {options.items.map((option) => (
+                  <option key={option.key} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </SelectContent>
+            </SelectRoot>
+          )}
+        />
       </Skeleton>
-      <FormErrorMessage>
+      <Field.ErrorText>
         {errors.restaurantId?.message?.toString()}
-      </FormErrorMessage>
-    </FormControl>
+      </Field.ErrorText>
+    </Field.Root>
   );
 };

@@ -1,13 +1,8 @@
+import { Checkbox } from '@/components/checkbox';
+import { SkeletonText } from '@/components/skeleton';
 import { useCustomOptions } from '@/hooks/useOptions';
 import { api } from '@/lib/swagger-client';
-import {
-  Checkbox,
-  CheckboxGroup,
-  Flex,
-  FormErrorMessage,
-  FormLabel,
-  SkeletonText,
-} from '@chakra-ui/react';
+import { CheckboxGroup, Field, Flex } from '@chakra-ui/react';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 import useSWR from 'swr';
 import { FormValues } from '../index.d';
@@ -35,9 +30,9 @@ const Ingredients = ({ errors, control, index }: Props) => {
   return (
     <div>
       <Flex mb={2}>
-        <FormLabel className={styles.label}>アレルギー情報</FormLabel>
+        <Field.Label className={styles.label}>アレルギー情報</Field.Label>
       </Flex>
-      <SkeletonText isLoaded={!isLoading} skeletonHeight={4} spacing='5'>
+      <SkeletonText loading={!isLoading} height={4} gap='5'>
         <Controller
           name={`menus.${index}.ingredientIds`}
           control={control}
@@ -55,10 +50,10 @@ const Ingredients = ({ errors, control, index }: Props) => {
           )}
         />
       </SkeletonText>
-      <FormErrorMessage>
+      <Field.ErrorText>
         {errors.menus &&
           errors.menus[index]?.ingredientIds?.message?.toString()}
-      </FormErrorMessage>
+      </Field.ErrorText>
     </div>
   );
 };

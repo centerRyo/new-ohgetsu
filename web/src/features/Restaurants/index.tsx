@@ -1,16 +1,14 @@
+import { Tooltip } from '@/components/tooltip';
 import { pagesPath } from '@/lib/$path';
 import { api } from '@/lib/swagger-client';
 import {
   Box,
   Card,
-  CardBody,
-  CardHeader,
   Heading,
   Image,
   SimpleGrid,
   Skeleton,
   Tag,
-  Tooltip,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import useSWR from 'swr';
@@ -39,7 +37,7 @@ export const Restaurants = ({ searchConditions }: Props): JSX.Element => {
     <ErrorSafePage error={error}>
       <div className={styles.container}>
         <SimpleGrid
-          spacing={4}
+          gap={4}
           templateColumns={{
             base: 'repeat(auto-fill, minmax(125px, 1fr))',
             md: 'repeat(auto-fill, minmax(200px, 1fr))',
@@ -51,8 +49,8 @@ export const Restaurants = ({ searchConditions }: Props): JSX.Element => {
                   href={pagesPath.restaurants._id(restaurant.id).$url().path}
                   key={restaurant.id}
                 >
-                  <Card key={restaurant.id}>
-                    <CardHeader>
+                  <Card.Root key={restaurant.id}>
+                    <Card.Header>
                       <Box className={styles.imageWrap}>
                         <Image
                           src={restaurant.pic ?? '/images/no_image.png'}
@@ -62,29 +60,33 @@ export const Restaurants = ({ searchConditions }: Props): JSX.Element => {
                           borderRadius='md'
                         />
                       </Box>
-                    </CardHeader>
-                    <CardBody>
+                    </Card.Header>
+                    <Card.Body>
                       <Tooltip
-                        label={restaurant.name}
-                        hasArrow
-                        bg='green'
-                        fontWeight='bold'
+                        content={restaurant.name}
+                        showArrow
+                        contentProps={{
+                          css: {
+                            '--tooltip-bg': 'colors.green.400',
+                            fontWeight: 'bold',
+                          },
+                        }}
                       >
-                        <Heading size='md' noOfLines={2} height='48px'>
+                        <Heading size='md' height='48px'>
                           {restaurant.name}
                         </Heading>
                       </Tooltip>
-                      <Tag
+                      <Tag.Root
                         variant='outline'
                         mt={4}
                         color='black'
                         borderColor='#d8d9db'
                         fontWeight='600'
                       >
-                        {restaurant.genre?.name}
-                      </Tag>
-                    </CardBody>
-                  </Card>
+                        <Tag.Label>{restaurant.genre?.name}</Tag.Label>
+                      </Tag.Root>
+                    </Card.Body>
+                  </Card.Root>
                 </Link>
               ))
             : [1, 2, 3, 4, 5, 6, 7, 8].map((_) => (

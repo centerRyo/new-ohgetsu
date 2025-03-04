@@ -1,5 +1,5 @@
+import { toaster } from '@/components/toaster';
 import { api } from '@/lib/swagger-client';
-import { useToast } from '@chakra-ui/react';
 import React, { useCallback } from 'react';
 import { UseFormReset } from 'react-hook-form';
 import { FormValues, PreviewType } from './index.d';
@@ -11,8 +11,6 @@ type TUseHandlerArgs = {
 };
 
 export const useHandler = ({ preview, setPreview, reset }: TUseHandlerArgs) => {
-  const toast = useToast();
-
   const handleSubmit = useCallback(
     async (values: FormValues) => {
       try {
@@ -27,20 +25,18 @@ export const useHandler = ({ preview, setPreview, reset }: TUseHandlerArgs) => {
 
         setPreview({ pic: undefined });
 
-        toast({
+        toaster.create({
           title: 'レストランを作成しました',
-          status: 'success',
-          isClosable: true,
+          type: 'success',
         });
       } catch (error) {
-        toast({
+        toaster.create({
           title: 'レストランを作成できませんでした',
-          status: 'error',
-          isClosable: true,
+          type: 'error',
         });
       }
     },
-    [toast, reset, setPreview]
+    [reset, setPreview]
   );
 
   const handleFileChange = useCallback(

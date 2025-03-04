@@ -1,12 +1,4 @@
-import {
-  Button,
-  Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Image,
-  Input,
-} from '@chakra-ui/react';
+import { Button, Field, Flex, Image, Input } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Genres from './Genres';
@@ -20,6 +12,7 @@ export const CreateRestaurant = () => {
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
     reset,
+    control,
   } = useForm<FormValues>({
     mode: 'all',
     defaultValues: {
@@ -41,11 +34,11 @@ export const CreateRestaurant = () => {
     <div className={styles.container}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Flex mb={6}>
-          <FormControl isInvalid={!!errors.name?.message}>
+          <Field.Root invalid={!!errors.name?.message}>
             <Flex alignItems='center' gap={4} mb={2}>
-              <FormLabel htmlFor='name' className={styles.label}>
+              <Field.Label htmlFor='name' className={styles.label}>
                 店名
-              </FormLabel>
+              </Field.Label>
               <span className={styles.required}>必須</span>
             </Flex>
             <Input
@@ -55,17 +48,17 @@ export const CreateRestaurant = () => {
               })}
               type='text'
             />
-            <FormErrorMessage>
+            <Field.ErrorText>
               {errors.name?.message?.toString()}
-            </FormErrorMessage>
-          </FormControl>
+            </Field.ErrorText>
+          </Field.Root>
         </Flex>
         <Flex mb={6}>
-          <FormControl>
+          <Field.Root>
             <Flex mb={2}>
-              <FormLabel htmlFor='file' className={styles.label}>
+              <Field.Label htmlFor='file' className={styles.label}>
                 お店の写真
-              </FormLabel>
+              </Field.Label>
             </Flex>
             <Input
               type='file'
@@ -85,18 +78,18 @@ export const CreateRestaurant = () => {
                 height='200'
               />
             )}
-          </FormControl>
+          </Field.Root>
         </Flex>
         <Flex mb={6}>
-          <Genres errors={errors} register={register} />
+          <Genres errors={errors} control={control} />
         </Flex>
 
         <Flex justifyContent='flex-end'>
           <Button
             type='submit'
             colorScheme='green'
-            isDisabled={!isValid}
-            isLoading={isSubmitting}
+            disabled={!isValid}
+            loading={isSubmitting}
           >
             登録する
           </Button>

@@ -1,12 +1,4 @@
-import {
-  Button,
-  Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Image,
-  Input,
-} from '@chakra-ui/react';
+import { Button, Field, Flex, Image, Input } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useHandler } from './hooks';
@@ -49,18 +41,18 @@ export const CreateMenus = () => {
     <div className={styles.container}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Flex mb={6}>
-          <Restaurants errors={errors} register={register} />
+          <Restaurants errors={errors} control={control} />
         </Flex>
         {fields.map((field, index) => (
           <div key={field.id}>
             <Flex mb={6}>
-              <FormControl
-                isInvalid={errors.menus && !!errors.menus[index]?.name?.message}
+              <Field.Root
+                invalid={errors.menus && !!errors.menus[index]?.name?.message}
               >
                 <Flex alignItems='center' gap={4} mb={2}>
-                  <FormLabel className={styles.label} htmlFor='menu_name'>
+                  <Field.Label className={styles.label} htmlFor='menu_name'>
                     メニュー
-                  </FormLabel>
+                  </Field.Label>
                   <span className={styles.required}>必須</span>
                 </Flex>
                 <Input
@@ -69,19 +61,19 @@ export const CreateMenus = () => {
                     required: 'メニューは必須です',
                   })}
                 />
-                <FormErrorMessage>
+                <Field.ErrorText>
                   {errors.menus &&
                     errors.menus[index]?.name?.message?.toString()}
-                </FormErrorMessage>
-              </FormControl>
+                </Field.ErrorText>
+              </Field.Root>
             </Flex>
             <Flex mb={6}>
               <Ingredients errors={errors} control={control} index={index} />
             </Flex>
             <Flex mb={8}>
-              <FormControl>
+              <Field.Root>
                 <Flex mb={2}>
-                  <FormLabel className={styles.label}>写真</FormLabel>
+                  <Field.Label className={styles.label}>写真</Field.Label>
                 </Flex>
                 <Input
                   type='file'
@@ -103,7 +95,7 @@ export const CreateMenus = () => {
                     height='200'
                   />
                 )}
-              </FormControl>
+              </Field.Root>
             </Flex>
           </div>
         ))}
@@ -114,8 +106,8 @@ export const CreateMenus = () => {
           <Button
             type='submit'
             colorScheme='green'
-            isDisabled={!isValid}
-            isLoading={isSubmitting}
+            disabled={!isValid}
+            loading={isSubmitting}
           >
             登録する
           </Button>

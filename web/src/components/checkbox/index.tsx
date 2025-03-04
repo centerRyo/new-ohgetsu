@@ -1,62 +1,25 @@
-import {
-  Checkbox as ChakraCheckbox,
-  CheckboxGroup,
-  Flex,
-  FormControl,
-  FormLabel,
-  SkeletonText,
-} from '@chakra-ui/react';
-import { memo } from 'react';
+import { Checkbox as ChakraCheckbox } from '@chakra-ui/react';
+import * as React from 'react';
 
-type Props = Partial<{
-  isRequired: boolean;
-  fontWeight: string;
-  isLoading: boolean;
-  isDisabled: boolean;
-  testPrefix: string;
-}> & {
-  options: Array<{ label: string; value: string }>;
-  name: string;
-  label: string;
-};
+export interface CheckboxProps extends ChakraCheckbox.RootProps {
+  icon?: React.ReactNode;
+  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  rootRef?: React.Ref<HTMLLabelElement>;
+}
 
-const Checkbox = memo(
-  ({
-    name,
-    label,
-    isRequired,
-    testPrefix,
-    fontWeight = 'bold',
-    isLoading,
-    isDisabled,
-    options,
-  }: Props) => {
+export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
+  function Checkbox(props, ref) {
+    const { icon, children, inputProps, rootRef, ...rest } = props;
     return (
-      <FormControl isRequired={isRequired}>
-        <FormLabel fontWeight={fontWeight}>{label}</FormLabel>
-        <SkeletonText
-          data-testid={testPrefix ? `${testPrefix}-${name}` : name}
-          isLoaded={!isLoading}
-          skeletonHeight={3}
-        >
-          <CheckboxGroup>
-            <Flex gap={4} wrap='wrap'>
-              {options.map((option) => (
-                <ChakraCheckbox
-                  key={option.value}
-                  isDisabled={isDisabled}
-                  name={option.value}
-                >
-                  {option.label}
-                </ChakraCheckbox>
-              ))}
-            </Flex>
-          </CheckboxGroup>
-        </SkeletonText>
-      </FormControl>
+      <ChakraCheckbox.Root ref={rootRef} {...rest}>
+        <ChakraCheckbox.HiddenInput ref={ref} {...inputProps} />
+        <ChakraCheckbox.Control>
+          {icon || <ChakraCheckbox.Indicator />}
+        </ChakraCheckbox.Control>
+        {children != null && (
+          <ChakraCheckbox.Label>{children}</ChakraCheckbox.Label>
+        )}
+      </ChakraCheckbox.Root>
     );
   }
 );
-Checkbox.displayName = 'Checkbox';
-
-export default Checkbox;

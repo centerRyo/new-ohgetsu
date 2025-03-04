@@ -1,22 +1,26 @@
-import { Spinner as ChakraSpinner } from '@chakra-ui/react';
+import { Spinner as ChakraSpinner, SpinnerProps } from '@chakra-ui/react';
 import { memo } from 'react';
 import styles from './index.module.scss';
 
 type Props = Partial<{
-  size: string;
-  thickness: string;
-  speed: string;
+  size: SpinnerProps['size'];
+  borderWidth: SpinnerProps['borderWidth'];
+  animationDuration: SpinnerProps['animationDuration'];
   color: string;
 }>;
 
 export const Spinner = memo(
-  ({ size = 'xl', thickness = '4px', speed = '0.65s', color }: Props) => (
+  ({
+    size = 'xl',
+    borderWidth = '4px',
+    animationDuration = '0.65s',
+    color,
+  }: Props) => (
     <div className={styles.container}>
       <ChakraSpinner
         size={size}
-        thickness={thickness}
-        speed={speed}
-        emptyColor='gray.200'
+        borderWidth={borderWidth}
+        animationDuration={animationDuration}
         color={color}
       />
     </div>
