@@ -29,6 +29,11 @@ export interface RestaurantDto {
   pic: string;
   /** ジャンル */
   genre: GenreDto;
+  /**
+   * 営業停止日時
+   * @format date-time
+   */
+  deletedAt: Date;
 }
 
 export interface CreateRestaurantDto {
@@ -380,6 +385,8 @@ export class Api<
       query?: {
         /** 検索キーワード */
         search_query?: string;
+        /** 営業停止中も含むかどうか */
+        withDeleted?: boolean;
       },
       params: RequestParams = {}
     ) =>

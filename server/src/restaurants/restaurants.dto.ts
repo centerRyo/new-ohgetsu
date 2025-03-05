@@ -35,4 +35,11 @@ export class RestaurantDto {
   @Expose()
   @ApiProperty({ description: 'ジャンル', type: GenreDto })
   genre: GenreDto;
+
+  /**
+   * 営業停止日時
+   */
+  @Expose()
+  @ApiProperty({ description: '営業停止日時' })
+  deletedAt: Date;
 }

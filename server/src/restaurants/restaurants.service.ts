@@ -11,10 +11,16 @@ export class RestaurantsService {
     private readonly s3Service: S3Service
   ) {}
 
-  async find(keyword?: string) {
+  async find({
+    keyword,
+    withDeleted,
+  }: {
+    keyword?: string;
+    withDeleted?: boolean;
+  }) {
     const restaurants = await this.prisma.restaurants.findMany({
       where: {
-        deletedAt: null,
+        deletedAt: withDeleted ? undefined : null,
         ...(keyword
           ? {
               name: {
