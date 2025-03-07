@@ -38,9 +38,6 @@ export const pagesPath = {
   'create_menus': {
     $url: (url?: { hash?: string }) => ({ pathname: '/create-menus' as const, hash: url?.hash, path: `/create-menus${buildSuffix(url)}` })
   },
-  'create_restaurant': {
-    $url: (url?: { hash?: string }) => ({ pathname: '/create-restaurant' as const, hash: url?.hash, path: `/create-restaurant${buildSuffix(url)}` })
-  },
   'menus': {
     _id: (id: string | number) => ({
       $url: (url?: { query?: OptionalQuery_gsgao6, hash?: string }) => ({ pathname: '/menus/[id]' as const, query: { id, ...url?.query }, hash: url?.hash, path: `/menus/${id}${buildSuffix(url)}` })
