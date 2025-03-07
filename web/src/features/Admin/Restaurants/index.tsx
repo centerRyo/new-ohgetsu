@@ -22,10 +22,14 @@ import {
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
 import useSWR from 'swr';
+import { DetailDrawer } from './DetailDrawer';
+import { useDetailDrawer } from './hooks';
 import styles from './index.module.scss';
 
 export const RestaurantsAdmin = (): JSX.Element => {
-  const { data, error, isLoading } = useSWR('/admin/restaurants', () =>
+  const { state, handleOpen, handleClose } = useDetailDrawer();
+
+  const { data, error, isLoading, mutate } = useSWR('/admin/restaurants', () =>
     api.restaurants.restaurantsControllerFind({ withDeleted: true })
   );
 
@@ -44,7 +48,9 @@ export const RestaurantsAdmin = (): JSX.Element => {
             </HStack>
           </GridItem>
           <GridItem colStart={20} colEnd={20}>
-            <Button w='100%'>新規作成</Button>
+            <Button w='100%' onClick={() => handleOpen()}>
+              新規作成
+            </Button>
           </GridItem>
         </Grid>
         <TableContainer>
@@ -88,7 +94,11 @@ export const RestaurantsAdmin = (): JSX.Element => {
                     </Tag>
                   </Td>
                   <Td>
-                    <Button colorScheme='teal' size='xs'>
+                    <Button
+                      colorScheme='teal'
+                      size='xs'
+                      onClick={() => handleOpen(restaurant.id)}
+                    >
                       詳細
                     </Button>
                   </Td>
@@ -98,6 +108,8 @@ export const RestaurantsAdmin = (): JSX.Element => {
           </Table>
         </TableContainer>
       </main>
+
+      <DetailDrawer state={state} onClose={handleClose} mutate={mutate} />
     </ErrorSafePage>
   ) : (
     <Spinner color='green' />

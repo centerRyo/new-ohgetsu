@@ -46,6 +46,8 @@ export interface CreateRestaurantDto {
   pic?: File;
   /** ジャンルID */
   genreId: string;
+  /** 営業開始フラグ */
+  isOpen: boolean;
 }
 
 export interface UpdateRestaurantDto {
@@ -58,6 +60,8 @@ export interface UpdateRestaurantDto {
   pic?: File;
   /** ジャンルID */
   genreId?: string;
+  /** 営業開始フラグ */
+  isOpen?: boolean;
   /** レストラン再開フラグ */
   isReopen: boolean;
 }

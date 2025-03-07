@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
 import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class SearchRestaurantsDto {
@@ -16,5 +16,7 @@ export class SearchRestaurantsDto {
     description: '営業停止中も含むかどうか',
     required: false,
   })
+  // クエリパラメーターではstringになるのでbooleanに変換
+  @Transform(({ value }) => value === 'true' || value === true)
   withDeleted?: boolean;
 }

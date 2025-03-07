@@ -71,10 +71,13 @@ export class RestaurantsService {
       ? await this.s3Service.uploadFile({ file: pic, folder: 'restaurants' })
       : null;
 
+    const { isOpen, ...rest } = data;
+
     const restaurant = await this.prisma.restaurants.create({
       data: {
-        ...data,
+        ...rest,
         pic: picPath,
+        deletedAt: isOpen ? null : new Date(),
       },
     });
 
