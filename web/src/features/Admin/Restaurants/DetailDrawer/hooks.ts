@@ -7,6 +7,7 @@ import { KeyedMutator } from 'swr';
 import { FormValues, PreviewType } from '../index.d';
 
 type TUseHandlerArgs = {
+  isEdit: boolean;
   restaurant: RestaurantDto | undefined;
   onClose: () => void;
   reset: UseFormReset<FormValues>;
@@ -15,6 +16,7 @@ type TUseHandlerArgs = {
 };
 
 export const useHandler = ({
+  isEdit,
   restaurant,
   onClose,
   reset,
@@ -34,12 +36,21 @@ export const useHandler = ({
   const handleSubmit = useCallback(
     async (values: FormValues) => {
       try {
-        const { error } = await api.restaurants.restaurantsControllerCreate({
-          ...values,
-          pic: values.pic ? values.pic[0] : undefined,
-        });
+        if (isEdit && !!restaurant) {
+          const { error } = await api.restaurants.restaurantsControllerUpdate(
+            restaurant?.id,
+            { ...values, pic: values.pic ? values.pic[0] : undefined }
+          );
 
-        if (error) throw error;
+          if (error) throw error;
+        } else {
+          const { error } = await api.restaurants.restaurantsControllerCreate({
+            ...values,
+            pic: values.pic ? values.pic[0] : undefined,
+          });
+
+          if (error) throw error;
+        }
 
         reset();
 
@@ -50,7 +61,7 @@ export const useHandler = ({
         onClose();
 
         toast({
-          title: 'レストランを作成しました',
+          title: `レストランを${isEdit ? '編集' : '作成'}しました`,
           status: 'success',
           isClosable: true,
         });
@@ -58,13 +69,13 @@ export const useHandler = ({
         onClose();
 
         toast({
-          title: 'レストランを作成できませんでした',
+          title: `レストランを${isEdit ? '編集' : '作成'}できませんでした`,
           status: 'error',
           isClosable: true,
         });
       }
     },
-    [toast, reset, setPreview]
+    [toast, reset, setPreview, isEdit, restaurant]
   );
 
   const handleFileChange = useCallback(

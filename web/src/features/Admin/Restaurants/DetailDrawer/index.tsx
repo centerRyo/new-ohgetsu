@@ -66,6 +66,7 @@ export const DetailDrawer = ({
     handleSubmit: onSubmit,
     handleFileChange,
   } = useHandler({
+    isEdit,
     restaurant,
     onClose,
     reset,
