@@ -1,7 +1,7 @@
 import { api } from '@/lib/swagger-client';
 import { HttpResponse, RestaurantDto } from '@/types/generated/Api';
 import { useToast } from '@chakra-ui/react';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { UseFormReset } from 'react-hook-form';
 import { KeyedMutator } from 'swr';
 import { FormValues, PreviewType } from '../index.d';
@@ -68,4 +68,22 @@ export const useHandler = ({ onClose, reset, mutate }: TUseHandlerArgs) => {
   );
 
   return { preview, handleSubmit, handleFileChange };
+};
+
+export const useDefaultValues = ({
+  restaurant,
+}: {
+  restaurant: RestaurantDto | undefined;
+}): FormValues => {
+  const result = useMemo(
+    () => ({
+      name: restaurant?.name ?? '',
+      pic: undefined,
+      genreId: restaurant?.genre.id ?? '',
+      isOpen: !restaurant?.deletedAt,
+    }),
+    [restaurant?.name, restaurant?.genre.id, restaurant?.deletedAt]
+  );
+
+  return result;
 };
