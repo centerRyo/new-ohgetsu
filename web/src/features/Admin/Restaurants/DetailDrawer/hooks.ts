@@ -1,22 +1,35 @@
 import { api } from '@/lib/swagger-client';
 import { HttpResponse, RestaurantDto } from '@/types/generated/Api';
 import { useToast } from '@chakra-ui/react';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { UseFormReset } from 'react-hook-form';
 import { KeyedMutator } from 'swr';
 import { FormValues, PreviewType } from '../index.d';
 
 type TUseHandlerArgs = {
+  restaurant: RestaurantDto | undefined;
   onClose: () => void;
   reset: UseFormReset<FormValues>;
   /* eslint-disable  @typescript-eslint/no-explicit-any */
   mutate: KeyedMutator<HttpResponse<RestaurantDto[], any>>;
 };
 
-export const useHandler = ({ onClose, reset, mutate }: TUseHandlerArgs) => {
+export const useHandler = ({
+  restaurant,
+  onClose,
+  reset,
+  mutate,
+}: TUseHandlerArgs) => {
   const [preview, setPreview] = useState<PreviewType>({});
 
   const toast = useToast();
+
+  // restaurantが存在する場合、プレビュー画像としてrestaurant.picを表示する
+  useEffect(() => {
+    if (restaurant && restaurant.pic) {
+      setPreview((prev) => ({ ...prev, pic: restaurant.pic }));
+    }
+  }, [restaurant]);
 
   const handleSubmit = useCallback(
     async (values: FormValues) => {
