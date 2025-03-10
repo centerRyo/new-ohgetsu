@@ -89,10 +89,17 @@ export class RestaurantsService {
     data: UpdateRestaurantDto,
     pic: Express.Multer.File | null
   ) {
+    const existing = await this.prisma.restaurants.findFirst({
+      where: { id },
+    });
+
+    if (!existing) {
+      throw new NotFoundException('Restaurant not found');
+    }
     // picがあればさくらのクラウドオブジェクトストレージにアップロード
     const picPath = pic
       ? await this.s3Service.uploadFile({ file: pic, folder: 'restaurants' })
-      : null;
+      : existing.pic;
 
     const { isOpen, ...rest } = data;
 
