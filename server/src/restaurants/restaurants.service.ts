@@ -84,15 +84,24 @@ export class RestaurantsService {
     return restaurant;
   }
 
-  async update(id: string, data: UpdateRestaurantDto) {
-    const { isReopen, ...rest } = data;
-    const deletedAt = isReopen ? null : undefined;
+  async update(
+    id: string,
+    data: UpdateRestaurantDto,
+    pic: Express.Multer.File | null
+  ) {
+    // picがあればさくらのクラウドオブジェクトストレージにアップロード
+    const picPath = pic
+      ? await this.s3Service.uploadFile({ file: pic, folder: 'restaurants' })
+      : null;
+
+    const { isOpen, ...rest } = data;
 
     const restaurant = await this.prisma.restaurants.update({
       where: { id },
       data: {
         ...rest,
-        deletedAt,
+        pic: picPath,
+        deletedAt: isOpen ? null : new Date(),
       },
     });
 

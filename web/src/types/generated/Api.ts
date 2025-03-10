@@ -62,8 +62,6 @@ export interface UpdateRestaurantDto {
   genreId?: string;
   /** 営業開始フラグ */
   isOpen?: boolean;
-  /** レストラン再開フラグ */
-  isReopen: boolean;
 }
 
 export interface MenuDto {
@@ -456,7 +454,7 @@ export class Api<
         path: `/restaurants/${id}`,
         method: 'PATCH',
         body: data,
-        type: ContentType.Json,
+        type: ContentType.FormData,
         format: 'json',
         ...params,
       }),
