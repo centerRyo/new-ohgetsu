@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   HttpStatus,
   Injectable,
@@ -40,7 +39,7 @@ export class RestaurantsController {
   })
   @ApiResponse({ status: HttpStatus.OK, type: [RestaurantDto] })
   async find(@Query() query: SearchRestaurantsDto): Promise<RestaurantDto[]> {
-    const restaurants = await this.restaurantsService.find(query.search_query);
+    const restaurants = await this.restaurantsService.find({ ...query });
 
     return restaurants.map((restaurant) => new RestaurantDto(restaurant));
   }
@@ -70,7 +69,6 @@ export class RestaurantsController {
     @Body() data: CreateRestaurantDto,
     @UploadedFile() pic?: Express.Multer.File
   ): Promise<RestaurantDto> {
-    console.log('🔴🔴🔴🔴🔴🔴🔴', process.env.SAKURA_OBJECT_STORAGE_ENDPOINT);
     const restaurant = await this.restaurantsService.create(data, pic);
 
     return new RestaurantDto(restaurant);
@@ -84,26 +82,15 @@ export class RestaurantsController {
   @ApiBody({
     type: UpdateRestaurantDto,
   })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('pic'))
   async update(
     @Param('id') id: string,
-    @Body() data: UpdateRestaurantDto
+    @Body() data: UpdateRestaurantDto,
+    @UploadedFile() pic?: Express.Multer.File
   ): Promise<RestaurantDto> {
-    const restaurant = await this.restaurantsService.update(id, data);
+    const restaurant = await this.restaurantsService.update(id, data, pic);
 
     return new RestaurantDto(restaurant);
-  }
-
-  @Delete(':id')
-  @ApiOperation({
-    summary: 'レストランを削除(営業停止)する',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    schema: { type: 'object', properties: { result: { type: 'boolean' } } },
-  })
-  async delete(@Param('id') id: string) {
-    await this.restaurantsService.delete(id);
-
-    return { result: true };
   }
 }

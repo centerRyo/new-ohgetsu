@@ -29,6 +29,11 @@ export interface RestaurantDto {
   pic: string;
   /** ジャンル */
   genre: GenreDto;
+  /**
+   * 営業停止日時
+   * @format date-time
+   */
+  deletedAt: Date;
 }
 
 export interface CreateRestaurantDto {
@@ -41,6 +46,8 @@ export interface CreateRestaurantDto {
   pic?: File;
   /** ジャンルID */
   genreId: string;
+  /** 営業開始フラグ */
+  isOpen: boolean;
 }
 
 export interface UpdateRestaurantDto {
@@ -53,8 +60,8 @@ export interface UpdateRestaurantDto {
   pic?: File;
   /** ジャンルID */
   genreId?: string;
-  /** レストラン再開フラグ */
-  isReopen: boolean;
+  /** 営業開始フラグ */
+  isOpen?: boolean;
 }
 
 export interface MenuDto {
@@ -380,6 +387,8 @@ export class Api<
       query?: {
         /** 検索キーワード */
         search_query?: string;
+        /** 営業停止中も含むかどうか */
+        withDeleted?: boolean;
       },
       params: RequestParams = {}
     ) =>
@@ -445,7 +454,7 @@ export class Api<
         path: `/restaurants/${id}`,
         method: 'PATCH',
         body: data,
-        type: ContentType.Json,
+        type: ContentType.FormData,
         format: 'json',
         ...params,
       }),

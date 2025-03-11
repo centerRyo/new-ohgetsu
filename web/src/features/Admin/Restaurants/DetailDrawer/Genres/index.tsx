@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { FieldErrors, UseFormRegister } from 'react-hook-form';
 import useSWR from 'swr';
-import { FormValues } from '../index.d';
+import { FormValues } from '../../index.d';
 import styles from '../index.module.scss';
 
 type Props = {

@@ -57,7 +57,7 @@ describe('RestaurantsService', () => {
     it('検索キーワードがない場合、全件取得できる', async () => {
       await createGenreAndRestaurants();
 
-      const res = await service.find();
+      const res = await service.find({});
 
       expect(res.length).toBe(2);
       expect(res.map((r) => r.name)).toEqual(
@@ -71,7 +71,7 @@ describe('RestaurantsService', () => {
     it('deletedAtが null でない レストランは取得しない', async () => {
       await createGenreAndRestaurants(true);
 
-      const res = await service.find();
+      const res = await service.find({});
 
       expect(res.length).toBe(1);
       expect(res[0].name).toBe('レストラン02');
@@ -80,7 +80,7 @@ describe('RestaurantsService', () => {
     it('検索キーワードを含むレストランを取得できる', async () => {
       await createGenreAndRestaurants();
 
-      const res = await service.find('キーワード');
+      const res = await service.find({ keyword: 'キーワード' });
 
       expect(res.length).toBe(1);
       expect(res[0].name).toBe('キーワードレストラン01キーワード');
@@ -105,6 +105,7 @@ describe('RestaurantsService', () => {
           name: 'test',
           pic: 'test pic',
           genreId: genre.id,
+          isOpen: true,
         },
         null
       );
