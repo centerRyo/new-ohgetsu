@@ -90,7 +90,7 @@ export const DetailDrawer = ({
           <form className={styles.form}>
             <Flex mb={8}>
               <FormControl isInvalid={!!errors.name?.message}>
-                <Flex alignItems={'center'} gap={4} mb={2}>
+                <Flex alignItems='center' gap={4} mb={2}>
                   <FormLabel htmlFor='name' className={styles.label}>
                     レストラン名
                   </FormLabel>
@@ -146,7 +146,7 @@ export const DetailDrawer = ({
                 name='isOpen'
                 control={control}
                 render={({ field: { onChange, value, ref } }) => (
-                  <Flex alignItems={'center'} gap={4}>
+                  <Flex alignItems='center' gap={4}>
                     <Text>{isEdit ? '営業停止' : '未営業'}</Text>
                     <Switch
                       isChecked={value}

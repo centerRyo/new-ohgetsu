@@ -75,7 +75,7 @@ export const useHandler = ({
         });
       }
     },
-    [toast, reset, setPreview, isEdit, restaurant]
+    [toast, reset, setPreview, isEdit, restaurant, mutate, onClose]
   );
 
   const handleFileChange = useCallback(

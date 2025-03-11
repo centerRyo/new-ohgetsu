@@ -61,7 +61,7 @@ export const RestaurantsAdmin = (): JSX.Element => {
                 <Th fontSize='md'>画像</Th>
                 <Th fontSize='md'>ジャンル</Th>
                 <Th fontSize='md'>営業状況</Th>
-                <Th></Th>
+                <Th />
               </Tr>
             </Thead>
             <Tbody>
@@ -70,7 +70,12 @@ export const RestaurantsAdmin = (): JSX.Element => {
                   <Td>{restaurant.name}</Td>
                   <Td>
                     {restaurant.pic && (
-                      <Image width='24' height='20' src={restaurant.pic} />
+                      <Image
+                        width='24'
+                        height='20'
+                        src={restaurant.pic}
+                        alt={restaurant.name}
+                      />
                     )}
                   </Td>
                   <Td>
