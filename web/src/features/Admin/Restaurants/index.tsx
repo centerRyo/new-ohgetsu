@@ -58,7 +58,7 @@ export const RestaurantsAdmin = (): JSX.Element => {
             <Thead>
               <Tr>
                 <Th fontSize='md'>レストラン名</Th>
-                <Th fontSize='md'>画像</Th>
+                <Th fontSize='md'>写真</Th>
                 <Th fontSize='md'>ジャンル</Th>
                 <Th fontSize='md'>営業状況</Th>
                 <Th />
