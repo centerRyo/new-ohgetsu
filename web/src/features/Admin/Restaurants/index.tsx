@@ -23,11 +23,13 @@ import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
 import useSWR from 'swr';
 import { DetailDrawer } from './DetailDrawer';
-import { useDetailDrawer } from './hooks';
+import { useDetailDrawer } from './hooks/useDetailDrawer';
+import { useMenusNavigation } from './hooks/useMenusNavigation';
 import styles from './index.module.scss';
 
 export const RestaurantsAdmin = (): JSX.Element => {
   const { state, handleOpen, handleClose } = useDetailDrawer();
+  const { handleClickMenuManagement } = useMenusNavigation();
 
   const { data, error, isLoading, mutate } = useSWR('/admin/restaurants', () =>
     api.restaurants.restaurantsControllerFind({ withDeleted: true })
@@ -99,13 +101,22 @@ export const RestaurantsAdmin = (): JSX.Element => {
                     </Tag>
                   </Td>
                   <Td>
-                    <Button
-                      colorScheme='teal'
-                      size='xs'
-                      onClick={() => handleOpen(restaurant.id)}
-                    >
-                      詳細
-                    </Button>
+                    <HStack spacing={4}>
+                      <Button
+                        colorScheme='teal'
+                        size='xs'
+                        onClick={() => handleOpen(restaurant.id)}
+                      >
+                        詳細
+                      </Button>
+                      <Button
+                        colorScheme='purple'
+                        size='xs'
+                        onClick={() => handleClickMenuManagement(restaurant.id)}
+                      >
+                        メニュー管理
+                      </Button>
+                    </HStack>
                   </Td>
                 </Tr>
               ))}

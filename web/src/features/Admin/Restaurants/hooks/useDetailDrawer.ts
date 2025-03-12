@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { DetailDrawerState, TOnOpenDetail } from './index.d';
+import { DetailDrawerState, TOnOpenDetail } from '../index.d';
 
 export type TUseDetailDrawer = () => {
   state: DetailDrawerState;
