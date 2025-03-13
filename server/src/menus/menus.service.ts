@@ -17,17 +17,22 @@ export class MenusService {
   ) {}
 
   async findAll(query: findMenusQuery) {
-    const ingredientIds = Array.isArray(query.ingredientIds)
-      ? query.ingredientIds
-      : [query.ingredientIds];
+    const { restaurantId, ingredientIds } = query;
+
+    const excludeIngredientIds = ingredientIds
+      ? Array.isArray(ingredientIds)
+        ? ingredientIds
+        : [ingredientIds]
+      : [];
+
     const menus = await this.prisma.menus.findMany({
       where: {
-        restaurantId: query.restaurantId,
-        ingredients: query.ingredientIds
+        restaurantId,
+        ingredients: ingredientIds
           ? {
               none: {
                 id: {
-                  in: ingredientIds,
+                  in: excludeIngredientIds,
                 },
               },
             }
