@@ -1,5 +1,6 @@
 import { HttpResponse, MenuDto } from '@/types/generated/Api';
 import {
+  Box,
   Button,
   Drawer,
   DrawerBody,
@@ -12,10 +13,13 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  Heading,
+  IconButton,
   Image,
   Input,
 } from '@chakra-ui/react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { FaTrash } from 'react-icons/fa';
 import { KeyedMutator } from 'swr';
 import { DetailDrawerState, FormValues } from '../index.d';
 import { useHandler } from './hooks';
@@ -49,7 +53,7 @@ export const DetailDrawer = ({
     defaultValues: { menus: [{ name: '', ingredientIds: [], pic: undefined }] },
   });
 
-  const { fields, append } = useFieldArray({ control, name: 'menus' });
+  const { fields, append, remove } = useFieldArray({ control, name: 'menus' });
 
   const {
     preview,
@@ -75,7 +79,26 @@ export const DetailDrawer = ({
         <DrawerBody>
           <form className={styles.form}>
             {fields.map((field, index) => (
-              <div key={field.id}>
+              <Box
+                key={field.id}
+                borderRadius='md'
+                borderWidth='1px'
+                p={4}
+                mb={6}
+              >
+                <Flex justifyContent='space-between' alignItems='center' mb={4}>
+                  <Heading size='md'>メニュー項目 {index + 1}</Heading>
+                  {index !== 0 && (
+                    <IconButton
+                      aria-label='メニュー項目を削除'
+                      icon={<FaTrash />}
+                      colorScheme='red'
+                      size='sm'
+                      onClick={() => remove(index)}
+                      variant='ghost'
+                    />
+                  )}
+                </Flex>
                 <Flex mb={6}>
                   <FormControl
                     isInvalid={
@@ -107,7 +130,7 @@ export const DetailDrawer = ({
                     index={index}
                   />
                 </Flex>
-                <Flex mb={8}>
+                <Flex>
                   <FormControl>
                     <Flex mb={2}>
                       <FormLabel className={styles.label}>写真</FormLabel>
@@ -134,7 +157,7 @@ export const DetailDrawer = ({
                     )}
                   </FormControl>
                 </Flex>
-              </div>
+              </Box>
             ))}
 
             <Button onClick={handleAddMenu}>メニューを追加</Button>
