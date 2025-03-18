@@ -18,6 +18,8 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import useSWR from 'swr';
+import { DetailDrawer } from './DetailDrawer';
+import { useDetailDrawer } from './hooks/useDetailDrawer';
 import styles from './index.module.scss';
 
 type Props = {
@@ -25,6 +27,8 @@ type Props = {
 };
 
 export const MenusAdmin = ({ restaurantId }: Props): JSX.Element => {
+  const { state, handleOpen, handleClose } = useDetailDrawer();
+
   const { data: restaurantData, isLoading: restaurantLoading } = useSWR(
     `/admin/restaurants/${restaurantId}/restaurant`,
     () => api.restaurants.restaurantsControllerFindOne(restaurantId)
@@ -34,6 +38,7 @@ export const MenusAdmin = ({ restaurantId }: Props): JSX.Element => {
     data: menusData,
     error: menusError,
     isLoading: menusLoading,
+    mutate,
   } = useSWR(`/admin/restaurants/${restaurantId}/menus`, () =>
     api.menus.menusControllerFindAll({ restaurantId })
   );
@@ -57,7 +62,7 @@ export const MenusAdmin = ({ restaurantId }: Props): JSX.Element => {
             </HStack>
           </GridItem>
           <GridItem colStart={20} colEnd={20}>
-            <Button w='100%' onClick={() => {}}>
+            <Button w='100%' onClick={() => handleOpen()}>
               新規作成
             </Button>
           </GridItem>
@@ -87,7 +92,11 @@ export const MenusAdmin = ({ restaurantId }: Props): JSX.Element => {
                   <Td>
                     <HStack spacing={2}>
                       {menu.ingredients.map((ingredient) => (
-                        <Tag variant='solid' colorScheme='green'>
+                        <Tag
+                          key={ingredient.id}
+                          variant='solid'
+                          colorScheme='green'
+                        >
                           {ingredient.name}
                         </Tag>
                       ))}
@@ -95,7 +104,11 @@ export const MenusAdmin = ({ restaurantId }: Props): JSX.Element => {
                   </Td>
                   <Td>
                     <HStack spacing={4}>
-                      <Button colorScheme='cyan' size='xs'>
+                      <Button
+                        colorScheme='cyan'
+                        size='xs'
+                        onClick={() => handleOpen(menu.id)}
+                      >
                         詳細
                       </Button>
                       <Button colorScheme='red' size='xs'>
@@ -109,6 +122,13 @@ export const MenusAdmin = ({ restaurantId }: Props): JSX.Element => {
           </Table>
         </TableContainer>
       </main>
+
+      <DetailDrawer
+        state={state}
+        restaurantId={restaurantId}
+        onClose={handleClose}
+        mutate={mutate}
+      />
     </ErrorSafePage>
   ) : (
     <Spinner color='green' />
