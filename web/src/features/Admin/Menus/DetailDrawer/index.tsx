@@ -1,3 +1,4 @@
+import { api } from '@/lib/swagger-client';
 import { HttpResponse, MenuDto } from '@/types/generated/Api';
 import {
   Box,
@@ -18,11 +19,12 @@ import {
   Image,
   Input,
 } from '@chakra-ui/react';
+import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { FaTrash } from 'react-icons/fa';
-import { KeyedMutator } from 'swr';
+import useSWR, { KeyedMutator } from 'swr';
 import { DetailDrawerState, FormValues } from '../index.d';
-import { useHandler } from './hooks';
+import { useDefaultValues, useHandler } from './hooks';
 import styles from './index.module.scss';
 import Ingredients from './Ingredients';
 
@@ -42,6 +44,14 @@ export const DetailDrawer = ({
 }: Props): JSX.Element => {
   const isEdit = !!state.menuId;
 
+  const { data } = useSWR(isEdit ? `/admin/menus/${state.menuId}` : null, () =>
+    api.menus.menusControllerFindOne(state.menuId as string)
+  );
+
+  const menu = data?.data;
+
+  const defaultValues = useDefaultValues({ menu });
+
   const {
     register,
     handleSubmit,
@@ -50,7 +60,7 @@ export const DetailDrawer = ({
     reset,
   } = useForm<FormValues>({
     mode: 'onSubmit',
-    defaultValues: { menus: [{ name: '', ingredientIds: [], pic: undefined }] },
+    defaultValues,
   });
 
   const { fields, append, remove } = useFieldArray({ control, name: 'menus' });
@@ -68,6 +78,12 @@ export const DetailDrawer = ({
     onClose,
     mutate,
   });
+
+  // react-hook-formのdefaultValuesは初期レンダリング時にセットされる
+  // data取得時に変更されないので、defaultValuesが変更されたときにresetする必要がある
+  useEffect(() => {
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <Drawer isOpen={state.open} placement='right' size='md' onClose={onClose}>

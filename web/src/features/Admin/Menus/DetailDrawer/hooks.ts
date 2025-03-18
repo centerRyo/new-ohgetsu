@@ -2,7 +2,7 @@ import { fileToBase64 } from '@/lib/file-util';
 import { api } from '@/lib/swagger-client';
 import { HttpResponse, MenuDto } from '@/types/generated/Api';
 import { useToast } from '@chakra-ui/react';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { UseFieldArrayAppend, UseFormReset } from 'react-hook-form';
 import { KeyedMutator } from 'swr';
 import { FormValues, PreviewType } from '../index.d';
@@ -93,4 +93,27 @@ export const useHandler = ({
     append([{ name: '', ingredientIds: [], pic: undefined }]);
 
   return { preview, handleSubmit, handleChangeFile, handleAddMenu };
+};
+
+export const useDefaultValues = ({
+  menu,
+}: {
+  menu: MenuDto | undefined;
+}): FormValues => {
+  const result = useMemo(
+    () => ({
+      menus: [
+        {
+          name: menu?.name ?? '',
+          ingredientIds: menu
+            ? menu.ingredients.map((ingredient) => ingredient.id)
+            : [],
+          pic: undefined,
+        },
+      ],
+    }),
+    [menu?.name, menu?.ingredients]
+  );
+
+  return result;
 };
