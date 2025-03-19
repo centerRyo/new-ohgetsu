@@ -8,6 +8,7 @@ import { S3Service } from '../common/services/s3.service';
 import { PrismaService } from '../prisma.service';
 import { CreateMenuDto } from './create-menu.dto';
 import { MenuDto, findMenusQuery } from './menus.dto';
+import { UpdateMenuDto } from './update-menu.dto';
 
 @Injectable()
 export class MenusService {
@@ -150,5 +151,27 @@ export class MenusService {
     }
 
     return menus;
+  }
+
+  async update(id: string, data: UpdateMenuDto, pic: Express.Multer.File) {
+    const existing = await this.prisma.menus.findFirst({ where: { id } });
+
+    if (!existing) {
+      throw new NotFoundException('Menu not found');
+    }
+
+    const picPath = pic
+      ? await this.s3Service.uploadFile({ file: pic, folder: 'menu' })
+      : existing.pic;
+
+    const menu = await this.prisma.menus.update({
+      where: { id },
+      data: {
+        ...data,
+        pic: picPath,
+      },
+    });
+
+    return menu;
   }
 }

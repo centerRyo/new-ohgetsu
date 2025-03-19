@@ -9,6 +9,10 @@ describe('MenusService', () => {
   let service: MenusService;
   let prisma: PrismaService;
 
+  let restaurant: restaurants;
+  let ingredient1: ingredients;
+  let ingredient2: ingredients;
+
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [MenusModule, AppModule],
@@ -17,6 +21,33 @@ describe('MenusService', () => {
     service = await module.resolve<MenusService>(MenusService);
 
     prisma = module.get<PrismaService>(PrismaService);
+
+    const genre = await prisma.genres.create({
+      data: {
+        name: 'test genre',
+      },
+    });
+
+    restaurant = await prisma.restaurants.create({
+      data: {
+        name: 'test restaurant',
+        genreId: genre.id,
+      },
+    });
+
+    ingredient1 = await prisma.ingredients.create({
+      data: {
+        name: 'ingredient1',
+        pic: 'pic1',
+      },
+    });
+
+    ingredient2 = await prisma.ingredients.create({
+      data: {
+        name: 'ingredient2',
+        pic: 'pic2',
+      },
+    });
   });
 
   afterAll(async () => {
@@ -27,38 +58,7 @@ describe('MenusService', () => {
   });
 
   describe('findAll', () => {
-    let restaurant: restaurants;
-    let ingredient1: ingredients;
-    let ingredient2: ingredients;
-
     beforeAll(async () => {
-      const genre = await prisma.genres.create({
-        data: {
-          name: 'test genre',
-        },
-      });
-
-      restaurant = await prisma.restaurants.create({
-        data: {
-          name: 'test restaurant',
-          genreId: genre.id,
-        },
-      });
-
-      ingredient1 = await prisma.ingredients.create({
-        data: {
-          name: 'ingredient1',
-          pic: 'pic1',
-        },
-      });
-
-      ingredient2 = await prisma.ingredients.create({
-        data: {
-          name: 'ingredient2',
-          pic: 'pic2',
-        },
-      });
-
       // メニューを作成
       await service.create({
         restaurantId: restaurant.id,
@@ -127,5 +127,28 @@ describe('MenusService', () => {
     });
 
     expect(data[0].name).toBe('カレー');
+  });
+
+  describe('update', () => {
+    it('メニューを更新できる', async () => {
+      const menu = await service.create({
+        restaurantId: restaurant.id,
+        menus: [
+          {
+            name: 'カレー',
+            pic: null,
+            ingredientIds: [ingredient1.id],
+          },
+        ],
+      });
+
+      const updatedMenu = await service.update(
+        menu[0].id,
+        { name: 'カツカレー' },
+        undefined
+      );
+
+      expect(updatedMenu.name).toBe('カツカレー');
+    });
   });
 });
