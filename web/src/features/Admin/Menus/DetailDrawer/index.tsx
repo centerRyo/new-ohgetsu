@@ -177,7 +177,7 @@ export const DetailDrawer = ({
               </Box>
             ))}
 
-            <Button onClick={handleAddMenu}>メニューを追加</Button>
+            {!isEdit && <Button onClick={handleAddMenu}>メニューを追加</Button>}
           </form>
         </DrawerBody>
 
