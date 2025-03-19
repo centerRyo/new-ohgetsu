@@ -73,6 +73,7 @@ export const DetailDrawer = ({
   } = useHandler({
     isEdit,
     restaurantId,
+    menu,
     reset,
     append,
     onClose,

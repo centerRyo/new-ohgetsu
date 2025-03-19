@@ -2,7 +2,7 @@ import { fileToBase64 } from '@/lib/file-util';
 import { api } from '@/lib/swagger-client';
 import { HttpResponse, MenuDto } from '@/types/generated/Api';
 import { useToast } from '@chakra-ui/react';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { UseFieldArrayAppend, UseFormReset } from 'react-hook-form';
 import { KeyedMutator } from 'swr';
 import { FormValues, PreviewType } from '../index.d';
@@ -10,6 +10,7 @@ import { FormValues, PreviewType } from '../index.d';
 type TUseHandlerArgs = {
   isEdit: boolean;
   restaurantId: string;
+  menu: MenuDto | undefined;
   reset: UseFormReset<FormValues>;
   append: UseFieldArrayAppend<FormValues, 'menus'>;
   onClose: () => void;
@@ -20,6 +21,7 @@ type TUseHandlerArgs = {
 export const useHandler = ({
   isEdit,
   restaurantId,
+  menu,
   reset,
   append,
   onClose,
@@ -28,6 +30,18 @@ export const useHandler = ({
   const [preview, setPreview] = useState<PreviewType>({});
 
   const toast = useToast();
+
+  // menuが存在する場合、プレビュー画像としてmenu.picを表示する
+  useEffect(() => {
+    if (menu && menu.pic) {
+      setPreview((prev) => ({ ...prev, 'menus.0.pic': menu.pic }));
+
+      return;
+    }
+
+    // menu.picがない場合はプレビュー画像をreset
+    setPreview({ 'menus.0.pic': undefined });
+  }, [menu]);
 
   const handleSubmit = useCallback(
     async (values: FormValues) => {
