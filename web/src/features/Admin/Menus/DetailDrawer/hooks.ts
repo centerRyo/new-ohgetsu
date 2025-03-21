@@ -46,7 +46,13 @@ export const useHandler = ({
   const handleSubmit = useCallback(
     async (values: FormValues) => {
       try {
-        if (isEdit) {
+        if (isEdit && !!menu) {
+          const { error } = await api.menus.menusControllerUpdate(menu.id, {
+            ...values.menus[0],
+            pic: values.menus[0].pic ? values.menus[0].pic[0] : undefined,
+          });
+
+          if (error) throw error;
         } else {
           const menus = await Promise.all(
             values.menus.map(async (menu) => ({
@@ -87,7 +93,7 @@ export const useHandler = ({
         });
       }
     },
-    [toast, reset, setPreview]
+    [toast, reset, setPreview, isEdit, menu]
   );
 
   const handleChangeFile = useCallback(

@@ -164,11 +164,28 @@ export class MenusService {
       ? await this.s3Service.uploadFile({ file: pic, folder: 'menu' })
       : existing.pic;
 
+    const validatedIngredients = await Promise.all(
+      data.ingredientIds.map(async (id) => {
+        const exists = await this.prisma.ingredients.findUnique({
+          where: { id },
+        });
+
+        if (!exists) {
+          throw new NotFoundException(`Ingredient ${id} not found`);
+        }
+
+        return { id: exists.id };
+      })
+    );
+
     const menu = await this.prisma.menus.update({
       where: { id },
       data: {
-        ...data,
+        name: data.name,
         pic: picPath,
+        ingredients: {
+          set: validatedIngredients,
+        },
       },
     });
 

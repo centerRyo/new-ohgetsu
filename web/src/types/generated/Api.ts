@@ -86,6 +86,16 @@ export interface CreateMenuDto {
   menus: PartialMenuDto[];
 }
 
+export interface UpdateMenuDto {
+  name: string;
+  /**
+   * 写真
+   * @format binary
+   */
+  pic?: File;
+  ingredientIds: string[];
+}
+
 export type QueryParamsType = Record<string | number, any>;
 export type ResponseFormat = keyof Omit<Body, 'body' | 'bodyUsed'>;
 
@@ -471,6 +481,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<MenuDto, any>({
         path: `/menus/${id}`,
         method: 'GET',
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags menus
+     * @name MenusControllerUpdate
+     * @summary メニューを更新する
+     * @request PATCH:/menus/{id}
+     */
+    menusControllerUpdate: (id: string, data: UpdateMenuDto, params: RequestParams = {}) =>
+      this.request<MenuDto, any>({
+        path: `/menus/${id}`,
+        method: 'PATCH',
+        body: data,
+        type: ContentType.FormData,
         format: 'json',
         ...params,
       }),

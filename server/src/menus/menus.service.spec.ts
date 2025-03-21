@@ -144,7 +144,7 @@ describe('MenusService', () => {
 
       const updatedMenu = await service.update(
         menu[0].id,
-        { name: 'カツカレー' },
+        { name: 'カツカレー', ingredientIds: [ingredient1.id, ingredient2.id] },
         undefined
       );
 
