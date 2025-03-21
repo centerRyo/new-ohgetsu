@@ -85,12 +85,14 @@ export const MenusAdmin = ({ restaurantId }: Props): JSX.Element => {
                 <Tr key={menu.id}>
                   <Td>{menu.name}</Td>
                   <Td>
-                    <Image
-                      width='24'
-                      height='20'
-                      src={menu.pic}
-                      alt={menu.name}
-                    />
+                    {menu.pic && (
+                      <Image
+                        width='24'
+                        height='20'
+                        src={menu.pic}
+                        alt={menu.name}
+                      />
+                    )}
                   </Td>
                   <Td>
                     <Box maxW='200px'>
