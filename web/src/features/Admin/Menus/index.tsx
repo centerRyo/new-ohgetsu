@@ -2,6 +2,7 @@ import { Spinner } from '@/components/spinner';
 import { ErrorSafePage } from '@/features/Error';
 import { api } from '@/lib/swagger-client';
 import {
+  Box,
   Button,
   Grid,
   GridItem,
@@ -16,6 +17,8 @@ import {
   Th,
   Thead,
   Tr,
+  Wrap,
+  WrapItem,
 } from '@chakra-ui/react';
 import useSWR from 'swr';
 import { DetailDrawer } from './DetailDrawer';
@@ -90,17 +93,17 @@ export const MenusAdmin = ({ restaurantId }: Props): JSX.Element => {
                     />
                   </Td>
                   <Td>
-                    <HStack spacing={2}>
-                      {menu.ingredients.map((ingredient) => (
-                        <Tag
-                          key={ingredient.id}
-                          variant='solid'
-                          colorScheme='green'
-                        >
-                          {ingredient.name}
-                        </Tag>
-                      ))}
-                    </HStack>
+                    <Box maxW='200px'>
+                      <Wrap spacing={2}>
+                        {menu.ingredients.map((ingredient) => (
+                          <WrapItem key={ingredient.id}>
+                            <Tag variant='solid' colorScheme='green'>
+                              {ingredient.name}
+                            </Tag>
+                          </WrapItem>
+                        ))}
+                      </Wrap>
+                    </Box>
                   </Td>
                   <Td>
                     <HStack spacing={4}>
