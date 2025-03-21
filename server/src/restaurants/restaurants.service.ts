@@ -32,6 +32,9 @@ export class RestaurantsService {
       include: {
         genre: true,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     return restaurants;

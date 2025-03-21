@@ -42,6 +42,9 @@ export class MenusService {
       include: {
         ingredients: true,
       },
+      orderBy: {
+        createdAt: 'asc',
+      },
     });
 
     return menus;
