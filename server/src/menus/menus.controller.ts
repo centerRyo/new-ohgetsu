@@ -83,7 +83,7 @@ export class MenusController {
     return new MenuDto(menu);
   }
 
-  @Delete('id')
+  @Delete(':id')
   @ApiOperation({
     summary: 'メニューを削除する',
     description: '指定したIDのメニューを物理削除する',

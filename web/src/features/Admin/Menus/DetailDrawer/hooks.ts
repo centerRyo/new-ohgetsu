@@ -93,7 +93,7 @@ export const useHandler = ({
         });
       }
     },
-    [toast, reset, setPreview, isEdit, menu]
+    [toast, reset, setPreview, isEdit, menu, onClose, mutate]
   );
 
   const handleChangeFile = useCallback(
@@ -112,7 +112,12 @@ export const useHandler = ({
   const handleAddMenu = () =>
     append([{ name: '', ingredientIds: [], pic: undefined }]);
 
-  return { preview, handleSubmit, handleChangeFile, handleAddMenu };
+  return {
+    preview,
+    handleSubmit,
+    handleChangeFile,
+    handleAddMenu,
+  };
 };
 
 export const useDefaultValues = ({

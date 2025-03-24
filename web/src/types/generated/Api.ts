@@ -513,11 +513,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @tags menus
      * @name MenusControllerRemove
      * @summary メニューを削除する
-     * @request DELETE:/menus/id
+     * @request DELETE:/menus/{id}
      */
     menusControllerRemove: (id: string, params: RequestParams = {}) =>
       this.request<DeleteMenuDto, any>({
-        path: `/menus/id`,
+        path: `/menus/${id}`,
         method: 'DELETE',
         format: 'json',
         ...params,

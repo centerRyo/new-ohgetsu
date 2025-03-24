@@ -23,6 +23,7 @@ import {
 import useSWR from 'swr';
 import { DetailDrawer } from './DetailDrawer';
 import { useDetailDrawer } from './hooks/useDetailDrawer';
+import { useRemoveMenu } from './hooks/useRemoveMenu';
 import styles from './index.module.scss';
 
 type Props = {
@@ -52,6 +53,7 @@ export const MenusAdmin = ({ restaurantId }: Props): JSX.Element => {
 
   const loading = restaurantLoading || menusLoading;
 
+  const { handleRemoveMenu } = useRemoveMenu({ onClose: handleClose, mutate });
   return !loading ? (
     <ErrorSafePage error={menusError}>
       <main className={styles.container}>
@@ -116,7 +118,11 @@ export const MenusAdmin = ({ restaurantId }: Props): JSX.Element => {
                       >
                         詳細
                       </Button>
-                      <Button colorScheme='red' size='xs'>
+                      <Button
+                        colorScheme='red'
+                        size='xs'
+                        onClick={() => handleRemoveMenu(menu.id)}
+                      >
                         削除
                       </Button>
                     </HStack>
