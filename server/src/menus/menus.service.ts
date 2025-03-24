@@ -194,4 +194,8 @@ export class MenusService {
 
     return menu;
   }
+
+  async remove(id: string) {
+    await this.prisma.menus.delete({ where: { id } });
+  }
 }

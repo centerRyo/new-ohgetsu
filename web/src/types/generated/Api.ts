@@ -96,6 +96,10 @@ export interface UpdateMenuDto {
   ingredientIds: string[];
 }
 
+export interface DeleteMenuDto {
+  result: boolean;
+}
+
 export type QueryParamsType = Record<string | number, any>;
 export type ResponseFormat = keyof Omit<Body, 'body' | 'bodyUsed'>;
 
@@ -499,6 +503,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: 'PATCH',
         body: data,
         type: ContentType.FormData,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description 指定したIDのメニューを物理削除する
+     *
+     * @tags menus
+     * @name MenusControllerRemove
+     * @summary メニューを削除する
+     * @request DELETE:/menus/id
+     */
+    menusControllerRemove: (id: string, params: RequestParams = {}) =>
+      this.request<DeleteMenuDto, any>({
+        path: `/menus/id`,
+        method: 'DELETE',
         format: 'json',
         ...params,
       }),

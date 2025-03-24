@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
@@ -19,6 +20,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateMenuDto } from './create-menu.dto';
+import { DeleteMenuDto } from './delete-menu.dto';
 import { MenuDto, findMenusQuery } from './menus.dto';
 import { MenusService } from './menus.service';
 import { UpdateMenuDto } from './update-menu.dto';
@@ -79,5 +81,17 @@ export class MenusController {
     const menu = await this.menusService.update(id, data, pic);
 
     return new MenuDto(menu);
+  }
+
+  @Delete('id')
+  @ApiOperation({
+    summary: 'メニューを削除する',
+    description: '指定したIDのメニューを物理削除する',
+  })
+  @ApiResponse({ status: HttpStatus.OK, type: DeleteMenuDto })
+  async remove(@Param('id') id: string): Promise<DeleteMenuDto> {
+    await this.menusService.remove(id);
+
+    return new DeleteMenuDto({ result: true });
   }
 }
