@@ -137,7 +137,7 @@ export const useDefaultValues = ({
         },
       ],
     }),
-    [menu, menu?.name, menu?.ingredients]
+    [menu]
   );
 
   return result;
