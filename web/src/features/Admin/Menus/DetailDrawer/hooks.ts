@@ -93,7 +93,7 @@ export const useHandler = ({
         });
       }
     },
-    [toast, reset, setPreview, isEdit, menu, onClose, mutate]
+    [restaurantId, toast, reset, setPreview, isEdit, menu, onClose, mutate]
   );
 
   const handleChangeFile = useCallback(
@@ -137,7 +137,7 @@ export const useDefaultValues = ({
         },
       ],
     }),
-    [menu?.name, menu?.ingredients]
+    [menu, menu?.name, menu?.ingredients]
   );
 
   return result;
