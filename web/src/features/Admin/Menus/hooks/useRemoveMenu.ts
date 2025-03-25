@@ -16,6 +16,10 @@ export const useRemoveMenu = ({ onClose, mutate }: Props) => {
   const handleRemoveMenu = useCallback(
     async (id: string) => {
       try {
+        const confirmed = window.confirm('本当に削除してもいいですか？');
+
+        if (!confirmed) return;
+
         const { error } = await api.menus.menusControllerRemove(id);
 
         if (error) throw error;
