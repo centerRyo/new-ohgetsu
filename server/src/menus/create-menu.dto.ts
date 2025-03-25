@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsArray, IsOptional, IsUUID } from 'class-validator';
 
-class PartialMenuDto {
+export class PartialMenuDto {
   /**
    * メニュー名
    */

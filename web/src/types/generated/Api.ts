@@ -86,6 +86,20 @@ export interface CreateMenuDto {
   menus: PartialMenuDto[];
 }
 
+export interface UpdateMenuDto {
+  name: string;
+  /**
+   * 写真
+   * @format binary
+   */
+  pic?: File;
+  ingredientIds: string[];
+}
+
+export interface DeleteMenuDto {
+  result: boolean;
+}
+
 export type QueryParamsType = Record<string | number, any>;
 export type ResponseFormat = keyof Omit<Body, 'body' | 'bodyUsed'>;
 
@@ -458,27 +472,6 @@ export class Api<
         format: 'json',
         ...params,
       }),
-
-    /**
-     * No description
-     *
-     * @tags restaurants
-     * @name RestaurantsControllerDelete
-     * @summary レストランを削除(営業停止)する
-     * @request DELETE:/restaurants/{id}
-     */
-    restaurantsControllerDelete: (id: string, params: RequestParams = {}) =>
-      this.request<
-        {
-          result?: boolean;
-        },
-        any
-      >({
-        path: `/restaurants/${id}`,
-        method: 'DELETE',
-        format: 'json',
-        ...params,
-      }),
   };
   menus = {
     /**
@@ -491,7 +484,8 @@ export class Api<
      */
     menusControllerFindAll: (
       query: {
-        ingredientIds: string[];
+        /** アレルギー情報のID */
+        ingredientIds?: string[];
         restaurantId: string;
       },
       params: RequestParams = {}
@@ -534,6 +528,44 @@ export class Api<
       this.request<MenuDto, any>({
         path: `/menus/${id}`,
         method: 'GET',
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags menus
+     * @name MenusControllerUpdate
+     * @summary メニューを更新する
+     * @request PATCH:/menus/{id}
+     */
+    menusControllerUpdate: (
+      id: string,
+      data: UpdateMenuDto,
+      params: RequestParams = {}
+    ) =>
+      this.request<MenuDto, any>({
+        path: `/menus/${id}`,
+        method: 'PATCH',
+        body: data,
+        type: ContentType.FormData,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description 指定したIDのメニューを物理削除する
+     *
+     * @tags menus
+     * @name MenusControllerRemove
+     * @summary メニューを削除する
+     * @request DELETE:/menus/{id}
+     */
+    menusControllerRemove: (id: string, params: RequestParams = {}) =>
+      this.request<DeleteMenuDto, any>({
+        path: `/menus/${id}`,
+        method: 'DELETE',
         format: 'json',
         ...params,
       }),

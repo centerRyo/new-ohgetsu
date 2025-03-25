@@ -33,19 +33,22 @@ const buildSuffix = (url?: {
 export const pagesPath = {
   admin: {
     restaurants: {
+      _id: (id: string | number) => ({
+        menus: {
+          $url: (url?: { hash?: string }) => ({
+            pathname: '/admin/restaurants/[id]/menus' as const,
+            query: { id },
+            hash: url?.hash,
+            path: `/admin/restaurants/${id}/menus${buildSuffix(url)}`,
+          }),
+        },
+      }),
       $url: (url?: { hash?: string }) => ({
         pathname: '/admin/restaurants' as const,
         hash: url?.hash,
         path: `/admin/restaurants${buildSuffix(url)}`,
       }),
     },
-  },
-  create_menus: {
-    $url: (url?: { hash?: string }) => ({
-      pathname: '/create-menus' as const,
-      hash: url?.hash,
-      path: `/create-menus${buildSuffix(url)}`,
-    }),
   },
   menus: {
     _id: (id: string | number) => ({

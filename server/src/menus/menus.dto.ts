@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsArray, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsOptional, IsString, IsUUID } from 'class-validator';
 import { IngredientDto } from '../ingredients/ingredients.dto';
 
 export class MenuDto {
@@ -42,9 +42,14 @@ export class findMenusQuery {
    * アレルギー情報のID
    */
   @Expose()
-  @IsArray()
-  @ApiProperty({ type: [String] })
-  ingredientIds: string[];
+  @IsOptional()
+  @IsString({ each: true })
+  @ApiProperty({
+    description: 'アレルギー情報のID',
+    type: [String],
+    required: false,
+  })
+  ingredientIds?: string | string[];
 
   /**
    * レストランID

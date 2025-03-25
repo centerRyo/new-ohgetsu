@@ -80,7 +80,7 @@ describe('RestaurantsService', () => {
     it('検索キーワードを含むレストランを取得できる', async () => {
       await createGenreAndRestaurants();
 
-      const res = await service.find({ keyword: 'キーワード' });
+      const res = await service.find({ search_query: 'キーワード' });
 
       expect(res.length).toBe(1);
       expect(res[0].name).toBe('キーワードレストラン01キーワード');

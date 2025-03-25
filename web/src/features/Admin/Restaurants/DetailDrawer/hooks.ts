@@ -38,7 +38,7 @@ export const useHandler = ({
       try {
         if (isEdit && !!restaurant) {
           const { error } = await api.restaurants.restaurantsControllerUpdate(
-            restaurant?.id,
+            restaurant.id,
             { ...values, pic: values.pic ? values.pic[0] : undefined }
           );
 

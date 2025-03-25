@@ -1,10 +1,10 @@
 'use client';
 
+import { Restaurants } from '@/features/Restaurants';
 import {
   CreateRestaurantsSearchCondition,
   RestaurantsSearchCondition,
-} from '@/features/CreateMenus/Restaurants/utils';
-import { Restaurants } from '@/features/Restaurants';
+} from '@/features/Restaurants/utils';
 
 export type OptionalQuery = RestaurantsSearchCondition;
 
