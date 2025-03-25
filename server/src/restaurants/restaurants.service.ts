@@ -12,19 +12,19 @@ export class RestaurantsService {
   ) {}
 
   async find({
-    keyword,
+    search_query,
     withDeleted,
   }: {
-    keyword?: string;
+    search_query?: string;
     withDeleted?: boolean;
   }) {
     const restaurants = await this.prisma.restaurants.findMany({
       where: {
         deletedAt: withDeleted ? undefined : null,
-        ...(keyword
+        ...(search_query
           ? {
               name: {
-                contains: keyword,
+                contains: search_query,
               },
             }
           : {}),
