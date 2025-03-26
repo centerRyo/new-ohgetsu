@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
-import { IsOptional, IsString, IsUUID } from 'class-validator';
+import { Expose, Transform } from 'class-transformer';
+import { IsBoolean, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateRestaurantDto {
   /**
@@ -31,4 +31,14 @@ export class CreateRestaurantDto {
   @IsUUID()
   @ApiProperty({ description: 'ジャンルID' })
   genreId: string;
+
+  /**
+   * 営業開始するかどうか
+   */
+  @Expose()
+  @IsBoolean()
+  // multipart/form-dataとして受け付けるのでstringをbooleanに変換する必要がある
+  @Transform(({ value }) => value === 'true' || value === true)
+  @ApiProperty({ description: '営業開始フラグ' })
+  isOpen: boolean;
 }

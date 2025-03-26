@@ -7,4 +7,10 @@ generateApi({
   name: 'Api.ts',
   url: 'http://localhost:8888/api-json',
   output: path.resolve(process.cwd(), GEN_FILE_DIR),
+
+  primitiveTypeConstructs: () => ({
+    string: {
+      'date-time': 'Date',
+    },
+  }),
 });

@@ -25,6 +25,10 @@ type Props = {
 };
 
 export const Menus = ({ searchConditions }: Props) => {
+  const excludedIngredientIds = searchConditions.excludedIngredientIds
+    ? searchConditions.excludedIngredientIds?.split(',')
+    : [];
+
   const {
     data: restaurantData,
     error: restaurantError,
@@ -51,10 +55,6 @@ export const Menus = ({ searchConditions }: Props) => {
   } = useSWR('/ingredients', () =>
     api.ingredients.ingredientsControllerFindAll()
   );
-
-  const excludedIngredientIds = searchConditions.excludedIngredientIds
-    ? searchConditions.excludedIngredientIds?.split(',')
-    : [];
 
   const restaurant = restaurantData?.data;
 

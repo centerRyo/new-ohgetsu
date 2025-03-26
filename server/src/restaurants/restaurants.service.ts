@@ -11,20 +11,29 @@ export class RestaurantsService {
     private readonly s3Service: S3Service
   ) {}
 
-  async find(keyword?: string) {
+  async find({
+    search_query,
+    withDeleted,
+  }: {
+    search_query?: string;
+    withDeleted?: boolean;
+  }) {
     const restaurants = await this.prisma.restaurants.findMany({
       where: {
-        deletedAt: null,
-        ...(keyword
+        deletedAt: withDeleted ? undefined : null,
+        ...(search_query
           ? {
               name: {
-                contains: keyword,
+                contains: search_query,
               },
             }
           : {}),
       },
       include: {
         genre: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
       },
     });
 
@@ -65,25 +74,44 @@ export class RestaurantsService {
       ? await this.s3Service.uploadFile({ file: pic, folder: 'restaurants' })
       : null;
 
+    const { isOpen, ...rest } = data;
+
     const restaurant = await this.prisma.restaurants.create({
       data: {
-        ...data,
+        ...rest,
         pic: picPath,
+        deletedAt: isOpen ? null : new Date(),
       },
     });
 
     return restaurant;
   }
 
-  async update(id: string, data: UpdateRestaurantDto) {
-    const { isReopen, ...rest } = data;
-    const deletedAt = isReopen ? null : undefined;
+  async update(
+    id: string,
+    data: UpdateRestaurantDto,
+    pic: Express.Multer.File | null
+  ) {
+    const existing = await this.prisma.restaurants.findFirst({
+      where: { id },
+    });
+
+    if (!existing) {
+      throw new NotFoundException('Restaurant not found');
+    }
+    // picがあればさくらのクラウドオブジェクトストレージにアップロード
+    const picPath = pic
+      ? await this.s3Service.uploadFile({ file: pic, folder: 'restaurants' })
+      : existing.pic;
+
+    const { isOpen, ...rest } = data;
 
     const restaurant = await this.prisma.restaurants.update({
       where: { id },
       data: {
         ...rest,
-        deletedAt,
+        pic: picPath,
+        deletedAt: isOpen ? null : new Date(),
       },
     });
 

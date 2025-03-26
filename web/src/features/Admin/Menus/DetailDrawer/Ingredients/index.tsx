@@ -5,7 +5,7 @@ import { api } from '@/lib/swagger-client';
 import { CheckboxGroup, Field, Flex } from '@chakra-ui/react';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 import useSWR from 'swr';
-import { FormValues } from '../index.d';
+import { FormValues } from '../../index.d';
 import styles from '../index.module.scss';
 
 type Props = {

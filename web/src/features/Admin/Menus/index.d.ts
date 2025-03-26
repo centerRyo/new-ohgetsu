@@ -1,5 +1,13 @@
+export type DetailDrawerState = {
+  menuId: string | undefined;
+  open: boolean;
+};
+
+export type TOnOpenDetail = (
+  menuId?: DetailDrawerState['menuId'] | undefined
+) => void;
+
 export type FormValues = {
-  restaurantId: string;
   menus: Array<{
     name: string;
     ingredientIds: Array<string>;

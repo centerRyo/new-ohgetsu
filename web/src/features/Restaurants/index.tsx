@@ -12,9 +12,9 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { RestaurantsSearchCondition } from '../CreateMenus/Restaurants/utils';
 import { ErrorSafePage } from '../Error';
 import styles from './index.module.scss';
+import { RestaurantsSearchCondition } from './utils';
 
 type Props = {
   searchConditions: RestaurantsSearchCondition;

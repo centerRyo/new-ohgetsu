@@ -3,30 +3,52 @@ import type { OptionalQuery as OptionalQuery_qbbltk } from '../app/menus/page';
 import type { OptionalQuery as OptionalQuery_1rgxedo } from '../app/restaurants/page';
 
 const buildSuffix = (url?: {
-  query?: Record<string, string>;
+  query?: Record<
+    string,
+    string | number | boolean | Array<string | number | boolean>
+  >;
   hash?: string;
 }) => {
   const query = url?.query;
   const hash = url?.hash;
   if (!query && !hash) return '';
-  const search = query ? `?${new URLSearchParams(query)}` : '';
+  const search = (() => {
+    if (!query) return '';
+
+    const params = new URLSearchParams();
+
+    Object.entries(query).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => params.append(key, String(item)));
+      } else {
+        params.set(key, String(value));
+      }
+    });
+
+    return `?${params.toString()}`;
+  })();
   return `${search}${hash ? `#${hash}` : ''}`;
 };
 
 export const pagesPath = {
-  create_menus: {
-    $url: (url?: { hash?: string }) => ({
-      pathname: '/create-menus' as const,
-      hash: url?.hash,
-      path: `/create-menus${buildSuffix(url)}`,
-    }),
-  },
-  create_restaurant: {
-    $url: (url?: { hash?: string }) => ({
-      pathname: '/create-restaurant' as const,
-      hash: url?.hash,
-      path: `/create-restaurant${buildSuffix(url)}`,
-    }),
+  admin: {
+    restaurants: {
+      _id: (id: string | number) => ({
+        menus: {
+          $url: (url?: { hash?: string }) => ({
+            pathname: '/admin/restaurants/[id]/menus' as const,
+            query: { id },
+            hash: url?.hash,
+            path: `/admin/restaurants/${id}/menus${buildSuffix(url)}`,
+          }),
+        },
+      }),
+      $url: (url?: { hash?: string }) => ({
+        pathname: '/admin/restaurants' as const,
+        hash: url?.hash,
+        path: `/admin/restaurants${buildSuffix(url)}`,
+      }),
+    },
   },
   menus: {
     _id: (id: string | number) => ({

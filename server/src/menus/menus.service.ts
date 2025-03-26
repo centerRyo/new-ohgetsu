@@ -8,6 +8,7 @@ import { S3Service } from '../common/services/s3.service';
 import { PrismaService } from '../prisma.service';
 import { CreateMenuDto } from './create-menu.dto';
 import { MenuDto, findMenusQuery } from './menus.dto';
+import { UpdateMenuDto } from './update-menu.dto';
 
 @Injectable()
 export class MenusService {
@@ -17,17 +18,22 @@ export class MenusService {
   ) {}
 
   async findAll(query: findMenusQuery) {
-    const ingredientIds = Array.isArray(query.ingredientIds)
-      ? query.ingredientIds
-      : [query.ingredientIds];
+    const { restaurantId, ingredientIds } = query;
+
+    const excludeIngredientIds = ingredientIds
+      ? Array.isArray(ingredientIds)
+        ? ingredientIds
+        : [ingredientIds]
+      : [];
+
     const menus = await this.prisma.menus.findMany({
       where: {
-        restaurantId: query.restaurantId,
-        ingredients: query.ingredientIds
+        restaurantId,
+        ingredients: ingredientIds
           ? {
               none: {
                 id: {
-                  in: ingredientIds,
+                  in: excludeIngredientIds,
                 },
               },
             }
@@ -35,6 +41,9 @@ export class MenusService {
       },
       include: {
         ingredients: true,
+      },
+      orderBy: {
+        createdAt: 'asc',
       },
     });
 
@@ -145,5 +154,48 @@ export class MenusService {
     }
 
     return menus;
+  }
+
+  async update(id: string, data: UpdateMenuDto, pic: Express.Multer.File) {
+    const existing = await this.prisma.menus.findFirst({ where: { id } });
+
+    if (!existing) {
+      throw new NotFoundException('Menu not found');
+    }
+
+    const picPath = pic
+      ? await this.s3Service.uploadFile({ file: pic, folder: 'menu' })
+      : existing.pic;
+
+    const validatedIngredients = await Promise.all(
+      data.ingredientIds.map(async (id) => {
+        const exists = await this.prisma.ingredients.findUnique({
+          where: { id },
+        });
+
+        if (!exists) {
+          throw new NotFoundException(`Ingredient ${id} not found`);
+        }
+
+        return { id: exists.id };
+      })
+    );
+
+    const menu = await this.prisma.menus.update({
+      where: { id },
+      data: {
+        name: data.name,
+        pic: picPath,
+        ingredients: {
+          set: validatedIngredients,
+        },
+      },
+    });
+
+    return menu;
+  }
+
+  async remove(id: string) {
+    await this.prisma.menus.delete({ where: { id } });
   }
 }

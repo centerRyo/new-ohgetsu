@@ -1,18 +1,29 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Query,
+  UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { AnyFilesInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CreateMenuDto } from './create-menu.dto';
+import { DeleteMenuDto } from './delete-menu.dto';
 import { MenuDto, findMenusQuery } from './menus.dto';
 import { MenusService } from './menus.service';
+import { UpdateMenuDto } from './update-menu.dto';
 
 @Controller('menus')
 @ApiTags('menus')
@@ -52,5 +63,35 @@ export class MenusController {
     const menus = await this.menusService.create(data);
 
     return menus.map((menu) => new MenuDto(menu));
+  }
+
+  @Patch(':id')
+  @ApiOperation({
+    summary: 'メニューを更新する',
+  })
+  @ApiResponse({ status: HttpStatus.OK, type: MenuDto })
+  @ApiBody({ type: UpdateMenuDto })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('pic'))
+  async update(
+    @Param('id') id: string,
+    @Body() data: UpdateMenuDto,
+    @UploadedFile() pic?: Express.Multer.File
+  ): Promise<MenuDto> {
+    const menu = await this.menusService.update(id, data, pic);
+
+    return new MenuDto(menu);
+  }
+
+  @Delete(':id')
+  @ApiOperation({
+    summary: 'メニューを削除する',
+    description: '指定したIDのメニューを物理削除する',
+  })
+  @ApiResponse({ status: HttpStatus.OK, type: DeleteMenuDto })
+  async remove(@Param('id') id: string): Promise<DeleteMenuDto> {
+    await this.menusService.remove(id);
+
+    return new DeleteMenuDto({ result: true });
   }
 }
