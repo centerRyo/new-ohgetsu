@@ -1,9 +1,4 @@
-import {
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Input as ChakraInput,
-} from '@chakra-ui/react';
+import { Input as ChakraInput, Field } from '@chakra-ui/react';
 import { ComponentPropsWithoutRef, forwardRef } from 'react';
 
 type Props = ComponentPropsWithoutRef<'input'> &
@@ -18,11 +13,11 @@ type Props = ComponentPropsWithoutRef<'input'> &
 const Input = forwardRef<HTMLInputElement, Props>(
   ({ isRequired, helper, fontWeight, label, type, name }, ref) => {
     return (
-      <FormControl isRequired={isRequired}>
-        <FormLabel fontWeight={fontWeight}>{label}</FormLabel>
+      <Field.Root required={isRequired}>
+        <Field.Label fontWeight={fontWeight}>{label}</Field.Label>
         <ChakraInput id={name} name={name} type={type} ref={ref} />
-        {helper && <FormHelperText>{helper}</FormHelperText>}
-      </FormControl>
+        {helper && <Field.HelperText>{helper}</Field.HelperText>}
+      </Field.Root>
     );
   }
 );

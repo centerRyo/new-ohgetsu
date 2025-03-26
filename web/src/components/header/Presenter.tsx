@@ -1,37 +1,34 @@
 'use client';
 
 import {
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
   IconButton,
   Input,
-  InputGroup,
-  InputRightElement,
   useBreakpointValue,
   VStack,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { FaSearch } from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
+import {
+  DrawerBackdrop,
+  DrawerBody,
+  DrawerCloseTrigger,
+  DrawerContent,
+  DrawerHeader,
+  DrawerRoot,
+  DrawerTitle,
+  DrawerTrigger,
+} from '../drawer';
+import { InputGroup } from '../input/input-group';
 import styles from './index.module.scss';
 
 type Props = {
-  isOpen: boolean;
-  onOpen: () => void;
-  onClose: () => void;
   searchText: string;
   setSearchText: (text: string) => void;
   handleSearch: () => void;
 };
 
 export const HeaderPresenter = ({
-  isOpen,
-  onOpen,
-  onClose,
   searchText,
   setSearchText,
   handleSearch,
@@ -47,15 +44,17 @@ export const HeaderPresenter = ({
           </Link>
         </h1>
 
-        {isMobile ? (
-          <IconButton
-            aria-label='Open menu'
-            icon={<GiHamburgerMenu />}
-            onClick={onOpen}
+        {!isMobile && (
+          <InputGroup
+            w='300px'
             bg='white'
-          />
-        ) : (
-          <InputGroup w='300px' bg='white' h='100%'>
+            h='100%'
+            endElement={
+              <IconButton aria-label='search' h='100%' onClick={handleSearch}>
+                <FaSearch />
+              </IconButton>
+            }
+          >
             <Input
               value={searchText}
               placeholder='レストランを探す...'
@@ -65,26 +64,40 @@ export const HeaderPresenter = ({
               h='100%'
               onChange={(e) => setSearchText(e.target.value)}
             />
-            <InputRightElement h='100%'>
-              <IconButton
-                aria-label='search'
-                icon={<FaSearch />}
-                h='100%'
-                onClick={handleSearch}
-              />
-            </InputRightElement>
           </InputGroup>
         )}
       </header>
 
-      <Drawer isOpen={isOpen} placement='right' onClose={onClose}>
-        <DrawerOverlay />
+      <DrawerRoot>
+        <DrawerBackdrop />
+
+        {isMobile && (
+          <DrawerTrigger asChild position='fixed' top='1rem' right='1rem'>
+            <IconButton>
+              <GiHamburgerMenu />
+            </IconButton>
+          </DrawerTrigger>
+        )}
+
         <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>レストランを検索</DrawerHeader>
+          <DrawerHeader>
+            <DrawerTitle>レストランを検索</DrawerTitle>
+          </DrawerHeader>
+
           <DrawerBody>
-            <VStack spacing={4} align='stretch'>
-              <InputGroup bg='white'>
+            <VStack spaceX={4} spaceY={4} align='stretch'>
+              <InputGroup
+                bg='white'
+                endElement={
+                  <IconButton
+                    aria-label='search'
+                    h='100%'
+                    onClick={handleSearch}
+                  >
+                    <FaSearch />
+                  </IconButton>
+                }
+              >
                 <Input
                   value={searchText}
                   placeholder='レストランを探す...'
@@ -93,18 +106,13 @@ export const HeaderPresenter = ({
                   _placeholder={{ color: 'gray.500' }}
                   onChange={(e) => setSearchText(e.target.value)}
                 />
-                <InputRightElement>
-                  <IconButton
-                    aria-label='search'
-                    icon={<FaSearch />}
-                    onClick={handleSearch}
-                  />
-                </InputRightElement>
               </InputGroup>
             </VStack>
           </DrawerBody>
+
+          <DrawerCloseTrigger />
         </DrawerContent>
-      </Drawer>
+      </DrawerRoot>
     </>
   );
 };
