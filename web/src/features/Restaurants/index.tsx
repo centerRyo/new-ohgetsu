@@ -5,6 +5,7 @@ import {
   Box,
   Card,
   Heading,
+  HStack,
   Image,
   SimpleGrid,
   Skeleton,
@@ -76,15 +77,17 @@ export const Restaurants = ({ searchConditions }: Props): JSX.Element => {
                           {restaurant.name}
                         </Heading>
                       </Tooltip>
-                      <Tag.Root
-                        variant='outline'
-                        mt={4}
-                        color='black'
-                        borderColor='#d8d9db'
-                        fontWeight='600'
-                      >
-                        <Tag.Label>{restaurant.genre?.name}</Tag.Label>
-                      </Tag.Root>
+                      <HStack>
+                        <Tag.Root
+                          variant='outline'
+                          mt={4}
+                          colorPalette='black'
+                          fontWeight='600'
+                          size='sm'
+                        >
+                          <Tag.Label>{restaurant.genre?.name}</Tag.Label>
+                        </Tag.Root>
+                      </HStack>
                     </Card.Body>
                   </Card.Root>
                 </Link>
