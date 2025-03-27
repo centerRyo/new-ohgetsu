@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Box,
   IconButton,
   Input,
   useBreakpointValue,
@@ -23,13 +24,17 @@ import { InputGroup } from '../input/input-group';
 import styles from './index.module.scss';
 
 type Props = {
+  openDrawer: boolean;
   searchText: string;
+  setOpenDrawer: (open: boolean) => void;
   setSearchText: (text: string) => void;
   handleSearch: () => void;
 };
 
 export const HeaderPresenter = ({
+  openDrawer,
   searchText,
+  setOpenDrawer,
   setSearchText,
   handleSearch,
 }: Props): JSX.Element => {
@@ -50,9 +55,17 @@ export const HeaderPresenter = ({
             bg='white'
             h='100%'
             endElement={
-              <IconButton aria-label='search' h='100%' onClick={handleSearch}>
+              <Box
+                as='button'
+                aria-label='search'
+                h='100%'
+                pointerEvents='auto'
+                zIndex={2}
+                cursor='pointer'
+                onClick={handleSearch}
+              >
                 <FaSearch />
-              </IconButton>
+              </Box>
             }
           >
             <Input
@@ -68,7 +81,7 @@ export const HeaderPresenter = ({
         )}
       </header>
 
-      <DrawerRoot>
+      <DrawerRoot open={openDrawer} onOpenChange={(e) => setOpenDrawer(e.open)}>
         <DrawerBackdrop />
 
         {isMobile && (
@@ -89,13 +102,17 @@ export const HeaderPresenter = ({
               <InputGroup
                 bg='white'
                 endElement={
-                  <IconButton
+                  <Box
+                    as='button'
                     aria-label='search'
                     h='100%'
+                    pointerEvents='auto'
+                    zIndex={2}
+                    cursor='pointer'
                     onClick={handleSearch}
                   >
                     <FaSearch />
-                  </IconButton>
+                  </Box>
                 }
               >
                 <Input
