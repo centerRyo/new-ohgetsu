@@ -1,19 +1,19 @@
+import {
+  DrawerBackdrop,
+  DrawerBody,
+  DrawerCloseTrigger,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerRoot,
+} from '@/components/drawer';
 import { api } from '@/lib/swagger-client';
 import { HttpResponse, MenuDto } from '@/types/generated/Api';
 import {
   Box,
   Button,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
+  Field,
   Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
   Heading,
   IconButton,
   Image,
@@ -87,10 +87,15 @@ export const DetailDrawer = ({
   }, [defaultValues, reset]);
 
   return (
-    <Drawer isOpen={state.open} placement='right' size='md' onClose={onClose}>
-      <DrawerOverlay />
+    <DrawerRoot
+      open={state.open}
+      placement='end'
+      size='md'
+      onOpenChange={onClose}
+    >
+      <DrawerBackdrop />
       <DrawerContent>
-        <DrawerCloseButton />
+        <DrawerCloseTrigger />
         <DrawerHeader>メニュー{isEdit ? '編集' : '追加'}</DrawerHeader>
 
         <DrawerBody>
@@ -108,24 +113,25 @@ export const DetailDrawer = ({
                   {index !== 0 && (
                     <IconButton
                       aria-label='メニュー項目を削除'
-                      icon={<FaTrash />}
                       colorScheme='red'
                       size='sm'
                       onClick={() => remove(index)}
                       variant='ghost'
-                    />
+                    >
+                      <FaTrash />
+                    </IconButton>
                   )}
                 </Flex>
                 <Flex mb={6}>
-                  <FormControl
-                    isInvalid={
+                  <Field.Root
+                    invalid={
                       errors.menus && !!errors.menus[index]?.name?.message
                     }
                   >
                     <Flex alignItems='center' gap={4} mb={2}>
-                      <FormLabel className={styles.label} htmlFor='menu_name'>
+                      <Field.Label className={styles.label} htmlFor='menu_name'>
                         メニュー
-                      </FormLabel>
+                      </Field.Label>
                       <span className={styles.required}>必須</span>
                     </Flex>
                     <Input
@@ -134,11 +140,11 @@ export const DetailDrawer = ({
                         required: 'メニューは必須です',
                       })}
                     />
-                    <FormErrorMessage>
+                    <Field.ErrorText>
                       {errors.menus &&
                         errors.menus[index]?.name?.message?.toString()}
-                    </FormErrorMessage>
-                  </FormControl>
+                    </Field.ErrorText>
+                  </Field.Root>
                 </Flex>
                 <Flex mb={6}>
                   <Ingredients
@@ -148,9 +154,9 @@ export const DetailDrawer = ({
                   />
                 </Flex>
                 <Flex>
-                  <FormControl>
+                  <Field.Root>
                     <Flex mb={2}>
-                      <FormLabel className={styles.label}>写真</FormLabel>
+                      <Field.Label className={styles.label}>写真</Field.Label>
                     </Flex>
                     <Input
                       type='file'
@@ -172,7 +178,7 @@ export const DetailDrawer = ({
                         height='200'
                       />
                     )}
-                  </FormControl>
+                  </Field.Root>
                 </Flex>
               </Box>
             ))}
@@ -184,14 +190,14 @@ export const DetailDrawer = ({
         <DrawerFooter>
           <Button
             colorScheme='green'
-            isDisabled={!isValid}
-            isLoading={isSubmitting}
+            disabled={!isValid}
+            loading={isSubmitting}
             onClick={handleSubmit(onSubmit)}
           >
             保存
           </Button>
         </DrawerFooter>
       </DrawerContent>
-    </Drawer>
+    </DrawerRoot>
   );
 };

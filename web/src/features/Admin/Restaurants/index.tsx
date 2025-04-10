@@ -3,21 +3,14 @@ import { ErrorSafePage } from '@/features/Error';
 import { api } from '@/lib/swagger-client';
 import {
   Button,
+  createListCollection,
   Grid,
   GridItem,
   Heading,
   HStack,
   Image,
   Table,
-  TableContainer,
   Tag,
-  TagLabel,
-  TagLeftIcon,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
 } from '@chakra-ui/react';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
@@ -37,12 +30,21 @@ export const RestaurantsAdmin = (): JSX.Element => {
 
   const restaurants = data?.data ?? [];
 
+  const frameworks = createListCollection({
+    items: [
+      { label: 'React.js', value: 'react' },
+      { label: 'Vue.js', value: 'vue' },
+      { label: 'Angular', value: 'angular' },
+      { label: 'Svelte', value: 'svelte' },
+    ],
+  });
+
   return !isLoading ? (
     <ErrorSafePage error={error}>
       <main className={styles.container}>
         <Grid mb={8}>
           <GridItem>
-            <HStack spacing={6}>
+            <HStack gap={6}>
               <Heading as='h3' size='lg'>
                 レストラン一覧
               </Heading>
@@ -55,74 +57,72 @@ export const RestaurantsAdmin = (): JSX.Element => {
             </Button>
           </GridItem>
         </Grid>
-        <TableContainer>
-          <Table variant='simple'>
-            <Thead>
-              <Tr>
-                <Th fontSize='md'>レストラン名</Th>
-                <Th fontSize='md'>写真</Th>
-                <Th fontSize='md'>ジャンル</Th>
-                <Th fontSize='md'>営業状況</Th>
-                <Th />
-              </Tr>
-            </Thead>
-            <Tbody>
-              {restaurants.map((restaurant) => (
-                <Tr key={restaurant.id}>
-                  <Td>{restaurant.name}</Td>
-                  <Td>
-                    {restaurant.pic && (
-                      <Image
-                        width='24'
-                        height='20'
-                        src={restaurant.pic}
-                        alt={restaurant.name}
-                      />
-                    )}
-                  </Td>
-                  <Td>
-                    <Tag variant='outline' color='black'>
-                      {restaurant.genre.name}
-                    </Tag>
-                  </Td>
-                  <Td>
-                    <Tag
-                      variant='outline'
-                      colorScheme={restaurant.deletedAt ? 'red' : 'blue'}
+        <Table.Root variant='line' stickyHeader>
+          <Table.Header>
+            <Table.Row>
+              <Table.ColumnHeader fontSize='md'>
+                レストラン名
+              </Table.ColumnHeader>
+              <Table.ColumnHeader fontSize='md'>写真</Table.ColumnHeader>
+              <Table.ColumnHeader fontSize='md'>ジャンル</Table.ColumnHeader>
+              <Table.ColumnHeader fontSize='md'>営業状況</Table.ColumnHeader>
+              <Table.ColumnHeader />
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {restaurants.map((restaurant) => (
+              <Table.Row key={restaurant.id}>
+                <Table.Cell>{restaurant.name}</Table.Cell>
+                <Table.Cell>
+                  {restaurant.pic && (
+                    <Image
+                      width='24'
+                      height='20'
+                      src={restaurant.pic}
+                      alt={restaurant.name}
+                    />
+                  )}
+                </Table.Cell>
+                <Table.Cell>
+                  <Tag.Root variant='outline' color='black'>
+                    <Tag.Label>{restaurant.genre.name}</Tag.Label>
+                  </Tag.Root>
+                </Table.Cell>
+                <Table.Cell>
+                  <Tag.Root
+                    variant='outline'
+                    colorPalette={restaurant.deletedAt ? 'red' : 'blue'}
+                  >
+                    <Tag.StartElement
+                      as={restaurant.deletedAt ? FaTimesCircle : FaCheckCircle}
+                    />
+                    <Tag.Label>
+                      {restaurant.deletedAt ? '営業停止中' : '営業中'}
+                    </Tag.Label>
+                  </Tag.Root>
+                </Table.Cell>
+                <Table.Cell>
+                  <HStack gap={4}>
+                    <Button
+                      colorPalette='teal'
+                      size='xs'
+                      onClick={() => handleOpen(restaurant.id)}
                     >
-                      <TagLeftIcon
-                        as={
-                          restaurant.deletedAt ? FaTimesCircle : FaCheckCircle
-                        }
-                      />
-                      <TagLabel>
-                        {restaurant.deletedAt ? '営業停止中' : '営業中'}
-                      </TagLabel>
-                    </Tag>
-                  </Td>
-                  <Td>
-                    <HStack spacing={4}>
-                      <Button
-                        colorScheme='teal'
-                        size='xs'
-                        onClick={() => handleOpen(restaurant.id)}
-                      >
-                        詳細
-                      </Button>
-                      <Button
-                        colorScheme='purple'
-                        size='xs'
-                        onClick={() => handleClickMenuManagement(restaurant.id)}
-                      >
-                        メニュー管理
-                      </Button>
-                    </HStack>
-                  </Td>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+                      詳細
+                    </Button>
+                    <Button
+                      colorPalette='purple'
+                      size='xs'
+                      onClick={() => handleClickMenuManagement(restaurant.id)}
+                    >
+                      メニュー管理
+                    </Button>
+                  </HStack>
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table.Root>
       </main>
 
       <DetailDrawer state={state} onClose={handleClose} mutate={mutate} />
