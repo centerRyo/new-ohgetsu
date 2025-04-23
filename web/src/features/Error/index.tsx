@@ -28,6 +28,8 @@ export const ErrorSafePage = ({ error, children }: ErrorSafePageProps) => {
     return children;
   }
 
+  console.log(error);
+
   const statusCode = error.error.statusCode;
 
   return <Error statusCode={statusCode} />;

@@ -103,7 +103,7 @@ export const Menus = ({ searchConditions }: Props) => {
         <section className={styles.menus}>
           {menus.length > 0 ? (
             <SimpleGrid
-              spacing={4}
+              gap={4}
               templateColumns={{
                 base: 'repeat(auto-fill, minmax(125px, 1fr))',
                 md: 'repeat(auto-fill, minmax(200px, 1fr))',
@@ -118,7 +118,7 @@ export const Menus = ({ searchConditions }: Props) => {
                   }
                   key={menu.id}
                 >
-                  <Card key={menu.id}>
+                  <Card.Root key={menu.id}>
                     <CardHeader>
                       <Box className={styles.imageWrap}>
                         <Image
@@ -131,11 +131,11 @@ export const Menus = ({ searchConditions }: Props) => {
                       </Box>
                     </CardHeader>
                     <CardBody>
-                      <Heading size='md' noOfLines={3} height='72px'>
+                      <Heading size='md' lineClamp={3} height='72px'>
                         {menu.name}
                       </Heading>
                     </CardBody>
-                  </Card>
+                  </Card.Root>
                 </Link>
               ))}
             </SimpleGrid>

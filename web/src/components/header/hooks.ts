@@ -5,10 +5,14 @@ import { useCallback } from 'react';
 type Props = {
   searchText: string;
   setSearchText: (text: string) => void;
-  onClose: () => void;
+  setOpenDrawer: (open: boolean) => void;
 };
 
-export const useSearch = ({ searchText, setSearchText, onClose }: Props) => {
+export const useSearch = ({
+  searchText,
+  setSearchText,
+  setOpenDrawer,
+}: Props) => {
   const router = useRouter();
 
   const handleSearch = useCallback(() => {
@@ -18,8 +22,8 @@ export const useSearch = ({ searchText, setSearchText, onClose }: Props) => {
 
     setSearchText('');
 
-    onClose();
-  }, [router, setSearchText, searchText, onClose]);
+    setOpenDrawer(false);
+  }, [router, setSearchText, searchText, setOpenDrawer]);
 
   return { handleSearch };
 };
