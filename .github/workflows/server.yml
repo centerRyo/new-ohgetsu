@@ -43,7 +43,8 @@ jobs:
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         # npm ciだとprisma/clientが生成されない
-        run: npm install
+        # TODO: aws sdkのバージョン不具合のため--legacy-peer-deps オプションをつけている
+        run: npm install--legacy-peer-deps
 
       - name: Type Check
         run: npm run types-check
