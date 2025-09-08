@@ -7,7 +7,8 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # to generate prisma client need to npm install
-RUN npm install
+# TODO: aws sdkのバージョン不具合のため--legacy-peer-deps オプションをつけている
+RUN npm install --legacy-peer-deps
 
 # Copy prisma schema and run prisma generate
 COPY prisma ./prisma
