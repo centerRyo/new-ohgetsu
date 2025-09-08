@@ -6,9 +6,14 @@ WORKDIR /app
 # Copy package.json and package-lock.json and install dependencies
 COPY package.json package-lock.json ./
 
-# to generate prisma client need to npm install
 # TODO: aws sdkのバージョン不具合のため--legacy-peer-deps オプションをつけている
-RUN npm install --legacy-peer-deps
+RUN npm ci --legacy-peer-deps
+
+# S3 SDK バージョンガード（< 3.729.0 以外ならビルド失敗）
+RUN node -e "const v=require('@aws-sdk/client-s3/package.json').version; \
+  const bad = v.localeCompare('3.729.0', undefined, {numeric:true}) >= 0; \
+  if (bad) { console.error('NG @aws-sdk/client-s3', v); process.exit(1); } \
+  console.log('OK @aws-sdk/client-s3', v);"
 
 # Copy prisma schema and run prisma generate
 COPY prisma ./prisma
