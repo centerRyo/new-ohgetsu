@@ -10,7 +10,7 @@ export class GenresController {
 
   @Get()
   @ApiOperation({
-    summary: 'ジャンルを取得する',
+    summary: 'ジャンル一覧を取得する',
   })
   @ApiResponse({ status: HttpStatus.OK, type: [GenreDto] })
   async findAll(): Promise<GenreDto[]> {
