@@ -51,7 +51,7 @@
     "pathpida": "^0.25.0",
     "prettier": "^3.4.2",
     "sass": "^1.91.0",
-    "sass-loader": "^16.0.5",
+    "sass-loader": "^16.0.6",
     "swagger-typescript-api": "^13.2.7",
     "ts-jest": "^29.4.1",
     "ts-node": "^10.9.2",
