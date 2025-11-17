@@ -30,6 +30,15 @@ export class MenuDto {
   pic: string | null;
 
   /**
+   * 備考
+   */
+  @Expose()
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  note: string | null;
+
+  /**
    * アレルギー情報
    */
   @Expose()
