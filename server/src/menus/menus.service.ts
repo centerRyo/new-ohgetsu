@@ -190,6 +190,7 @@ export class MenusService {
         ingredients: {
           set: validatedIngredients,
         },
+        note: data.note
       },
     });
 
