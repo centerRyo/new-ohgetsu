@@ -13,7 +13,7 @@
     "lint": "eslint \"src/**/*.{js,ts,tsx}\" --max-warnings=0",
     "lint:fix": "eslint src/**/*.{js,ts,tsx} --fix",
     "test": "jest",
-    "generate-types": "node ./scripts/ApiTypeGenerator.js"
+    "generate-types": "node ./scripts/ApiTypeGenerator.mjs"
   },
   "dependencies": {
     "@chakra-ui/next-js": "^2.4.2",
