@@ -190,7 +190,7 @@ export class MenusService {
         ingredients: {
           set: validatedIngredients,
         },
-        note: data.note
+        note: data.note ?? existing.note // undefined/null 対策
       },
     });
 
