@@ -23,6 +23,18 @@ export class UpdateMenuDto {
   })
   pic?: string;
 
+  /**
+   * 備考
+   */
+  @Expose()
+  @IsOptional()
+  @ApiProperty({
+    description: '備考',
+    type: 'string',
+    required: false,
+  })
+  note?: string;
+
   @Expose()
   @IsArray()
   @IsString({ each: true })

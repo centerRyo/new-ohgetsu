@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+// @ts-nocheck
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -68,6 +69,7 @@ export interface MenuDto {
   id: string;
   name: string;
   pic: string;
+  note: string;
   ingredients: IngredientDto[];
 }
 
@@ -78,6 +80,8 @@ export interface PartialMenuDto {
    * @format byte
    */
   pic?: string;
+  /** 備考 */
+  note?: string;
   ingredientIds: string[];
 }
 
@@ -93,6 +97,8 @@ export interface UpdateMenuDto {
    * @format binary
    */
   pic?: File;
+  /** 備考 */
+  note?: string;
   ingredientIds: string[];
 }
 
@@ -146,6 +152,7 @@ type CancelToken = Symbol | string | number;
 
 export enum ContentType {
   Json = 'application/json',
+  JsonApi = 'application/vnd.api+json',
   FormData = 'multipart/form-data',
   UrlEncoded = 'application/x-www-form-urlencoded',
   Text = 'text/plain',
@@ -209,6 +216,10 @@ export class HttpClient<SecurityDataType = unknown> {
 
   private contentFormatters: Record<ContentType, (input: any) => any> = {
     [ContentType.Json]: (input: any) =>
+      input !== null && (typeof input === 'object' || typeof input === 'string')
+        ? JSON.stringify(input)
+        : input,
+    [ContentType.JsonApi]: (input: any) =>
       input !== null && (typeof input === 'object' || typeof input === 'string')
         ? JSON.stringify(input)
         : input,
@@ -377,7 +388,7 @@ export class Api<
      *
      * @tags genres
      * @name GenresControllerFindAll
-     * @summary ジャンルを取得する
+     * @summary ジャンル一覧を取得する
      * @request GET:/genres
      */
     genresControllerFindAll: (params: RequestParams = {}) =>

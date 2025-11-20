@@ -81,7 +81,7 @@ export class MenusService {
     const menus: MenuDto[] = [];
 
     for (const menu of data.menus) {
-      const { name, pic, ingredientIds } = menu;
+      const { name, pic, ingredientIds, note } = menu;
 
       const validatedIngredients = [];
 
@@ -144,6 +144,7 @@ export class MenusService {
           ingredients: {
             connect: validatedIngredients,
           },
+          note,
         },
         include: {
           ingredients: true,
@@ -189,6 +190,7 @@ export class MenusService {
         ingredients: {
           set: validatedIngredients,
         },
+        note: data.note,
       },
     });
 
