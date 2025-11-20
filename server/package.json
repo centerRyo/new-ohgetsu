@@ -13,7 +13,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "types-check": "tsc --pretty --noEmit",
-    "format:check": "prettier --check \"src/**/*.{js,ts,tsx,json}\" \"test/**/*.ts\"",
+    "format:check": "prettier --check 'src/**/*.{js,ts,tsx,json}' 'test/**/*.ts'",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --max-warnings=0",
     "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "with-env:test": "dotenv -e ./prisma/.env.test --",
