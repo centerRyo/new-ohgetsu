@@ -182,7 +182,7 @@ export const DetailDrawer = ({
                         備考
                       </FormLabel>
                     </Flex>
-                    <Textarea {...register(`menus.${index}.note`)} />
+                    <Textarea rows={3} {...register(`menus.${index}.note`)} />
                   </FormControl>
                 </Flex>
               </Box>
