@@ -174,6 +174,20 @@ export const DetailDrawer = ({
                     )}
                   </FormControl>
                 </Flex>
+                <Flex mb={6}>
+                  <FormControl>
+                    <Flex alignItems='center' gap={4} mb={2}>
+                      <FormLabel className={styles.label} htmlFor='menu_note'>
+                        備考
+                      </FormLabel>
+                    </Flex>
+                    <Input
+                      type='text'
+                      {...register(`menus.${index}.note`)}
+                      placeholder=''
+                    />
+                  </FormControl>
+                </Flex>
               </Box>
             ))}
 

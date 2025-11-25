@@ -12,6 +12,7 @@ export type FormValues = {
     name: string;
     ingredientIds: Array<string>;
     pic?: FileList;
+    note?: string;
   }>;
 };
 
