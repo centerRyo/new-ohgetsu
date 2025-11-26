@@ -134,6 +134,7 @@ export const useDefaultValues = ({
             ? menu.ingredients.map((ingredient) => ingredient.id)
             : [],
           pic: undefined,
+          note: menu?.note ?? '',
         },
       ],
     }),

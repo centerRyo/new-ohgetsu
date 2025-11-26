@@ -18,6 +18,7 @@ import {
   IconButton,
   Image,
   Input,
+  Textarea,
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -148,7 +149,7 @@ export const DetailDrawer = ({
                   />
                 </Flex>
                 <Flex>
-                  <FormControl>
+                  <FormControl mb={6}>
                     <Flex mb={2}>
                       <FormLabel className={styles.label}>写真</FormLabel>
                     </Flex>
@@ -172,6 +173,16 @@ export const DetailDrawer = ({
                         height='200'
                       />
                     )}
+                  </FormControl>
+                </Flex>
+                <Flex>
+                  <FormControl>
+                    <Flex alignItems='center' gap={4} mb={2}>
+                      <FormLabel className={styles.label} htmlFor='menu_note'>
+                        備考
+                      </FormLabel>
+                    </Flex>
+                    <Textarea rows={3} {...register(`menus.${index}.note`)} />
                   </FormControl>
                 </Flex>
               </Box>
