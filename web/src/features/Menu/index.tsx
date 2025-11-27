@@ -1,13 +1,17 @@
 import { Spinner } from '@/components/spinner';
 import { api } from '@/lib/swagger-client';
 import {
+  Box,
   Button,
   Flex,
   Heading,
+  HStack,
+  Icon,
   Image,
   SimpleGrid,
   Text,
 } from '@chakra-ui/react';
+import { FiInfo } from 'react-icons/fi';
 import useSWR from 'swr';
 import { ErrorSafePage } from '../Error';
 import { MenusSearchCondition } from '../Menus/utils';
@@ -68,6 +72,31 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
             alt={menu?.name}
           />
         </Flex>
+
+        {menu?.note.trim() && (
+          <Box
+            maxW='30rem'
+            mx='auto'
+            mb={6}
+            px={4}
+            py={3}
+            borderWidth='1px'
+            borderRadius='md'
+            bg='yellow.50'
+          >
+            <HStack align='flex-start' spacing={2}>
+              <Icon as={FiInfo} mt={1} color='yellow.600' />
+              <Box>
+                <Text fontSize='sm' fontWeight='bold' mb={1} color='yellow.800'>
+                  備考
+                </Text>
+                <Text fontSize='sm' color='gray.800' whiteSpace='pre-wrap'>
+                  {menu.note}
+                </Text>
+              </Box>
+            </HStack>
+          </Box>
+        )}
 
         <div className={styles.explanation}>
           本商品に含まれているアレルギー物質
