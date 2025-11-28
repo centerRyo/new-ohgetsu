@@ -73,7 +73,7 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
           />
         </Flex>
 
-        {menu?.note.trim() && (
+        {menu?.note?.trim() && (
           <Box
             maxW='30rem'
             mx='auto'
