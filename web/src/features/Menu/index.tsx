@@ -63,11 +63,7 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
 
         <Flex maxWidth='30rem' margin='0 auto' mb={8}>
           <Image
-            src={
-              menu?.pic
-                ? `${process.env.NEXT_PUBLIC_BACKEND_URL}${menu?.pic}`
-                : '/images/no_image.png'
-            }
+            src={menu?.pic ?? '/images/no_image.png'}
             fit='fill'
             alt={menu?.name}
           />
