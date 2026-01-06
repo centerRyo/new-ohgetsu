@@ -3,7 +3,7 @@ import { IndexPage } from '@/features/blog/components/pages/IndexPage';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: `ブログ | ${SERVICE_NAME}`,
+  title: `アレルギー外食ガイド | ${SERVICE_NAME}`,
   description: 'アレルギー外食のヒント・ohgetsuの使い方などを発信します',
 };
 

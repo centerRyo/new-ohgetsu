@@ -6,18 +6,17 @@ import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 import { Mdx } from '../Mdx';
 import styles from './markdown.module.scss';
+import navStyles from './navigation.module.scss';
 
 type Props = {
   post: PostType;
 };
 
 export const Post = ({ post }: Props): JSX.Element => (
-  <main style={{ maxWidth: '90rem', margin: '0 auto', padding: '32px 16px' }}>
-    <a
-      href='/blog'
-      style={{ fontSize: 14, color: 'rgba(0,0,0,0.6)', textDecoration: 'none' }}
-    >
-      ← ブログ一覧へ
+  <main style={{ maxWidth: '90rem', margin: '0 auto', padding: '32px 0' }}>
+    <a href='/blog' className={navStyles.backLink}>
+      <span className={navStyles.arrow}>←</span>
+      記事一覧へ戻る
     </a>
 
     <div style={{ fontSize: 14, color: 'rgba(0,0,0,0.6)', marginTop: 16 }}>
@@ -83,5 +82,11 @@ export const Post = ({ post }: Props): JSX.Element => (
         }}
       />
     </article>
+
+    <hr style={{ margin: '48px 0 24px' }} />
+
+    <a href='/blog' className={navStyles.backLink}>
+      ← 記事一覧へ戻る
+    </a>
   </main>
 );

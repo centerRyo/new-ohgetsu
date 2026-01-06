@@ -7,7 +7,7 @@ type Props = {
 };
 
 export const List = ({ posts }: Props): JSX.Element => (
-  <SimpleGrid columns={1} spacing={4} mt={6}>
+  <SimpleGrid minChildWidth='280px' spacing={4} mt={6}>
     {posts.map((post) => (
       <Card key={post.slug} post={post} />
     ))}

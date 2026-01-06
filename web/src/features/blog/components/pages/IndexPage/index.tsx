@@ -6,8 +6,8 @@ export const IndexPage = () => {
   const posts = getAllPosts();
 
   return (
-    <Box maxW='90rem' mx='auto' px={4} py={8}>
-      <Heading size='lg'>ブログ</Heading>
+    <Box maxW='90rem' mx='auto' py={8}>
+      <Heading size='lg'>アレルギー外食ガイド</Heading>
       <Text mt={2} color='gray.600'>
         アレルギーがある方の外食をラクにするための情報をまとめています
       </Text>

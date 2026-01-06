@@ -1,0 +1,29 @@
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+  text-decoration: none;
+
+  border-radius: 8px;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: rgba(0, 0, 0, 0.85);
+  }
+
+  &:active {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+}
+
+.arrow {
+  font-size: 16px;
+  line-height: 1;
+}
