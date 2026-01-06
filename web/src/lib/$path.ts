@@ -50,6 +50,13 @@ export const pagesPath = {
       }),
     },
   },
+  blog: {
+    $url: (url?: { hash?: string }) => ({
+      pathname: '/blog' as const,
+      hash: url?.hash,
+      path: `/blog${buildSuffix(url)}`,
+    }),
+  },
   menus: {
     _id: (id: string | number) => ({
       $url: (url?: { query?: OptionalQuery_gsgao6; hash?: string }) => ({
