@@ -51,6 +51,14 @@ export const pagesPath = {
     },
   },
   blog: {
+    _slug: (slug: string | number) => ({
+      $url: (url?: { hash?: string }) => ({
+        pathname: '/blog/[slug]' as const,
+        query: { slug },
+        hash: url?.hash,
+        path: `/blog/${slug}${buildSuffix(url)}`,
+      }),
+    }),
     $url: (url?: { hash?: string }) => ({
       pathname: '/blog' as const,
       hash: url?.hash,
