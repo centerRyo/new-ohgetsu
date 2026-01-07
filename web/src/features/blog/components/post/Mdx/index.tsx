@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import type { ComponentProps, JSX } from 'react';
 
 type MarkdownAnchorProps = ComponentProps<'a'> & { href?: string };
@@ -5,6 +6,11 @@ type MarkdownAnchorProps = ComponentProps<'a'> & { href?: string };
 type MarkdownImageProps = Omit<ComponentProps<'img'>, 'src' | 'alt'> & {
   src?: string;
   alt?: string;
+};
+
+type CreateMdxComponentsArgs = {
+  /** これと一致した画像だけ priority 付与 */
+  priorityImageSrc?: string | null;
 };
 
 const isExternalHttpUrl = (href: string): boolean => {
@@ -39,54 +45,85 @@ const mergeRelForExternalLink = (existingRel: string | undefined): string => {
   return Array.from(relTokens).join(' ');
 };
 
-const AnchorLink = ({
-  href,
-  rel,
-  target,
-  ...restProps
-}: MarkdownAnchorProps): JSX.Element => {
-  if (!href) return <a {...restProps} />;
+const createAnchorLink = (): ((props: MarkdownAnchorProps) => JSX.Element) => {
+  const AnchorLink = ({
+    href,
+    rel,
+    target,
+    ...restProps
+  }: MarkdownAnchorProps): JSX.Element => {
+    if (!href) return <a {...restProps} />;
 
-  if (isExternalHttpUrl(href)) {
-    const safeRel = mergeRelForExternalLink(rel);
-    const safeTarget = target ?? '_blank';
-    return <a {...restProps} href={href} target={safeTarget} rel={safeRel} />;
-  }
+    if (isExternalHttpUrl(href)) {
+      const safeRel = mergeRelForExternalLink(rel);
+      const safeTarget = target ?? '_blank';
 
-  return <a {...restProps} href={href} rel={rel} target={target} />;
-};
+      return <a {...restProps} href={href} target={safeTarget} rel={safeRel} />;
+    }
 
-const MarkdownImage = ({
-  src,
-  alt,
-  style,
-  loading,
-  ...restProps
-}: MarkdownImageProps): JSX.Element => {
-  if (!src || src.trim().length === 0) return <></>;
-
-  const mergedStyle: React.CSSProperties = {
-    maxWidth: '100%',
-    height: 'auto',
-    borderRadius: 12,
-    display: 'block',
-    margin: '24px 0', // 画像自体に余白をつける（figure不要）
-    ...style,
+    return <a {...restProps} href={href} target={target} rel={rel} />;
   };
 
-  return (
-    <img
-      {...restProps}
-      src={src}
-      alt={alt ?? ''}
-      loading={loading ?? 'lazy'}
-      decoding='async'
-      style={mergedStyle}
-    />
-  );
+  return AnchorLink;
 };
 
-export const Mdx = {
-  a: AnchorLink,
-  img: MarkdownImage,
+const createMarkdownImage = (
+  priorityImageSrc?: string | null
+): ((props: MarkdownImageProps) => JSX.Element) => {
+  const MarkdownImage = ({
+    src,
+    alt,
+    style,
+  }: MarkdownImageProps): JSX.Element => {
+    if (!src || src.trim().length === 0) return <></>;
+
+    const isRemoteImage =
+      src.startsWith('http://') || src.startsWith('https://');
+    const shouldPrioritize = Boolean(
+      priorityImageSrc && src === priorityImageSrc
+    );
+
+    const wrapperStyle: React.CSSProperties = {
+      position: 'relative',
+      width: '100%',
+      display: 'block',
+      margin: '24px 0',
+      borderRadius: 12,
+      overflow: 'hidden',
+      paddingTop: '56.25%', // 16:9
+      ...style,
+    };
+
+    const innerStyle: React.CSSProperties = {
+      position: 'absolute',
+      inset: 0,
+    };
+
+    return (
+      <span style={wrapperStyle}>
+        <span style={innerStyle}>
+          <Image
+            src={src}
+            alt={alt ?? ''}
+            fill
+            sizes='(max-width: 768px) 100vw, 900px'
+            style={{ objectFit: 'contain' }}
+            unoptimized={isRemoteImage}
+            priority={shouldPrioritize}
+          />
+        </span>
+      </span>
+    );
+  };
+
+  return MarkdownImage;
+};
+
+export const createMdxComponents = ({
+  priorityImageSrc,
+}: CreateMdxComponentsArgs) => {
+  return {
+    a: createAnchorLink(),
+    img: createMarkdownImage(priorityImageSrc),
+  } as const;
 };
