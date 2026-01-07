@@ -5,6 +5,12 @@ import { Post } from '../types';
 
 const BLOG_DIRECTORY = path.join(process.cwd(), 'src', 'content', 'blog');
 
+/**
+ * slug からその slug のファイル名を mdx / md で取得する
+ * - mdx がある場合はそちらが優先される
+ * @param slug
+ * @returns string
+ */
 const getFilePathBySlug = (slug: string): string => {
   const mdx = path.join(BLOG_DIRECTORY, `${slug}.mdx`);
   const md = path.join(BLOG_DIRECTORY, `${slug}.md`);
@@ -15,6 +21,10 @@ const getFilePathBySlug = (slug: string): string => {
   throw new Error(`投稿が見つかりません: ${slug}`);
 };
 
+/**
+ * src/content/blog にある mdx / md の記事の slug を全部取得する
+ * @returns string[]
+ */
 export const getAllSlugs = (): string[] => {
   const files = fs.readdirSync(BLOG_DIRECTORY);
 
@@ -23,6 +33,12 @@ export const getAllSlugs = (): string[] => {
     .map((file) => file.replace(/\.(mdx|md)$/, ''));
 };
 
+/**
+ * slug から記事を取得する
+ * - title と date がないものはエラーにする
+ * @param slug string
+ * @returns Post
+ */
 export const getPostBySlug = (slug: string): Post => {
   const filePath = getFilePathBySlug(slug);
   const raw = fs.readFileSync(filePath, 'utf8');
@@ -45,6 +61,10 @@ export const getPostBySlug = (slug: string): Post => {
   };
 };
 
+/**
+ * 全記事を取得して日付の降順に並べる
+ * @returns Post[]
+ */
 export const getAllPosts = (): Post[] => {
   const posts = getAllSlugs().map(getPostBySlug);
 
