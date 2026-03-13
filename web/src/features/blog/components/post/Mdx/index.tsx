@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import type { ComponentProps, JSX } from 'react';
+import React from 'react';
 
 type MarkdownAnchorProps = ComponentProps<'a'> & { href?: string };
 
@@ -45,6 +46,27 @@ const mergeRelForExternalLink = (existingRel: string | undefined): string => {
   return Array.from(relTokens).join(' ');
 };
 
+const ctaButtonStyle: React.CSSProperties = {
+  display: 'inline-block',
+  marginTop: '8px',
+  padding: '12px 24px',
+  backgroundColor: '#38A169',
+  color: '#ffffff',
+  borderRadius: '8px',
+  fontWeight: 'bold',
+  textDecoration: 'none',
+};
+
+const isCtaLink = (children: React.ReactNode): boolean => {
+  const text =
+    typeof children === 'string'
+      ? children
+      : Array.isArray(children)
+        ? children.join('')
+        : '';
+  return text.trimEnd().endsWith('→');
+};
+
 const createAnchorLink = (): ((props: MarkdownAnchorProps) => JSX.Element) => {
   const AnchorLink = ({
     href,
@@ -54,14 +76,27 @@ const createAnchorLink = (): ((props: MarkdownAnchorProps) => JSX.Element) => {
   }: MarkdownAnchorProps): JSX.Element => {
     if (!href) return <a {...restProps} />;
 
+    const isCta = isCtaLink(restProps.children);
+    const style = isCta ? ctaButtonStyle : undefined;
+
     if (isExternalHttpUrl(href)) {
       const safeRel = mergeRelForExternalLink(rel);
       const safeTarget = target ?? '_blank';
 
-      return <a {...restProps} href={href} target={safeTarget} rel={safeRel} />;
+      return (
+        <a
+          {...restProps}
+          href={href}
+          target={safeTarget}
+          rel={safeRel}
+          style={style}
+        />
+      );
     }
 
-    return <a {...restProps} href={href} target={target} rel={rel} />;
+    return (
+      <a {...restProps} href={href} target={target} rel={rel} style={style} />
+    );
   };
 
   return AnchorLink;
