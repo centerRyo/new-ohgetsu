@@ -1,6 +1,6 @@
 import Image from 'next/image';
-import React from 'react';
 import type { ComponentProps, JSX } from 'react';
+import React from 'react';
 
 type MarkdownAnchorProps = ComponentProps<'a'> & { href?: string };
 
@@ -94,7 +94,9 @@ const createAnchorLink = (): ((props: MarkdownAnchorProps) => JSX.Element) => {
       );
     }
 
-    return <a {...restProps} href={href} target={target} rel={rel} style={style} />;
+    return (
+      <a {...restProps} href={href} target={target} rel={rel} style={style} />
+    );
   };
 
   return AnchorLink;
