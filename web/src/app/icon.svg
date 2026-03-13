@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- O ring -->
+  <circle cx="16" cy="17" r="10" stroke="#2ecc71" stroke-width="4.5" fill="none"/>
+  <!-- Left leaf -->
+  <ellipse cx="13.5" cy="5.5" rx="2.5" ry="4"
+    fill="#2ecc71" transform="rotate(-20 13.5 5.5)"/>
+  <!-- Right leaf -->
+  <ellipse cx="18.5" cy="5.5" rx="2.5" ry="4"
+    fill="#27ae60" transform="rotate(20 18.5 5.5)"/>
+</svg>
