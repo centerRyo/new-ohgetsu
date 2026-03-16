@@ -64,6 +64,10 @@ export const Restaurant = ({ restaurantId }: Props) => {
             size='lg'
             colorPalette='green'
             variant='outline'
+            color='green.600'
+            borderColor='green.600'
+            borderWidth='2px'
+            fontWeight='bold'
             width='100%'
             maxWidth='30rem'
             onClick={handleBack}

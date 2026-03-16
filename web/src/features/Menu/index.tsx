@@ -130,6 +130,10 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
             size='lg'
             colorPalette='green'
             variant='outline'
+            color='green.600'
+            borderColor='green.600'
+            borderWidth='2px'
+            fontWeight='bold'
             w='336px'
             maxW='100%'
             onClick={handleBack}
@@ -142,6 +146,10 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
             size='lg'
             colorPalette='green'
             variant='outline'
+            color='green.600'
+            borderColor='green.600'
+            borderWidth='2px'
+            fontWeight='bold'
             w='336px'
             maxW='100%'
             onClick={handleSearchMenus}
@@ -154,6 +162,10 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
             size='lg'
             colorPalette='green'
             variant='outline'
+            color='green.600'
+            borderColor='green.600'
+            borderWidth='2px'
+            fontWeight='bold'
             w='336px'
             maxW='100%'
             onClick={handleSearchRestaurants}

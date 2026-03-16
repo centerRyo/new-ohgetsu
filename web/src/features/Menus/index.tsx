@@ -148,6 +148,10 @@ export const Menus = ({ searchConditions }: Props) => {
             size='lg'
             colorPalette='green'
             variant='outline'
+            color='green.600'
+            borderColor='green.600'
+            borderWidth='2px'
+            fontWeight='bold'
             onClick={handleBack}
           >
             アレルギー物質を変更して検索する
