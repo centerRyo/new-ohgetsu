@@ -4,9 +4,9 @@ import { api } from '@/lib/swagger-client';
 import {
   Box,
   Button,
-  Card,
   CardBody,
   CardHeader,
+  CardRoot,
   Flex,
   Heading,
   Image,
@@ -103,7 +103,7 @@ export const Menus = ({ searchConditions }: Props) => {
         <section className={styles.menus}>
           {menus.length > 0 ? (
             <SimpleGrid
-              spacing={4}
+              gap={4}
               templateColumns={{
                 base: 'repeat(auto-fill, minmax(125px, 1fr))',
                 md: 'repeat(auto-fill, minmax(200px, 1fr))',
@@ -118,12 +118,11 @@ export const Menus = ({ searchConditions }: Props) => {
                   }
                   key={menu.id}
                 >
-                  <Card key={menu.id}>
+                  <CardRoot key={menu.id}>
                     <CardHeader>
                       <Box className={styles.imageWrap}>
                         <Image
                           src={menu.pic ?? '/images/no_image.png'}
-                          fit='fill'
                           objectFit='cover'
                           borderRadius='md'
                           alt={menu.name}
@@ -131,11 +130,11 @@ export const Menus = ({ searchConditions }: Props) => {
                       </Box>
                     </CardHeader>
                     <CardBody>
-                      <Heading size='md' noOfLines={3} height='72px'>
+                      <Heading size='md' lineClamp={3} height='72px'>
                         {menu.name}
                       </Heading>
                     </CardBody>
-                  </Card>
+                  </CardRoot>
                 </Link>
               ))}
             </SimpleGrid>
@@ -147,7 +146,7 @@ export const Menus = ({ searchConditions }: Props) => {
         <Flex justifyContent='center'>
           <Button
             size='lg'
-            colorScheme='green'
+            colorPalette='green'
             variant='outline'
             onClick={handleBack}
           >

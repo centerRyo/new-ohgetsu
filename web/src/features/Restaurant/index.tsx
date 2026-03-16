@@ -51,7 +51,7 @@ export const Restaurant = ({ restaurantId }: Props) => {
         <Flex justifyContent='center'>
           <Button
             size='lg'
-            colorScheme='green'
+            colorPalette='green'
             width='100%'
             maxWidth='30rem'
             onClick={handleClickSearch}
@@ -62,7 +62,7 @@ export const Restaurant = ({ restaurantId }: Props) => {
         <Flex justifyContent='center' mt={8}>
           <Button
             size='lg'
-            colorScheme='green'
+            colorPalette='green'
             variant='outline'
             width='100%'
             maxWidth='30rem'

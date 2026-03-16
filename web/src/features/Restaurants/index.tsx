@@ -2,15 +2,18 @@ import { pagesPath } from '@/lib/$path';
 import { api } from '@/lib/swagger-client';
 import {
   Box,
-  Card,
   CardBody,
   CardHeader,
+  CardRoot,
   Heading,
   Image,
   SimpleGrid,
   Skeleton,
-  Tag,
-  Tooltip,
+  TagRoot,
+  TooltipArrow,
+  TooltipContent,
+  TooltipRoot,
+  TooltipTrigger,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import useSWR from 'swr';
@@ -39,7 +42,7 @@ export const Restaurants = ({ searchConditions }: Props): JSX.Element => {
     <ErrorSafePage error={error}>
       <div className={styles.container}>
         <SimpleGrid
-          spacing={4}
+          gap={4}
           templateColumns={{
             base: 'repeat(auto-fill, minmax(125px, 1fr))',
             md: 'repeat(auto-fill, minmax(200px, 1fr))',
@@ -51,30 +54,30 @@ export const Restaurants = ({ searchConditions }: Props): JSX.Element => {
                   href={pagesPath.restaurants._id(restaurant.id).$url().path}
                   key={restaurant.id}
                 >
-                  <Card key={restaurant.id}>
+                  <CardRoot key={restaurant.id}>
                     <CardHeader>
                       <Box className={styles.imageWrap}>
                         <Image
                           src={restaurant.pic ?? '/images/no_image.png'}
                           alt={restaurant.name}
-                          fit='fill'
                           objectFit='cover'
                           borderRadius='md'
                         />
                       </Box>
                     </CardHeader>
                     <CardBody>
-                      <Tooltip
-                        label={restaurant.name}
-                        hasArrow
-                        bg='green'
-                        fontWeight='bold'
-                      >
-                        <Heading size='md' noOfLines={2} height='48px'>
+                      <TooltipRoot>
+                        <TooltipTrigger asChild>
+                          <Heading size='md' lineClamp={2} height='48px'>
+                            {restaurant.name}
+                          </Heading>
+                        </TooltipTrigger>
+                        <TooltipContent bg='green' fontWeight='bold'>
+                          <TooltipArrow />
                           {restaurant.name}
-                        </Heading>
-                      </Tooltip>
-                      <Tag
+                        </TooltipContent>
+                      </TooltipRoot>
+                      <TagRoot
                         variant='outline'
                         mt={4}
                         color='black'
@@ -82,9 +85,9 @@ export const Restaurants = ({ searchConditions }: Props): JSX.Element => {
                         fontWeight='600'
                       >
                         {restaurant.genre?.name}
-                      </Tag>
+                      </TagRoot>
                     </CardBody>
-                  </Card>
+                  </CardRoot>
                 </Link>
               ))
             : [1, 2, 3, 4, 5, 6, 7, 8].map((_) => (

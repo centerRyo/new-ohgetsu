@@ -35,7 +35,7 @@ const Ingredients = memo(({ register }: Props) => {
   return (
     <div className={styles.container}>
       <SimpleGrid
-        spacing={4}
+        gap={4}
         templateColumns='repeat(auto-fill, minmax(150px, 1fr))'
       >
         {!isLoading ? (
