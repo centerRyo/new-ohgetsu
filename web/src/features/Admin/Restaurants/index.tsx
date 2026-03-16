@@ -8,16 +8,14 @@ import {
   Heading,
   HStack,
   Image,
-  Table,
-  TableContainer,
-  Tag,
-  TagLabel,
-  TagLeftIcon,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
+  TableBody,
+  TableCell,
+  TableColumnHeader,
+  TableHeader,
+  TableRoot,
+  TableRow,
+  TableScrollArea,
+  TagRoot,
 } from '@chakra-ui/react';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
@@ -42,7 +40,7 @@ export const RestaurantsAdmin = (): JSX.Element => {
       <main className={styles.container}>
         <Grid mb={8}>
           <GridItem>
-            <HStack spacing={6}>
+            <HStack gap={6}>
               <Heading as='h3' size='lg'>
                 レストラン一覧
               </Heading>
@@ -55,22 +53,22 @@ export const RestaurantsAdmin = (): JSX.Element => {
             </Button>
           </GridItem>
         </Grid>
-        <TableContainer>
-          <Table variant='simple'>
-            <Thead>
-              <Tr>
-                <Th fontSize='md'>レストラン名</Th>
-                <Th fontSize='md'>写真</Th>
-                <Th fontSize='md'>ジャンル</Th>
-                <Th fontSize='md'>営業状況</Th>
-                <Th />
-              </Tr>
-            </Thead>
-            <Tbody>
+        <TableScrollArea>
+          <TableRoot variant='outline'>
+            <TableHeader>
+              <TableRow>
+                <TableColumnHeader fontSize='md'>レストラン名</TableColumnHeader>
+                <TableColumnHeader fontSize='md'>写真</TableColumnHeader>
+                <TableColumnHeader fontSize='md'>ジャンル</TableColumnHeader>
+                <TableColumnHeader fontSize='md'>営業状況</TableColumnHeader>
+                <TableColumnHeader />
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {restaurants.map((restaurant) => (
-                <Tr key={restaurant.id}>
-                  <Td>{restaurant.name}</Td>
-                  <Td>
+                <TableRow key={restaurant.id}>
+                  <TableCell>{restaurant.name}</TableCell>
+                  <TableCell>
                     {restaurant.pic && (
                       <Image
                         width='24'
@@ -79,50 +77,48 @@ export const RestaurantsAdmin = (): JSX.Element => {
                         alt={restaurant.name}
                       />
                     )}
-                  </Td>
-                  <Td>
-                    <Tag variant='outline' color='black'>
+                  </TableCell>
+                  <TableCell>
+                    <TagRoot variant='outline' color='black'>
                       {restaurant.genre.name}
-                    </Tag>
-                  </Td>
-                  <Td>
-                    <Tag
+                    </TagRoot>
+                  </TableCell>
+                  <TableCell>
+                    <TagRoot
                       variant='outline'
-                      colorScheme={restaurant.deletedAt ? 'red' : 'blue'}
+                      colorPalette={restaurant.deletedAt ? 'red' : 'blue'}
                     >
-                      <TagLeftIcon
-                        as={
-                          restaurant.deletedAt ? FaTimesCircle : FaCheckCircle
-                        }
-                      />
-                      <TagLabel>
-                        {restaurant.deletedAt ? '営業停止中' : '営業中'}
-                      </TagLabel>
-                    </Tag>
-                  </Td>
-                  <Td>
-                    <HStack spacing={4}>
+                      {restaurant.deletedAt ? (
+                        <FaTimesCircle />
+                      ) : (
+                        <FaCheckCircle />
+                      )}
+                      {restaurant.deletedAt ? '営業停止中' : '営業中'}
+                    </TagRoot>
+                  </TableCell>
+                  <TableCell>
+                    <HStack gap={4}>
                       <Button
-                        colorScheme='teal'
+                        colorPalette='teal'
                         size='xs'
                         onClick={() => handleOpen(restaurant.id)}
                       >
                         詳細
                       </Button>
                       <Button
-                        colorScheme='purple'
+                        colorPalette='purple'
                         size='xs'
                         onClick={() => handleClickMenuManagement(restaurant.id)}
                       >
                         メニュー管理
                       </Button>
                     </HStack>
-                  </Td>
-                </Tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+            </TableBody>
+          </TableRoot>
+        </TableScrollArea>
       </main>
 
       <DetailDrawer state={state} onClose={handleClose} mutate={mutate} />
