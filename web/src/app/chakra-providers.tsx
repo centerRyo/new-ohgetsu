@@ -1,10 +1,14 @@
 'use client';
 
-import theme from '@/lib/theme';
+import { Toaster } from '@/components/toaster';
+import system from '@/lib/theme';
 import { ChakraProvider } from '@chakra-ui/react';
 
 const ChakraProviders = ({ children }: { children: React.ReactNode }) => (
-  <ChakraProvider theme={theme}>{children}</ChakraProvider>
+  <ChakraProvider value={system}>
+    {children}
+    <Toaster />
+  </ChakraProvider>
 );
 
 export default ChakraProviders;
