@@ -1,6 +1,6 @@
 import { api } from '@/lib/swagger-client';
 import { HttpResponse, MenuDto } from '@/types/generated/Api';
-import { useToast } from '@chakra-ui/react';
+import { toaster } from '@/components/toaster';
 import { useCallback } from 'react';
 import { KeyedMutator } from 'swr';
 
@@ -11,8 +11,6 @@ type Props = {
 };
 
 export const useRemoveMenu = ({ onClose, mutate }: Props) => {
-  const toast = useToast();
-
   const handleRemoveMenu = useCallback(
     async (id: string) => {
       try {
@@ -28,20 +26,18 @@ export const useRemoveMenu = ({ onClose, mutate }: Props) => {
 
         mutate();
 
-        toast({
+        toaster.create({
           title: 'メニューを削除しました',
-          status: 'success',
-          isClosable: true,
+          type: 'success',
         });
       } catch (error) {
-        toast({
+        toaster.create({
           title: 'メニューを削除できませんでした',
-          status: 'error',
-          isClosable: true,
+          type: 'error',
         });
       }
     },
-    [onClose, mutate, toast]
+    [onClose, mutate]
   );
 
   return { handleRemoveMenu };

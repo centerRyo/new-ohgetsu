@@ -1,7 +1,7 @@
 import { fileToBase64 } from '@/lib/file-util';
 import { api } from '@/lib/swagger-client';
 import { HttpResponse, MenuDto } from '@/types/generated/Api';
-import { useToast } from '@chakra-ui/react';
+import { toaster } from '@/components/toaster';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { UseFieldArrayAppend, UseFormReset } from 'react-hook-form';
 import { KeyedMutator } from 'swr';
@@ -28,8 +28,6 @@ export const useHandler = ({
   mutate,
 }: TUseHandlerArgs) => {
   const [preview, setPreview] = useState<PreviewType>({});
-
-  const toast = useToast();
 
   // menuが存在する場合、プレビュー画像としてmenu.picを表示する
   useEffect(() => {
@@ -80,20 +78,18 @@ export const useHandler = ({
 
         onClose();
 
-        toast({
+        toaster.create({
           title: `メニューを${isEdit ? '編集' : '作成'}しました`,
-          status: 'success',
-          isClosable: true,
+          type: 'success',
         });
       } catch (error) {
-        toast({
+        toaster.create({
           title: `メニューを${isEdit ? '編集' : '作成'}できませんでした`,
-          status: 'error',
-          isClosable: true,
+          type: 'error',
         });
       }
     },
-    [restaurantId, toast, reset, setPreview, isEdit, menu, onClose, mutate]
+    [restaurantId, reset, setPreview, isEdit, menu, onClose, mutate]
   );
 
   const handleChangeFile = useCallback(
