@@ -10,10 +10,6 @@ import {
   SimpleGrid,
   Skeleton,
   TagRoot,
-  TooltipArrow,
-  TooltipContent,
-  TooltipRoot,
-  TooltipTrigger,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import useSWR from 'swr';
@@ -66,23 +62,16 @@ export const Restaurants = ({ searchConditions }: Props): JSX.Element => {
                       </Box>
                     </CardHeader>
                     <CardBody>
-                      <TooltipRoot>
-                        <TooltipTrigger asChild>
-                          <Heading size='md' lineClamp={2} height='48px'>
-                            {restaurant.name}
-                          </Heading>
-                        </TooltipTrigger>
-                        <TooltipContent bg='green' fontWeight='bold'>
-                          <TooltipArrow />
-                          {restaurant.name}
-                        </TooltipContent>
-                      </TooltipRoot>
+                      <Heading size='md' lineClamp={2} height='48px'>
+                        {restaurant.name}
+                      </Heading>
                       <TagRoot
                         variant='outline'
                         mt={4}
                         color='black'
                         borderColor='#d8d9db'
                         fontWeight='600'
+                        w='fit-content'
                       >
                         {restaurant.genre?.name}
                       </TagRoot>
