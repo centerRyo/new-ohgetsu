@@ -1,8 +1,4 @@
-import {
-  Field,
-  NativeSelectField,
-  NativeSelectRoot,
-} from '@chakra-ui/react';
+import { Field, NativeSelectField, NativeSelectRoot } from '@chakra-ui/react';
 import { memo } from 'react';
 
 type Props = Partial<{

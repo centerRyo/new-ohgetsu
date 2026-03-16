@@ -57,7 +57,9 @@ export const RestaurantsAdmin = (): JSX.Element => {
           <TableRoot variant='outline'>
             <TableHeader>
               <TableRow>
-                <TableColumnHeader fontSize='md'>レストラン名</TableColumnHeader>
+                <TableColumnHeader fontSize='md'>
+                  レストラン名
+                </TableColumnHeader>
                 <TableColumnHeader fontSize='md'>写真</TableColumnHeader>
                 <TableColumnHeader fontSize='md'>ジャンル</TableColumnHeader>
                 <TableColumnHeader fontSize='md'>営業状況</TableColumnHeader>

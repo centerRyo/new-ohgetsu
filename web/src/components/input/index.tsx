@@ -1,7 +1,4 @@
-import {
-  Field,
-  Input as ChakraInput,
-} from '@chakra-ui/react';
+import { Field, Input as ChakraInput } from '@chakra-ui/react';
 import { ComponentPropsWithoutRef, forwardRef } from 'react';
 
 type Props = ComponentPropsWithoutRef<'input'> &

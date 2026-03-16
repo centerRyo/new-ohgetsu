@@ -48,11 +48,7 @@ export const HeaderPresenter = ({
         </h1>
 
         {isMobile ? (
-          <IconButton
-            aria-label='Open menu'
-            onClick={onOpen}
-            bg='white'
-          >
+          <IconButton aria-label='Open menu' onClick={onOpen} bg='white'>
             <GiHamburgerMenu />
           </IconButton>
         ) : (
@@ -61,7 +57,13 @@ export const HeaderPresenter = ({
             bg='white'
             h='100%'
             endElement={
-              <IconButton aria-label='search' h='100%' onClick={handleSearch} variant='ghost' size='sm'>
+              <IconButton
+                aria-label='search'
+                h='100%'
+                onClick={handleSearch}
+                variant='ghost'
+                size='sm'
+              >
                 <FaSearch />
               </IconButton>
             }
@@ -94,7 +96,12 @@ export const HeaderPresenter = ({
                 <InputGroup
                   bg='white'
                   endElement={
-                    <IconButton aria-label='search' onClick={handleSearch} variant='ghost' size='sm'>
+                    <IconButton
+                      aria-label='search'
+                      onClick={handleSearch}
+                      variant='ghost'
+                      size='sm'
+                    >
                       <FaSearch />
                     </IconButton>
                   }

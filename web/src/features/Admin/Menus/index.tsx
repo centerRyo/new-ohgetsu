@@ -78,7 +78,9 @@ export const MenusAdmin = ({ restaurantId }: Props): JSX.Element => {
               <TableRow>
                 <TableColumnHeader fontSize='md'>メニュー名</TableColumnHeader>
                 <TableColumnHeader fontSize='md'>写真</TableColumnHeader>
-                <TableColumnHeader fontSize='md'>アレルギー物質</TableColumnHeader>
+                <TableColumnHeader fontSize='md'>
+                  アレルギー物質
+                </TableColumnHeader>
                 <TableColumnHeader />
               </TableRow>
             </TableHeader>

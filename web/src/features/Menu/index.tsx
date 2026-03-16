@@ -61,10 +61,7 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
         </Flex>
 
         <Flex maxWidth='30rem' margin='0 auto' mb={8}>
-          <Image
-            src={menu?.pic ?? '/images/no_image.png'}
-            alt={menu?.name}
-          />
+          <Image src={menu?.pic ?? '/images/no_image.png'} alt={menu?.name} />
         </Flex>
 
         {menu?.note?.trim() && (
@@ -79,7 +76,12 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
             bg='yellow.50'
           >
             <HStack align='flex-start' gap={2}>
-              <FiInfo style={{ marginTop: '4px', color: 'var(--chakra-colors-yellow-600)' }} />
+              <FiInfo
+                style={{
+                  marginTop: '4px',
+                  color: 'var(--chakra-colors-yellow-600)',
+                }}
+              />
               <Box>
                 <Text fontSize='sm' fontWeight='bold' mb={1} color='yellow.800'>
                   備考

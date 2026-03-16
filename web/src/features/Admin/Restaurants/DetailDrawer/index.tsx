@@ -81,103 +81,108 @@ export const DetailDrawer = ({
   }, [defaultValues, reset]);
 
   return (
-    <DrawerRoot open={state.open} placement='end' size='md' onOpenChange={(e) => !e.open && onClose()}>
+    <DrawerRoot
+      open={state.open}
+      placement='end'
+      size='md'
+      onOpenChange={(e) => !e.open && onClose()}
+    >
       <DrawerBackdrop />
       <DrawerPositioner>
-      <DrawerContent>
-        <DrawerCloseTrigger />
-        <DrawerHeader>レストラン{isEdit ? '編集' : '追加'}</DrawerHeader>
+        <DrawerContent>
+          <DrawerCloseTrigger />
+          <DrawerHeader>レストラン{isEdit ? '編集' : '追加'}</DrawerHeader>
 
-        <DrawerBody>
-          <form className={styles.form}>
-            <Flex mb={8}>
-              <Field.Root invalid={!!errors.name?.message}>
-                <Flex alignItems='center' gap={4} mb={2}>
-                  <Field.Label htmlFor='name' className={styles.label}>
-                    レストラン名
-                  </Field.Label>
-                  <span className={styles.required}>必須</span>
-                </Flex>
-                <Input
-                  id='name'
-                  {...register('name', {
-                    required: '店名は必須です',
-                  })}
-                  type='text'
-                />
-                <Field.ErrorText>
-                  {errors.name?.message?.toString()}
-                </Field.ErrorText>
-              </Field.Root>
-            </Flex>
-
-            <Flex mb={8}>
-              <Field.Root>
-                <Flex mb={2}>
-                  <Field.Label htmlFor='file' className={styles.label}>
-                    レストランの写真
-                  </Field.Label>
-                </Flex>
-                <Input
-                  type='file'
-                  {...register('pic')}
-                  accept='image/*'
-                  onChange={handleFileChange}
-                />
-                {preview.pic && (
-                  <Image
-                    src={preview.pic}
-                    alt={preview.pic}
-                    style={{
-                      maxWidth: '100%',
-                      height: 'auto',
-                    }}
-                    width='200'
-                    height='200'
-                  />
-                )}
-              </Field.Root>
-            </Flex>
-
-            <Flex mb={8}>
-              <Genres errors={errors} register={register} />
-            </Flex>
-
-            <Field.Root>
-              <Controller
-                name='isOpen'
-                control={control}
-                render={({ field: { onChange, value, ref } }) => (
-                  <Flex alignItems='center' gap={4}>
-                    <Text>{isEdit ? '営業停止' : '未営業'}</Text>
-                    <Switch.Root
-                      checked={value}
-                      onCheckedChange={(e) => onChange(e.checked)}
-                      ref={ref}
-                    >
-                      <SwitchControl>
-                        <SwitchThumb />
-                      </SwitchControl>
-                    </Switch.Root>
-                    <Text>{isEdit ? '営業中' : '営業開始'}</Text>
+          <DrawerBody>
+            <form className={styles.form}>
+              <Flex mb={8}>
+                <Field.Root invalid={!!errors.name?.message}>
+                  <Flex alignItems='center' gap={4} mb={2}>
+                    <Field.Label htmlFor='name' className={styles.label}>
+                      レストラン名
+                    </Field.Label>
+                    <span className={styles.required}>必須</span>
                   </Flex>
-                )}
-              />
-            </Field.Root>
-          </form>
-        </DrawerBody>
+                  <Input
+                    id='name'
+                    {...register('name', {
+                      required: '店名は必須です',
+                    })}
+                    type='text'
+                  />
+                  <Field.ErrorText>
+                    {errors.name?.message?.toString()}
+                  </Field.ErrorText>
+                </Field.Root>
+              </Flex>
 
-        <DrawerFooter>
-          <Button
-            colorPalette='green'
-            disabled={!isValid}
-            loading={isSubmitting}
-            onClick={handleSubmit(onSubmit)}
-          >
-            保存
-          </Button>
-        </DrawerFooter>
-      </DrawerContent>
+              <Flex mb={8}>
+                <Field.Root>
+                  <Flex mb={2}>
+                    <Field.Label htmlFor='file' className={styles.label}>
+                      レストランの写真
+                    </Field.Label>
+                  </Flex>
+                  <Input
+                    type='file'
+                    {...register('pic')}
+                    accept='image/*'
+                    onChange={handleFileChange}
+                  />
+                  {preview.pic && (
+                    <Image
+                      src={preview.pic}
+                      alt={preview.pic}
+                      style={{
+                        maxWidth: '100%',
+                        height: 'auto',
+                      }}
+                      width='200'
+                      height='200'
+                    />
+                  )}
+                </Field.Root>
+              </Flex>
+
+              <Flex mb={8}>
+                <Genres errors={errors} register={register} />
+              </Flex>
+
+              <Field.Root>
+                <Controller
+                  name='isOpen'
+                  control={control}
+                  render={({ field: { onChange, value, ref } }) => (
+                    <Flex alignItems='center' gap={4}>
+                      <Text>{isEdit ? '営業停止' : '未営業'}</Text>
+                      <Switch.Root
+                        checked={value}
+                        onCheckedChange={(e) => onChange(e.checked)}
+                        ref={ref}
+                      >
+                        <SwitchControl>
+                          <SwitchThumb />
+                        </SwitchControl>
+                      </Switch.Root>
+                      <Text>{isEdit ? '営業中' : '営業開始'}</Text>
+                    </Flex>
+                  )}
+                />
+              </Field.Root>
+            </form>
+          </DrawerBody>
+
+          <DrawerFooter>
+            <Button
+              colorPalette='green'
+              disabled={!isValid}
+              loading={isSubmitting}
+              onClick={handleSubmit(onSubmit)}
+            >
+              保存
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
       </DrawerPositioner>
     </DrawerRoot>
   );
