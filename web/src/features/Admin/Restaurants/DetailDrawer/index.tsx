@@ -2,20 +2,21 @@ import { api } from '@/lib/swagger-client';
 import { HttpResponse, RestaurantDto } from '@/types/generated/Api';
 import {
   Button,
-  Drawer,
+  DrawerBackdrop,
   DrawerBody,
-  DrawerCloseButton,
+  DrawerCloseTrigger,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerPositioner,
+  DrawerRoot,
+  Field,
   Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
   Image,
   Input,
   Switch,
+  SwitchControl,
+  SwitchThumb,
   Text,
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
@@ -80,20 +81,21 @@ export const DetailDrawer = ({
   }, [defaultValues, reset]);
 
   return (
-    <Drawer isOpen={state.open} placement='right' size='md' onClose={onClose}>
-      <DrawerOverlay />
+    <DrawerRoot open={state.open} placement='end' size='md' onOpenChange={(e) => !e.open && onClose()}>
+      <DrawerBackdrop />
+      <DrawerPositioner>
       <DrawerContent>
-        <DrawerCloseButton />
+        <DrawerCloseTrigger />
         <DrawerHeader>レストラン{isEdit ? '編集' : '追加'}</DrawerHeader>
 
         <DrawerBody>
           <form className={styles.form}>
             <Flex mb={8}>
-              <FormControl isInvalid={!!errors.name?.message}>
+              <Field.Root invalid={!!errors.name?.message}>
                 <Flex alignItems='center' gap={4} mb={2}>
-                  <FormLabel htmlFor='name' className={styles.label}>
+                  <Field.Label htmlFor='name' className={styles.label}>
                     レストラン名
-                  </FormLabel>
+                  </Field.Label>
                   <span className={styles.required}>必須</span>
                 </Flex>
                 <Input
@@ -103,18 +105,18 @@ export const DetailDrawer = ({
                   })}
                   type='text'
                 />
-                <FormErrorMessage>
+                <Field.ErrorText>
                   {errors.name?.message?.toString()}
-                </FormErrorMessage>
-              </FormControl>
+                </Field.ErrorText>
+              </Field.Root>
             </Flex>
 
             <Flex mb={8}>
-              <FormControl>
+              <Field.Root>
                 <Flex mb={2}>
-                  <FormLabel htmlFor='file' className={styles.label}>
+                  <Field.Label htmlFor='file' className={styles.label}>
                     レストランの写真
-                  </FormLabel>
+                  </Field.Label>
                 </Flex>
                 <Input
                   type='file'
@@ -134,44 +136,49 @@ export const DetailDrawer = ({
                     height='200'
                   />
                 )}
-              </FormControl>
+              </Field.Root>
             </Flex>
 
             <Flex mb={8}>
               <Genres errors={errors} register={register} />
             </Flex>
 
-            <FormControl>
+            <Field.Root>
               <Controller
                 name='isOpen'
                 control={control}
                 render={({ field: { onChange, value, ref } }) => (
                   <Flex alignItems='center' gap={4}>
                     <Text>{isEdit ? '営業停止' : '未営業'}</Text>
-                    <Switch
-                      isChecked={value}
-                      onChange={(e) => onChange(e.target.checked)}
+                    <Switch.Root
+                      checked={value}
+                      onCheckedChange={(e) => onChange(e.checked)}
                       ref={ref}
-                    />
+                    >
+                      <SwitchControl>
+                        <SwitchThumb />
+                      </SwitchControl>
+                    </Switch.Root>
                     <Text>{isEdit ? '営業中' : '営業開始'}</Text>
                   </Flex>
                 )}
               />
-            </FormControl>
+            </Field.Root>
           </form>
         </DrawerBody>
 
         <DrawerFooter>
           <Button
-            colorScheme='green'
-            isDisabled={!isValid}
-            isLoading={isSubmitting}
+            colorPalette='green'
+            disabled={!isValid}
+            loading={isSubmitting}
             onClick={handleSubmit(onSubmit)}
           >
             保存
           </Button>
         </DrawerFooter>
       </DrawerContent>
-    </Drawer>
+      </DrawerPositioner>
+    </DrawerRoot>
   );
 };
