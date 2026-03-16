@@ -48,7 +48,12 @@ export const HeaderPresenter = ({
         </h1>
 
         {isMobile ? (
-          <IconButton aria-label='Open menu' onClick={onOpen} bg='white'>
+          <IconButton
+            aria-label='Open menu'
+            onClick={onOpen}
+            bg='white'
+            color='black'
+          >
             <GiHamburgerMenu />
           </IconButton>
         ) : (
