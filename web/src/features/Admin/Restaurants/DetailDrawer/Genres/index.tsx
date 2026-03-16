@@ -1,11 +1,10 @@
 import { useCustomOptions } from '@/hooks/useOptions';
 import { api } from '@/lib/swagger-client';
 import {
+  Field,
   Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Select,
+  NativeSelectField,
+  NativeSelectRoot,
   Skeleton,
 } from '@chakra-ui/react';
 import { FieldErrors, UseFormRegister } from 'react-hook-form';
@@ -30,27 +29,31 @@ const Genres = ({ errors, register }: Props) => {
   });
 
   return (
-    <FormControl isInvalid={!!errors.genreId?.message}>
+    <Field.Root invalid={!!errors.genreId?.message}>
       <Flex alignItems='center' gap={4} mb={2}>
-        <FormLabel htmlFor='genreId' className={styles.label}>
+        <Field.Label htmlFor='genreId' className={styles.label}>
           ジャンル
-        </FormLabel>
+        </Field.Label>
         <span className={styles.required}>必須</span>
       </Flex>
-      <Skeleton isLoaded={!isLoading}>
-        <Select
-          placeholder='ジャンルを選択してください'
-          {...register('genreId', { required: 'ジャンルは必須です' })}
-        >
-          {options.map((option) => (
-            <option key={option.key} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </Select>
-      </Skeleton>
-      <FormErrorMessage>{errors.genreId?.message?.toString()}</FormErrorMessage>
-    </FormControl>
+      {isLoading ? (
+        <Skeleton height='40px' />
+      ) : (
+        <NativeSelectRoot>
+          <NativeSelectField
+            placeholder='ジャンルを選択してください'
+            {...register('genreId', { required: 'ジャンルは必須です' })}
+          >
+            {options.map((option) => (
+              <option key={option.key} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </NativeSelectField>
+        </NativeSelectRoot>
+      )}
+      <Field.ErrorText>{errors.genreId?.message?.toString()}</Field.ErrorText>
+    </Field.Root>
   );
 };
 

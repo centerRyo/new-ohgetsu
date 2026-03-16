@@ -1,7 +1,7 @@
 import {
-  FormControl,
-  FormLabel,
-  Select as ChakraSelect,
+  Field,
+  NativeSelectField,
+  NativeSelectRoot,
 } from '@chakra-ui/react';
 import { memo } from 'react';
 
@@ -25,14 +25,16 @@ const Select = memo(
     fontWeight = 'bold',
   }: Props) => {
     return (
-      <FormControl isRequired={isRequired}>
-        <FormLabel fontWeight={fontWeight}>{label}</FormLabel>
-        <ChakraSelect name={name} placeholder={placeholder}>
-          {options.map((option) => (
-            <option key={option.id}>{option.value}</option>
-          ))}
-        </ChakraSelect>
-      </FormControl>
+      <Field.Root required={isRequired}>
+        <Field.Label fontWeight={fontWeight}>{label}</Field.Label>
+        <NativeSelectRoot>
+          <NativeSelectField name={name} placeholder={placeholder}>
+            {options.map((option) => (
+              <option key={option.id}>{option.value}</option>
+            ))}
+          </NativeSelectField>
+        </NativeSelectRoot>
+      </Field.Root>
     );
   }
 );

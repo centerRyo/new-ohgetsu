@@ -1,11 +1,14 @@
 import { useCustomOptions } from '@/hooks/useOptions';
 import { api } from '@/lib/swagger-client';
 import {
-  Checkbox,
+  CheckboxControl,
   CheckboxGroup,
+  CheckboxHiddenInput,
+  CheckboxIndicator,
+  CheckboxLabel,
+  CheckboxRoot,
+  Field,
   Flex,
-  FormErrorMessage,
-  FormLabel,
   SkeletonText,
 } from '@chakra-ui/react';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
@@ -35,9 +38,11 @@ const Ingredients = ({ errors, control, index }: Props) => {
   return (
     <div>
       <Flex mb={2}>
-        <FormLabel className={styles.label}>アレルギー情報</FormLabel>
+        <Field.Label className={styles.label}>アレルギー情報</Field.Label>
       </Flex>
-      <SkeletonText isLoaded={!isLoading} skeletonHeight={4} spacing='5'>
+      {isLoading ? (
+        <SkeletonText noOfLines={4} />
+      ) : (
         <Controller
           name={`menus.${index}.ingredientIds`}
           control={control}
@@ -46,19 +51,23 @@ const Ingredients = ({ errors, control, index }: Props) => {
             <CheckboxGroup {...rest}>
               <Flex gap={4} wrap='wrap'>
                 {options.map((option) => (
-                  <Checkbox value={option.value} key={option.key} ref={ref}>
-                    {option.label}
-                  </Checkbox>
+                  <CheckboxRoot value={option.value} key={option.key} ref={ref}>
+                    <CheckboxHiddenInput />
+                    <CheckboxControl>
+                      <CheckboxIndicator />
+                    </CheckboxControl>
+                    <CheckboxLabel>{option.label}</CheckboxLabel>
+                  </CheckboxRoot>
                 ))}
               </Flex>
             </CheckboxGroup>
           )}
         />
-      </SkeletonText>
-      <FormErrorMessage>
+      )}
+      <Field.ErrorText>
         {errors.menus &&
           errors.menus[index]?.ingredientIds?.message?.toString()}
-      </FormErrorMessage>
+      </Field.ErrorText>
     </div>
   );
 };

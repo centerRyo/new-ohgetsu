@@ -1,8 +1,8 @@
 import { useCustomOptionsWithPic } from '@/hooks/useOptions';
 import { api } from '@/lib/swagger-client';
 import {
+  Field,
   Flex,
-  FormLabel,
   Input,
   SimpleGrid,
   Skeleton,
@@ -51,7 +51,7 @@ const Ingredients = memo(({ register }: Props) => {
                   {...register(`ingredients`)}
                   className={styles.checkbox}
                 />
-                <FormLabel htmlFor={option.key} className={styles.label}>
+                <Field.Label htmlFor={option.key} className={styles.label}>
                   <Flex
                     maxW='sm'
                     padding='25px 10px'
@@ -79,7 +79,7 @@ const Ingredients = memo(({ register }: Props) => {
                     />
                     <Text fontWeight='bold'>{option.label}</Text>
                   </Flex>
-                </FormLabel>
+                </Field.Label>
               </div>
             ))}
           </>
