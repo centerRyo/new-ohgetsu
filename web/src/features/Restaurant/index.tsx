@@ -52,6 +52,7 @@ export const Restaurant = ({ restaurantId }: Props) => {
           <Button
             size='lg'
             colorPalette='green'
+            fontWeight='bold'
             width='100%'
             maxWidth='30rem'
             onClick={handleClickSearch}
