@@ -1,12 +1,6 @@
 import { useCustomOptionsWithPic } from '@/hooks/useOptions';
 import { api } from '@/lib/swagger-client';
-import {
-  Flex,
-  Input,
-  SimpleGrid,
-  Skeleton,
-  Text,
-} from '@chakra-ui/react';
+import { Flex, Input, SimpleGrid, Skeleton, Text } from '@chakra-ui/react';
 import Image from 'next/image';
 import { memo } from 'react';
 import { UseFormRegister } from 'react-hook-form';
