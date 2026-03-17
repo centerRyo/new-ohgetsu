@@ -7,9 +7,9 @@ import {
   CheckboxIndicator,
   CheckboxLabel,
   CheckboxRoot,
-  Field,
   Flex,
   SkeletonText,
+  Text,
 } from '@chakra-ui/react';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 import useSWR from 'swr';
@@ -38,7 +38,7 @@ const Ingredients = ({ errors, control, index }: Props) => {
   return (
     <div>
       <Flex mb={2}>
-        <Field.Label className={styles.label}>アレルギー情報</Field.Label>
+        <label className={styles.label}>アレルギー情報</label>
       </Flex>
       {isLoading ? (
         <SkeletonText noOfLines={4} />
@@ -46,9 +46,13 @@ const Ingredients = ({ errors, control, index }: Props) => {
         <Controller
           name={`menus.${index}.ingredientIds`}
           control={control}
-          render={({ field: { ref, ...rest } }) => (
-            // @ts-ignore
-            <CheckboxGroup {...rest}>
+          render={({ field: { ref, value, onChange, onBlur, name } }) => (
+            <CheckboxGroup
+              value={Array.isArray(value) ? value : []}
+              onValueChange={(value) => onChange(value)}
+              name={name}
+              onBlur={onBlur}
+            >
               <Flex gap={4} wrap='wrap'>
                 {options.map((option) => (
                   <CheckboxRoot value={option.value} key={option.key} ref={ref}>
@@ -64,10 +68,11 @@ const Ingredients = ({ errors, control, index }: Props) => {
           )}
         />
       )}
-      <Field.ErrorText>
-        {errors.menus &&
-          errors.menus[index]?.ingredientIds?.message?.toString()}
-      </Field.ErrorText>
+      {errors.menus && errors.menus[index]?.ingredientIds?.message && (
+        <Text color='red.500' fontSize='sm'>
+          {errors.menus[index]?.ingredientIds?.message?.toString()}
+        </Text>
+      )}
     </div>
   );
 };
