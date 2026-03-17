@@ -1,39 +1,28 @@
 'use client';
 
 import {
+  Toaster as ChakraToaster,
   createToaster,
   Portal,
   Stack,
-  Toaster as ChakraToaster,
-  ToastCloseTrigger,
-  ToastDescription,
-  ToastIndicator,
-  ToastTitle,
+  Toast,
 } from '@chakra-ui/react';
 
-export const toaster = createToaster({ placement: 'bottom-end' });
+export const toaster = createToaster({ placement: 'top' });
 
 export const Toaster = () => (
   <Portal>
     <ChakraToaster toaster={toaster}>
       {(toast) => (
-        <Stack
-          direction='row'
-          p='4'
-          bg='bg.panel'
-          borderRadius='l3'
-          boxShadow='md'
-          width='sm'
-        >
-          <ToastIndicator />
-          <Stack gap='1' flex='1'>
-            {toast.title && <ToastTitle>{toast.title}</ToastTitle>}
+        <Toast.Root width={{ md: 'sm' }}>
+          <Stack gap='1' flex='1' maxWidth='100%'>
+            {toast.title && <Toast.Title>{toast.title}</Toast.Title>}
             {toast.description && (
-              <ToastDescription>{toast.description}</ToastDescription>
+              <Toast.Description>{toast.description}</Toast.Description>
             )}
           </Stack>
-          <ToastCloseTrigger />
-        </Stack>
+          <Toast.CloseTrigger />
+        </Toast.Root>
       )}
     </ChakraToaster>
   </Portal>
