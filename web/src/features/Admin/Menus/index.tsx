@@ -67,7 +67,7 @@ export const MenusAdmin = ({ restaurantId }: Props): JSX.Element => {
             </HStack>
           </GridItem>
           <GridItem colStart={20} colEnd={20}>
-            <Button w='100%' onClick={() => handleOpen()}>
+            <Button w='100%' fontWeight='bold' onClick={() => handleOpen()}>
               新規作成
             </Button>
           </GridItem>
