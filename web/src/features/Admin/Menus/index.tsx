@@ -9,14 +9,14 @@ import {
   Heading,
   HStack,
   Image,
-  Table,
-  TableContainer,
-  Tag,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
+  TableBody,
+  TableCell,
+  TableColumnHeader,
+  TableHeader,
+  TableRoot,
+  TableRow,
+  TableScrollArea,
+  TagRoot,
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
@@ -59,7 +59,7 @@ export const MenusAdmin = ({ restaurantId }: Props): JSX.Element => {
       <main className={styles.container}>
         <Grid mb={8}>
           <GridItem>
-            <HStack spacing={6}>
+            <HStack gap={6}>
               <Heading as='h3' size='lg'>
                 {restaurant?.name}のメニュー一覧
               </Heading>
@@ -67,26 +67,28 @@ export const MenusAdmin = ({ restaurantId }: Props): JSX.Element => {
             </HStack>
           </GridItem>
           <GridItem colStart={20} colEnd={20}>
-            <Button w='100%' onClick={() => handleOpen()}>
+            <Button w='100%' fontWeight='bold' onClick={() => handleOpen()}>
               新規作成
             </Button>
           </GridItem>
         </Grid>
-        <TableContainer>
-          <Table variant='simple'>
-            <Thead>
-              <Tr>
-                <Th fontSize='md'>メニュー名</Th>
-                <Th fontSize='md'>写真</Th>
-                <Th fontSize='md'>アレルギー物質</Th>
-                <Th />
-              </Tr>
-            </Thead>
-            <Tbody>
+        <TableScrollArea>
+          <TableRoot variant='outline'>
+            <TableHeader>
+              <TableRow>
+                <TableColumnHeader fontSize='md'>メニュー名</TableColumnHeader>
+                <TableColumnHeader fontSize='md'>写真</TableColumnHeader>
+                <TableColumnHeader fontSize='md'>
+                  アレルギー物質
+                </TableColumnHeader>
+                <TableColumnHeader />
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {menus.map((menu) => (
-                <Tr key={menu.id}>
-                  <Td>{menu.name}</Td>
-                  <Td>
+                <TableRow key={menu.id}>
+                  <TableCell>{menu.name}</TableCell>
+                  <TableCell>
                     {menu.pic && (
                       <Image
                         width='24'
@@ -95,43 +97,43 @@ export const MenusAdmin = ({ restaurantId }: Props): JSX.Element => {
                         alt={menu.name}
                       />
                     )}
-                  </Td>
-                  <Td>
+                  </TableCell>
+                  <TableCell>
                     <Box maxW='200px'>
-                      <Wrap spacing={2}>
+                      <Wrap gap={2}>
                         {menu.ingredients.map((ingredient) => (
                           <WrapItem key={ingredient.id}>
-                            <Tag variant='solid' colorScheme='green'>
+                            <TagRoot variant='solid' colorPalette='green'>
                               {ingredient.name}
-                            </Tag>
+                            </TagRoot>
                           </WrapItem>
                         ))}
                       </Wrap>
                     </Box>
-                  </Td>
-                  <Td>
-                    <HStack spacing={4}>
+                  </TableCell>
+                  <TableCell>
+                    <HStack gap={4}>
                       <Button
-                        colorScheme='cyan'
+                        colorPalette='cyan'
                         size='xs'
                         onClick={() => handleOpen(menu.id)}
                       >
                         詳細
                       </Button>
                       <Button
-                        colorScheme='red'
+                        colorPalette='red'
                         size='xs'
                         onClick={() => handleRemoveMenu(menu.id)}
                       >
                         削除
                       </Button>
                     </HStack>
-                  </Td>
-                </Tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+            </TableBody>
+          </TableRoot>
+        </TableScrollArea>
       </main>
 
       <DetailDrawer

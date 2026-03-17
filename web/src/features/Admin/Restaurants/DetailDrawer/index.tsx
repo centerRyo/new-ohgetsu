@@ -2,20 +2,22 @@ import { api } from '@/lib/swagger-client';
 import { HttpResponse, RestaurantDto } from '@/types/generated/Api';
 import {
   Button,
-  Drawer,
+  DrawerBackdrop,
   DrawerBody,
-  DrawerCloseButton,
+  DrawerCloseTrigger,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerPositioner,
+  DrawerRoot,
+  Field,
   Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
   Image,
   Input,
   Switch,
+  SwitchControl,
+  SwitchHiddenInput,
+  SwitchThumb,
   Text,
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
@@ -80,98 +82,111 @@ export const DetailDrawer = ({
   }, [defaultValues, reset]);
 
   return (
-    <Drawer isOpen={state.open} placement='right' size='md' onClose={onClose}>
-      <DrawerOverlay />
-      <DrawerContent>
-        <DrawerCloseButton />
-        <DrawerHeader>レストラン{isEdit ? '編集' : '追加'}</DrawerHeader>
+    <DrawerRoot
+      open={state.open}
+      placement='end'
+      size='md'
+      onOpenChange={(e) => !e.open && onClose()}
+    >
+      <DrawerBackdrop />
+      <DrawerPositioner>
+        <DrawerContent>
+          <DrawerCloseTrigger />
+          <DrawerHeader fontSize='xl' fontWeight='bold'>
+            レストラン{isEdit ? '編集' : '追加'}
+          </DrawerHeader>
 
-        <DrawerBody>
-          <form className={styles.form}>
-            <Flex mb={8}>
-              <FormControl isInvalid={!!errors.name?.message}>
-                <Flex alignItems='center' gap={4} mb={2}>
-                  <FormLabel htmlFor='name' className={styles.label}>
-                    レストラン名
-                  </FormLabel>
-                  <span className={styles.required}>必須</span>
-                </Flex>
-                <Input
-                  id='name'
-                  {...register('name', {
-                    required: '店名は必須です',
-                  })}
-                  type='text'
-                />
-                <FormErrorMessage>
-                  {errors.name?.message?.toString()}
-                </FormErrorMessage>
-              </FormControl>
-            </Flex>
-
-            <Flex mb={8}>
-              <FormControl>
-                <Flex mb={2}>
-                  <FormLabel htmlFor='file' className={styles.label}>
-                    レストランの写真
-                  </FormLabel>
-                </Flex>
-                <Input
-                  type='file'
-                  {...register('pic')}
-                  accept='image/*'
-                  onChange={handleFileChange}
-                />
-                {preview.pic && (
-                  <Image
-                    src={preview.pic}
-                    alt={preview.pic}
-                    style={{
-                      maxWidth: '100%',
-                      height: 'auto',
-                    }}
-                    width='200'
-                    height='200'
-                  />
-                )}
-              </FormControl>
-            </Flex>
-
-            <Flex mb={8}>
-              <Genres errors={errors} register={register} />
-            </Flex>
-
-            <FormControl>
-              <Controller
-                name='isOpen'
-                control={control}
-                render={({ field: { onChange, value, ref } }) => (
-                  <Flex alignItems='center' gap={4}>
-                    <Text>{isEdit ? '営業停止' : '未営業'}</Text>
-                    <Switch
-                      isChecked={value}
-                      onChange={(e) => onChange(e.target.checked)}
-                      ref={ref}
-                    />
-                    <Text>{isEdit ? '営業中' : '営業開始'}</Text>
+          <DrawerBody>
+            <form className={styles.form}>
+              <Flex mb={8}>
+                <Field.Root invalid={!!errors.name?.message}>
+                  <Flex alignItems='center' gap={4} mb={2}>
+                    <Field.Label htmlFor='name' className={styles.label}>
+                      レストラン名
+                    </Field.Label>
+                    <span className={styles.required}>必須</span>
                   </Flex>
-                )}
-              />
-            </FormControl>
-          </form>
-        </DrawerBody>
+                  <Input
+                    id='name'
+                    {...register('name', {
+                      required: '店名は必須です',
+                    })}
+                    type='text'
+                  />
+                  <Field.ErrorText>
+                    {errors.name?.message?.toString()}
+                  </Field.ErrorText>
+                </Field.Root>
+              </Flex>
 
-        <DrawerFooter>
-          <Button
-            colorScheme='green'
-            isDisabled={!isValid}
-            isLoading={isSubmitting}
-            onClick={handleSubmit(onSubmit)}
-          >
-            保存
-          </Button>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+              <Flex mb={8}>
+                <Field.Root>
+                  <Flex mb={2}>
+                    <Field.Label htmlFor='file' className={styles.label}>
+                      レストランの写真
+                    </Field.Label>
+                  </Flex>
+                  <Input
+                    type='file'
+                    {...register('pic')}
+                    accept='image/*'
+                    onChange={handleFileChange}
+                  />
+                  {preview.pic && (
+                    <Image
+                      src={preview.pic}
+                      alt={preview.pic}
+                      style={{
+                        maxWidth: '100%',
+                        height: 'auto',
+                      }}
+                      width='200'
+                      height='200'
+                    />
+                  )}
+                </Field.Root>
+              </Flex>
+
+              <Flex mb={8}>
+                <Genres errors={errors} register={register} />
+              </Flex>
+
+              <Field.Root>
+                <Controller
+                  name='isOpen'
+                  control={control}
+                  render={({ field: { onChange, value, ref } }) => (
+                    <Flex alignItems='center' gap={4}>
+                      <Text>{isEdit ? '営業停止' : '未営業'}</Text>
+                      <Switch.Root
+                        checked={value}
+                        onCheckedChange={(e) => onChange(e.checked)}
+                      >
+                        <SwitchHiddenInput ref={ref} />
+                        <SwitchControl>
+                          <SwitchThumb />
+                        </SwitchControl>
+                      </Switch.Root>
+                      <Text>{isEdit ? '営業中' : '営業開始'}</Text>
+                    </Flex>
+                  )}
+                />
+              </Field.Root>
+            </form>
+          </DrawerBody>
+
+          <DrawerFooter>
+            <Button
+              colorPalette='green'
+              disabled={!isValid}
+              loading={isSubmitting}
+              onClick={handleSubmit(onSubmit)}
+            >
+              保存
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </DrawerPositioner>
+    </DrawerRoot>
   );
 };

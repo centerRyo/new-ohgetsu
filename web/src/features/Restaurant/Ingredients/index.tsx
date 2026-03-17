@@ -1,13 +1,6 @@
 import { useCustomOptionsWithPic } from '@/hooks/useOptions';
 import { api } from '@/lib/swagger-client';
-import {
-  Flex,
-  FormLabel,
-  Input,
-  SimpleGrid,
-  Skeleton,
-  Text,
-} from '@chakra-ui/react';
+import { Flex, Input, SimpleGrid, Skeleton, Text } from '@chakra-ui/react';
 import Image from 'next/image';
 import { memo } from 'react';
 import { UseFormRegister } from 'react-hook-form';
@@ -35,7 +28,7 @@ const Ingredients = memo(({ register }: Props) => {
   return (
     <div className={styles.container}>
       <SimpleGrid
-        spacing={4}
+        gap={4}
         templateColumns='repeat(auto-fill, minmax(150px, 1fr))'
       >
         {!isLoading ? (
@@ -51,7 +44,7 @@ const Ingredients = memo(({ register }: Props) => {
                   {...register(`ingredients`)}
                   className={styles.checkbox}
                 />
-                <FormLabel htmlFor={option.key} className={styles.label}>
+                <label htmlFor={option.key} className={styles.label}>
                   <Flex
                     maxW='sm'
                     padding='25px 10px'
@@ -79,7 +72,7 @@ const Ingredients = memo(({ register }: Props) => {
                     />
                     <Text fontWeight='bold'>{option.label}</Text>
                   </Flex>
-                </FormLabel>
+                </label>
               </div>
             ))}
           </>

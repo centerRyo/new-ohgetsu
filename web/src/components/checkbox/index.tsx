@@ -1,9 +1,12 @@
 import {
-  Checkbox as ChakraCheckbox,
+  CheckboxControl,
   CheckboxGroup,
+  CheckboxHiddenInput,
+  CheckboxIndicator,
+  CheckboxLabel,
+  CheckboxRoot,
+  Field,
   Flex,
-  FormControl,
-  FormLabel,
   SkeletonText,
 } from '@chakra-ui/react';
 import { memo } from 'react';
@@ -20,7 +23,7 @@ type Props = Partial<{
   label: string;
 };
 
-const Checkbox = memo(
+const CheckboxComponent = memo(
   ({
     name,
     label,
@@ -32,31 +35,36 @@ const Checkbox = memo(
     options,
   }: Props) => {
     return (
-      <FormControl isRequired={isRequired}>
-        <FormLabel fontWeight={fontWeight}>{label}</FormLabel>
-        <SkeletonText
-          data-testid={testPrefix ? `${testPrefix}-${name}` : name}
-          isLoaded={!isLoading}
-          skeletonHeight={3}
-        >
+      <Field.Root required={isRequired}>
+        <Field.Label fontWeight={fontWeight}>{label}</Field.Label>
+        {isLoading ? (
+          <SkeletonText
+            data-testid={testPrefix ? `${testPrefix}-${name}` : name}
+            noOfLines={3}
+          />
+        ) : (
           <CheckboxGroup>
             <Flex gap={4} wrap='wrap'>
               {options.map((option) => (
-                <ChakraCheckbox
+                <CheckboxRoot
                   key={option.value}
-                  isDisabled={isDisabled}
+                  disabled={isDisabled}
                   name={option.value}
                 >
-                  {option.label}
-                </ChakraCheckbox>
+                  <CheckboxHiddenInput />
+                  <CheckboxControl>
+                    <CheckboxIndicator />
+                  </CheckboxControl>
+                  <CheckboxLabel>{option.label}</CheckboxLabel>
+                </CheckboxRoot>
               ))}
             </Flex>
           </CheckboxGroup>
-        </SkeletonText>
-      </FormControl>
+        )}
+      </Field.Root>
     );
   }
 );
-Checkbox.displayName = 'Checkbox';
+CheckboxComponent.displayName = 'Checkbox';
 
-export default Checkbox;
+export default CheckboxComponent;

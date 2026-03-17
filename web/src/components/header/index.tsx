@@ -6,7 +6,7 @@ import { HeaderPresenter } from './Presenter';
 import { useSearch } from './hooks';
 
 export const Header = (): JSX.Element => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { open, onOpen, onClose } = useDisclosure();
 
   const [searchText, setSearchText] = useState<string>('');
 
@@ -14,7 +14,7 @@ export const Header = (): JSX.Element => {
 
   return (
     <HeaderPresenter
-      isOpen={isOpen}
+      isOpen={open}
       onOpen={onOpen}
       onClose={onClose}
       searchText={searchText}

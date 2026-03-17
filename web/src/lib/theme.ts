@@ -1,14 +1,14 @@
-import { extendTheme } from '@chakra-ui/react';
+import { createSystem, defaultConfig, defineConfig } from '@chakra-ui/react';
 
-const theme = extendTheme({
-  styles: {
-    global: {
-      body: {
-        fontFamily:
-          "'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN','Hiragino Sans', Meiryo, sans-serif",
-      },
+const config = defineConfig({
+  globalCss: {
+    body: {
+      fontFamily:
+        "'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN','Hiragino Sans', Meiryo, sans-serif",
     },
   },
 });
 
-export default theme;
+const system = createSystem(defaultConfig, config);
+
+export default system;

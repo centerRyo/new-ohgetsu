@@ -3,17 +3,16 @@ import { HttpResponse, MenuDto } from '@/types/generated/Api';
 import {
   Box,
   Button,
-  Drawer,
+  DrawerBackdrop,
   DrawerBody,
-  DrawerCloseButton,
+  DrawerCloseTrigger,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerPositioner,
+  DrawerRoot,
+  Field,
   Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
   Heading,
   IconButton,
   Image,
@@ -88,121 +87,143 @@ export const DetailDrawer = ({
   }, [defaultValues, reset]);
 
   return (
-    <Drawer isOpen={state.open} placement='right' size='md' onClose={onClose}>
-      <DrawerOverlay />
-      <DrawerContent>
-        <DrawerCloseButton />
-        <DrawerHeader>メニュー{isEdit ? '編集' : '追加'}</DrawerHeader>
+    <DrawerRoot
+      open={state.open}
+      placement='end'
+      size='md'
+      onOpenChange={(e) => !e.open && onClose()}
+    >
+      <DrawerBackdrop />
+      <DrawerPositioner>
+        <DrawerContent>
+          <DrawerCloseTrigger />
+          <DrawerHeader fontSize='xl' fontWeight='bold'>
+            メニュー{isEdit ? '編集' : '追加'}
+          </DrawerHeader>
 
-        <DrawerBody>
-          <form className={styles.form}>
-            {fields.map((field, index) => (
-              <Box
-                key={field.id}
-                borderRadius='md'
-                borderWidth='1px'
-                p={4}
-                mb={6}
-              >
-                <Flex justifyContent='space-between' alignItems='center' mb={4}>
-                  <Heading size='md'>メニュー項目 {index + 1}</Heading>
-                  {index !== 0 && (
-                    <IconButton
-                      aria-label='メニュー項目を削除'
-                      icon={<FaTrash />}
-                      colorScheme='red'
-                      size='sm'
-                      onClick={() => remove(index)}
-                      variant='ghost'
-                    />
-                  )}
-                </Flex>
-                <Flex mb={6}>
-                  <FormControl
-                    isInvalid={
-                      errors.menus && !!errors.menus[index]?.name?.message
-                    }
+          <DrawerBody>
+            <form className={styles.form}>
+              {fields.map((field, index) => (
+                <Box
+                  key={field.id}
+                  borderRadius='md'
+                  borderWidth='1px'
+                  p={4}
+                  mb={6}
+                >
+                  <Flex
+                    justifyContent='space-between'
+                    alignItems='center'
+                    mb={4}
                   >
-                    <Flex alignItems='center' gap={4} mb={2}>
-                      <FormLabel className={styles.label} htmlFor='menu_name'>
-                        メニュー
-                      </FormLabel>
-                      <span className={styles.required}>必須</span>
-                    </Flex>
-                    <Input
-                      type='text'
-                      {...register(`menus.${index}.name`, {
-                        required: 'メニューは必須です',
-                      })}
-                    />
-                    <FormErrorMessage>
-                      {errors.menus &&
-                        errors.menus[index]?.name?.message?.toString()}
-                    </FormErrorMessage>
-                  </FormControl>
-                </Flex>
-                <Flex mb={6}>
-                  <Ingredients
-                    errors={errors}
-                    control={control}
-                    index={index}
-                  />
-                </Flex>
-                <Flex>
-                  <FormControl mb={6}>
-                    <Flex mb={2}>
-                      <FormLabel className={styles.label}>写真</FormLabel>
-                    </Flex>
-                    <Input
-                      type='file'
-                      {...register(`menus.${index}.pic`)}
-                      accept='image/*'
-                      onChange={handleChangeFile}
-                    />
-                    {/* @ts-ignore */}
-                    {preview[`menus.${index}.pic`] && (
-                      <Image
-                        // @ts-ignore
-                        src={preview[`menus.${index}.pic`]}
-                        alt='プレビュー画像'
-                        style={{
-                          maxWidth: '100%',
-                          height: 'auto',
-                        }}
-                        width='200'
-                        height='200'
-                      />
+                    <Heading size='md'>メニュー項目 {index + 1}</Heading>
+                    {index !== 0 && (
+                      <IconButton
+                        aria-label='メニュー項目を削除'
+                        colorPalette='red'
+                        size='sm'
+                        onClick={() => remove(index)}
+                        variant='ghost'
+                      >
+                        <FaTrash />
+                      </IconButton>
                     )}
-                  </FormControl>
-                </Flex>
-                <Flex>
-                  <FormControl>
-                    <Flex alignItems='center' gap={4} mb={2}>
-                      <FormLabel className={styles.label} htmlFor='menu_note'>
-                        備考
-                      </FormLabel>
-                    </Flex>
-                    <Textarea rows={3} {...register(`menus.${index}.note`)} />
-                  </FormControl>
-                </Flex>
-              </Box>
-            ))}
+                  </Flex>
+                  <Flex mb={6}>
+                    <Field.Root
+                      invalid={
+                        errors.menus && !!errors.menus[index]?.name?.message
+                      }
+                    >
+                      <Flex alignItems='center' gap={4} mb={2}>
+                        <Field.Label
+                          className={styles.label}
+                          htmlFor='menu_name'
+                        >
+                          メニュー
+                        </Field.Label>
+                        <span className={styles.required}>必須</span>
+                      </Flex>
+                      <Input
+                        type='text'
+                        {...register(`menus.${index}.name`, {
+                          required: 'メニューは必須です',
+                        })}
+                      />
+                      <Field.ErrorText>
+                        {errors.menus &&
+                          errors.menus[index]?.name?.message?.toString()}
+                      </Field.ErrorText>
+                    </Field.Root>
+                  </Flex>
+                  <Flex mb={6}>
+                    <Ingredients
+                      errors={errors}
+                      control={control}
+                      index={index}
+                    />
+                  </Flex>
+                  <Flex>
+                    <Field.Root mb={6}>
+                      <Flex mb={2}>
+                        <Field.Label className={styles.label}>写真</Field.Label>
+                      </Flex>
+                      <Input
+                        type='file'
+                        {...register(`menus.${index}.pic`)}
+                        accept='image/*'
+                        onChange={handleChangeFile}
+                      />
+                      {/* @ts-ignore */}
+                      {preview[`menus.${index}.pic`] && (
+                        <Image
+                          // @ts-ignore
+                          src={preview[`menus.${index}.pic`]}
+                          alt='プレビュー画像'
+                          style={{
+                            maxWidth: '100%',
+                            height: 'auto',
+                          }}
+                          width='200'
+                          height='200'
+                        />
+                      )}
+                    </Field.Root>
+                  </Flex>
+                  <Flex>
+                    <Field.Root>
+                      <Flex alignItems='center' gap={4} mb={2}>
+                        <Field.Label
+                          className={styles.label}
+                          htmlFor='menu_note'
+                        >
+                          備考
+                        </Field.Label>
+                      </Flex>
+                      <Textarea rows={3} {...register(`menus.${index}.note`)} />
+                    </Field.Root>
+                  </Flex>
+                </Box>
+              ))}
 
-            {!isEdit && <Button onClick={handleAddMenu}>メニューを追加</Button>}
-          </form>
-        </DrawerBody>
+              {!isEdit && (
+                <Button onClick={handleAddMenu}>メニューを追加</Button>
+              )}
+            </form>
+          </DrawerBody>
 
-        <DrawerFooter>
-          <Button
-            colorScheme='green'
-            isDisabled={!isValid}
-            isLoading={isSubmitting}
-            onClick={handleSubmit(onSubmit)}
-          >
-            保存
-          </Button>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+          <DrawerFooter>
+            <Button
+              colorPalette='green'
+              disabled={!isValid}
+              loading={isSubmitting}
+              onClick={handleSubmit(onSubmit)}
+            >
+              保存
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </DrawerPositioner>
+    </DrawerRoot>
   );
 };

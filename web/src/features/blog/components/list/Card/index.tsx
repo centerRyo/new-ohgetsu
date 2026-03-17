@@ -7,7 +7,7 @@ import {
   HStack,
   LinkBox,
   LinkOverlay,
-  Tag,
+  TagRoot,
   Text,
 } from '@chakra-ui/react';
 import Image from 'next/image';
@@ -54,11 +54,11 @@ export const Card = ({ post }: Props): JSX.Element => (
       )}
 
       {post.frontmatter.tags && (
-        <HStack mt={3} spacing={2} wrap='wrap'>
+        <HStack mt={3} gap={2} wrap='wrap'>
           {post.frontmatter.tags.map((tag) => (
-            <Tag key={tag} size='sm'>
+            <TagRoot key={tag} size='sm'>
               {tag}
-            </Tag>
+            </TagRoot>
           ))}
         </HStack>
       )}

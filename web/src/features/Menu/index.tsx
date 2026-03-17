@@ -6,7 +6,6 @@ import {
   Flex,
   Heading,
   HStack,
-  Icon,
   Image,
   SimpleGrid,
   Text,
@@ -62,11 +61,7 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
         </Flex>
 
         <Flex maxWidth='30rem' margin='0 auto' mb={8}>
-          <Image
-            src={menu?.pic ?? '/images/no_image.png'}
-            fit='fill'
-            alt={menu?.name}
-          />
+          <Image src={menu?.pic ?? '/images/no_image.png'} alt={menu?.name} />
         </Flex>
 
         {menu?.note?.trim() && (
@@ -80,8 +75,13 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
             borderRadius='md'
             bg='yellow.50'
           >
-            <HStack align='flex-start' spacing={2}>
-              <Icon as={FiInfo} mt={1} color='yellow.600' />
+            <HStack align='flex-start' gap={2}>
+              <FiInfo
+                style={{
+                  marginTop: '4px',
+                  color: 'var(--chakra-colors-yellow-600)',
+                }}
+              />
               <Box>
                 <Text fontSize='sm' fontWeight='bold' mb={1} color='yellow.800'>
                   備考
@@ -99,7 +99,7 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
         </div>
         <section className={styles.ingredients}>
           <SimpleGrid
-            spacing={4}
+            gap={4}
             templateColumns={{
               base: 'repeat(auto-fill, minmax(125px, 1fr))',
               md: 'repeat(auto-fill, minmax(200px, 1fr))',
@@ -117,7 +117,6 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
               >
                 <Image
                   src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${ingredient.pic}`}
-                  fit='fill'
                   alt={ingredient.name}
                 />
                 <Text fontWeight='bold'>{ingredient.name}</Text>
@@ -129,8 +128,12 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
         <Flex justifyContent='center' mb={8}>
           <Button
             size='lg'
-            colorScheme='green'
+            colorPalette='green'
             variant='outline'
+            color='green.600'
+            borderColor='green.600'
+            borderWidth='2px'
+            fontWeight='bold'
             w='336px'
             maxW='100%'
             onClick={handleBack}
@@ -141,8 +144,12 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
         <Flex justifyContent='center' mb={8}>
           <Button
             size='lg'
-            colorScheme='green'
+            colorPalette='green'
             variant='outline'
+            color='green.600'
+            borderColor='green.600'
+            borderWidth='2px'
+            fontWeight='bold'
             w='336px'
             maxW='100%'
             onClick={handleSearchMenus}
@@ -153,8 +160,12 @@ export const Menu = ({ menuId, searchConditions }: Props) => {
         <Flex justifyContent='center'>
           <Button
             size='lg'
-            colorScheme='green'
+            colorPalette='green'
             variant='outline'
+            color='green.600'
+            borderColor='green.600'
+            borderWidth='2px'
+            fontWeight='bold'
             w='336px'
             maxW='100%'
             onClick={handleSearchRestaurants}

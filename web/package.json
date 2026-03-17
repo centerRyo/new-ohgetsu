@@ -16,12 +16,8 @@
     "generate-types": "node ./scripts/ApiTypeGenerator.mjs"
   },
   "dependencies": {
-    "@chakra-ui/next-js": "^2.4.2",
-    "@chakra-ui/react": "^2.9.1",
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
+    "@chakra-ui/react": "^3.34.0",
     "@next/third-parties": "^16.1.1",
-    "framer-motion": "^12.0.6",
     "gray-matter": "^4.0.3",
     "next": "^14.2.35",
     "next-mdx-remote-client": "^1.1.4",

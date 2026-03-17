@@ -1,12 +1,15 @@
 import { useCustomOptions } from '@/hooks/useOptions';
 import { api } from '@/lib/swagger-client';
 import {
-  Checkbox,
+  CheckboxControl,
   CheckboxGroup,
+  CheckboxHiddenInput,
+  CheckboxIndicator,
+  CheckboxLabel,
+  CheckboxRoot,
   Flex,
-  FormErrorMessage,
-  FormLabel,
   SkeletonText,
+  Text,
 } from '@chakra-ui/react';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 import useSWR from 'swr';
@@ -35,30 +38,41 @@ const Ingredients = ({ errors, control, index }: Props) => {
   return (
     <div>
       <Flex mb={2}>
-        <FormLabel className={styles.label}>アレルギー情報</FormLabel>
+        <label className={styles.label}>アレルギー情報</label>
       </Flex>
-      <SkeletonText isLoaded={!isLoading} skeletonHeight={4} spacing='5'>
+      {isLoading ? (
+        <SkeletonText noOfLines={4} />
+      ) : (
         <Controller
           name={`menus.${index}.ingredientIds`}
           control={control}
-          render={({ field: { ref, ...rest } }) => (
-            // @ts-ignore
-            <CheckboxGroup {...rest}>
+          render={({ field: { ref, value, onChange, onBlur, name } }) => (
+            <CheckboxGroup
+              value={Array.isArray(value) ? value : []}
+              onValueChange={(value) => onChange(value)}
+              name={name}
+              onBlur={onBlur}
+            >
               <Flex gap={4} wrap='wrap'>
                 {options.map((option) => (
-                  <Checkbox value={option.value} key={option.key} ref={ref}>
-                    {option.label}
-                  </Checkbox>
+                  <CheckboxRoot value={option.value} key={option.key} ref={ref}>
+                    <CheckboxHiddenInput />
+                    <CheckboxControl>
+                      <CheckboxIndicator />
+                    </CheckboxControl>
+                    <CheckboxLabel>{option.label}</CheckboxLabel>
+                  </CheckboxRoot>
                 ))}
               </Flex>
             </CheckboxGroup>
           )}
         />
-      </SkeletonText>
-      <FormErrorMessage>
-        {errors.menus &&
-          errors.menus[index]?.ingredientIds?.message?.toString()}
-      </FormErrorMessage>
+      )}
+      {errors.menus && errors.menus[index]?.ingredientIds?.message && (
+        <Text color='red.500' fontSize='sm'>
+          {errors.menus[index]?.ingredientIds?.message?.toString()}
+        </Text>
+      )}
     </div>
   );
 };
