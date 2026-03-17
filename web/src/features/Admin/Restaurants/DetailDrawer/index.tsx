@@ -16,6 +16,7 @@ import {
   Input,
   Switch,
   SwitchControl,
+  SwitchHiddenInput,
   SwitchThumb,
   Text,
 } from '@chakra-ui/react';
@@ -158,8 +159,8 @@ export const DetailDrawer = ({
                       <Switch.Root
                         checked={value}
                         onCheckedChange={(e) => onChange(e.checked)}
-                        ref={ref}
                       >
+                        <SwitchHiddenInput ref={ref} />
                         <SwitchControl>
                           <SwitchThumb />
                         </SwitchControl>
