@@ -97,7 +97,7 @@ export const DetailDrawer = ({
       <DrawerPositioner>
         <DrawerContent>
           <DrawerCloseTrigger />
-          <DrawerHeader>メニュー{isEdit ? '編集' : '追加'}</DrawerHeader>
+          <DrawerHeader fontSize='xl' fontWeight='bold'>メニュー{isEdit ? '編集' : '追加'}</DrawerHeader>
 
           <DrawerBody>
             <form className={styles.form}>
