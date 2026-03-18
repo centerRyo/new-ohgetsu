@@ -26,7 +26,7 @@ export class S3Service {
         delete args.request.headers['expect'];
         return next(args);
       },
-      { step: 'finalizeRequest', name: 'removeExpectHeader', priority: 'low' },
+      { step: 'finalizeRequest', name: 'removeExpectHeader', priority: 'low' }
     );
   }
 
@@ -46,7 +46,7 @@ export class S3Service {
         Body: file.buffer,
         ContentType: file.mimetype,
         ACL: 'public-read',
-      }),
+      })
     );
 
     return `${process.env.SAKURA_OBJECT_STORAGE_ENDPOINT}/${this.bucketName}/${fileKey}`;
