@@ -3,11 +3,12 @@ import { notFound } from 'next/navigation';
 import { Post } from '../../post/Post';
 
 export const PostPage = ({ slug }: { slug: string }) => {
+  let post;
   try {
-    const post = getPostBySlug(slug);
-
-    return <Post post={post} />;
+    post = getPostBySlug(slug);
   } catch {
     return notFound();
   }
+
+  return <Post post={post} />;
 };

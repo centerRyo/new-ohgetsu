@@ -62,7 +62,7 @@ export const useHandler = ({
           title: `レストランを${isEdit ? '編集' : '作成'}しました`,
           type: 'success',
         });
-      } catch (error) {
+      } catch {
         onClose();
 
         toaster.create({
