@@ -1,3 +1,5 @@
+'use client';
+
 import { pagesPath } from '@/lib/$path';
 import { api } from '@/lib/swagger-client';
 import {

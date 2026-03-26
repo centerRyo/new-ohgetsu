@@ -1,3 +1,5 @@
+'use client';
+
 import { Spinner } from '@/components/spinner';
 import { ErrorSafePage } from '@/features/Error';
 import { api } from '@/lib/swagger-client';
