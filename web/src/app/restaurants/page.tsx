@@ -1,5 +1,3 @@
-'use client';
-
 import { Restaurants } from '@/features/Restaurants';
 import {
   CreateRestaurantsSearchCondition,
@@ -8,12 +6,13 @@ import {
 
 export type OptionalQuery = RestaurantsSearchCondition;
 
-const RestaurantsPage = ({
+const RestaurantsPage = async ({
   searchParams,
 }: {
-  searchParams: RestaurantsSearchCondition;
+  searchParams: Promise<RestaurantsSearchCondition>;
 }) => {
-  const searchConditions = CreateRestaurantsSearchCondition(searchParams);
+  const resolvedSearchParams = await searchParams;
+  const searchConditions = CreateRestaurantsSearchCondition(resolvedSearchParams);
 
   return <Restaurants searchConditions={searchConditions} />;
 };

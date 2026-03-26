@@ -1,9 +1,8 @@
-'use client';
-
 import { Restaurant } from '@/features/Restaurant';
 
-const RestaurantPage = ({ params }: { params: { id: string } }) => (
-  <Restaurant restaurantId={params.id} />
-);
+const RestaurantPage = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = await params;
+  return <Restaurant restaurantId={id} />;
+};
 
 export default RestaurantPage;
