@@ -21,7 +21,7 @@ type Props = {
   searchConditions: RestaurantsSearchCondition;
 };
 
-export const Restaurants = ({ searchConditions }: Props): JSX.Element => {
+export const Restaurants = ({ searchConditions }: Props) => {
   const { search_query } = searchConditions;
 
   const { data, error, isLoading } = useSWR(

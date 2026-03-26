@@ -35,7 +35,7 @@ export const HeaderPresenter = ({
   searchText,
   setSearchText,
   handleSearch,
-}: Props): JSX.Element => {
+}: Props) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   return (
@@ -133,7 +133,7 @@ type LogoProps = {
   color?: string;
 };
 
-const Logo = ({ color = 'white' }: LogoProps): JSX.Element => (
+const Logo = ({ color = 'white' }: LogoProps) => (
   <svg
     width='125'
     height='37'

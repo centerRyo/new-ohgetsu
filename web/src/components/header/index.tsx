@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { HeaderPresenter } from './Presenter';
 import { useSearch } from './hooks';
 
-export const Header = (): JSX.Element => {
+export const Header = () => {
   const { open, onOpen, onClose } = useDisclosure();
 
   const [searchText, setSearchText] = useState<string>('');

@@ -39,7 +39,7 @@ export const DetailDrawer = ({
   state,
   onClose,
   mutate,
-}: Props): JSX.Element => {
+}: Props) => {
   const isEdit = !!state.restaurantId;
 
   const { data } = useSWR(

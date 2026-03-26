@@ -8,7 +8,7 @@ type Props = {
   };
 };
 
-const MenusAdminPage = ({ params }: Props): JSX.Element => {
+const MenusAdminPage = ({ params }: Props) => {
   const { id } = params;
 
   return <MenusAdmin restaurantId={id} />;

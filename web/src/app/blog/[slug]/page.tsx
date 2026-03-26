@@ -65,7 +65,7 @@ export const generateMetadata = async ({
   }
 };
 
-const Page = ({ params }: Props): JSX.Element => (
+const Page = ({ params }: Props) => (
   <PostPage slug={params.slug} />
 );
 

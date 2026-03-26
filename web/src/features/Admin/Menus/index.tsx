@@ -30,7 +30,7 @@ type Props = {
   restaurantId: string;
 };
 
-export const MenusAdmin = ({ restaurantId }: Props): JSX.Element => {
+export const MenusAdmin = ({ restaurantId }: Props) => {
   const { state, handleOpen, handleClose } = useDetailDrawer();
 
   const { data: restaurantData, isLoading: restaurantLoading } = useSWR(
