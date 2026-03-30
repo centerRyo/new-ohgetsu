@@ -4,7 +4,7 @@ import { PostPage } from '@/features/blog/components/pages/PostPage';
 import { Metadata } from 'next';
 
 type Props = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 export const generateStaticParams = () => {
@@ -14,7 +14,7 @@ export const generateStaticParams = () => {
 export const generateMetadata = async ({
   params,
 }: Props): Promise<Metadata> => {
-  const slug = params.slug;
+  const { slug } = await params;
 
   try {
     const post = getPostBySlug(slug);
@@ -65,8 +65,9 @@ export const generateMetadata = async ({
   }
 };
 
-const Page = ({ params }: Props): JSX.Element => (
-  <PostPage slug={params.slug} />
-);
+const Page = async ({ params }: Props) => {
+  const { slug } = await params;
+  return <PostPage slug={slug} />;
+};
 
 export default Page;

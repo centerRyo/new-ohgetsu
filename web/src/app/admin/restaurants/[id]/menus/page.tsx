@@ -1,15 +1,11 @@
-'use client';
-
 import { MenusAdmin } from '@/features/Admin/Menus';
 
-type Props = {
-  params: {
-    id: string;
-  };
-};
-
-const MenusAdminPage = ({ params }: Props): JSX.Element => {
-  const { id } = params;
+const MenusAdminPage = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
+  const { id } = await params;
 
   return <MenusAdmin restaurantId={id} />;
 };

@@ -1,3 +1,5 @@
+'use client';
+
 import { Spinner } from '@/components/spinner';
 import { pagesPath } from '@/lib/$path';
 import { api } from '@/lib/swagger-client';

@@ -1,5 +1,5 @@
 # Base Image
-FROM node:20-alpine AS base
+FROM node:24-slim AS base
 
 WORKDIR /app
 
@@ -50,8 +50,8 @@ WORKDIR /app
 ENV NODE_ENV production
 
 # Create a user group and user
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN groupadd --system --gid 1001 nodejs \
+  && useradd --system --uid 1001 --gid nodejs nextjs
 
 # Copy built assets from builder
 COPY --from=builder /app/public ./public

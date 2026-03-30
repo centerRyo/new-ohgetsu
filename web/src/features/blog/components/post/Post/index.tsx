@@ -21,7 +21,7 @@ type Props = {
   post: PostType;
 };
 
-export const Post = ({ post }: Props): JSX.Element => {
+export const Post = ({ post }: Props) => {
   const firstMarkdownImageSrc = getFirstMarkdownImageSrc(post.content);
   const mdxComponents = createMdxComponents({
     priorityImageSrc: firstMarkdownImageSrc,

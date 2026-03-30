@@ -30,7 +30,7 @@ export const useRemoveMenu = ({ onClose, mutate }: Props) => {
           title: 'メニューを削除しました',
           type: 'success',
         });
-      } catch (error) {
+      } catch {
         toaster.create({
           title: 'メニューを削除できませんでした',
           type: 'error',

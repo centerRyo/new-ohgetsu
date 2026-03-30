@@ -2,6 +2,7 @@ import { Header } from '@/components/header';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { memo } from 'react';
 import ChakraProviders from './chakra-providers';
+import { EmotionRegistry } from './emotion-registry';
 import styles from './layout.module.scss';
 
 type Props = {
@@ -16,15 +17,17 @@ const RootLayout = memo(({ children }: Props) => {
           gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID as string}
         />
 
-        <ChakraProviders>
-          <div className={styles.container}>
-            <div className={styles.header}>
-              <Header />
-            </div>
+        <EmotionRegistry>
+          <ChakraProviders>
+            <div className={styles.container}>
+              <div className={styles.header}>
+                <Header />
+              </div>
 
-            <div className={styles.content}>{children}</div>
-          </div>
-        </ChakraProviders>
+              <div className={styles.content}>{children}</div>
+            </div>
+          </ChakraProviders>
+        </EmotionRegistry>
       </body>
     </html>
   );

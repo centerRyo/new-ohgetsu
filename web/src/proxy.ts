@@ -4,7 +4,7 @@ export const config = {
   matcher: ['/admin/:path*'],
 };
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   if (process.env.NODE_ENV === 'development') {
     return NextResponse.next();
   }

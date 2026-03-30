@@ -82,7 +82,7 @@ export const useHandler = ({
           title: `メニューを${isEdit ? '編集' : '作成'}しました`,
           type: 'success',
         });
-      } catch (error) {
+      } catch {
         toaster.create({
           title: `メニューを${isEdit ? '編集' : '作成'}できませんでした`,
           type: 'error',

@@ -2,6 +2,6 @@
 
 import { RestaurantsAdmin } from '@/features/Admin/Restaurants';
 
-const RestaurantsAdminPage = (): JSX.Element => <RestaurantsAdmin />;
+const RestaurantsAdminPage = () => <RestaurantsAdmin />;
 
 export default RestaurantsAdminPage;

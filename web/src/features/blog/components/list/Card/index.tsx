@@ -17,7 +17,7 @@ type Props = {
   post: Post;
 };
 
-export const Card = ({ post }: Props): JSX.Element => (
+export const Card = ({ post }: Props) => (
   <LinkBox
     as='article'
     borderWidth='1px'

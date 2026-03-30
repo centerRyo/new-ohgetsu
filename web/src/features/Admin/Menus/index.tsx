@@ -1,3 +1,5 @@
+'use client';
+
 import { Spinner } from '@/components/spinner';
 import { ErrorSafePage } from '@/features/Error';
 import { api } from '@/lib/swagger-client';
@@ -30,7 +32,7 @@ type Props = {
   restaurantId: string;
 };
 
-export const MenusAdmin = ({ restaurantId }: Props): JSX.Element => {
+export const MenusAdmin = ({ restaurantId }: Props) => {
   const { state, handleOpen, handleClose } = useDetailDrawer();
 
   const { data: restaurantData, isLoading: restaurantLoading } = useSWR(

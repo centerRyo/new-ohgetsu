@@ -25,7 +25,7 @@ import { useDetailDrawer } from './hooks/useDetailDrawer';
 import { useMenusNavigation } from './hooks/useMenusNavigation';
 import styles from './index.module.scss';
 
-export const RestaurantsAdmin = (): JSX.Element => {
+export const RestaurantsAdmin = () => {
   const { state, handleOpen, handleClose } = useDetailDrawer();
   const { handleClickMenuManagement } = useMenusNavigation();
 

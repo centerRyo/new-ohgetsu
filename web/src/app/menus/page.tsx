@@ -1,5 +1,3 @@
-'use client';
-
 import { Menus } from '@/features/Menus';
 import {
   CreateMenusSearchCondition,
@@ -8,12 +6,13 @@ import {
 
 export type OptionalQuery = MenusSearchCondition;
 
-const MenusPage = ({
+const MenusPage = async ({
   searchParams,
 }: {
-  searchParams: MenusSearchCondition;
+  searchParams: Promise<MenusSearchCondition>;
 }) => {
-  const searchConditions = CreateMenusSearchCondition(searchParams);
+  const resolvedSearchParams = await searchParams;
+  const searchConditions = CreateMenusSearchCondition(resolvedSearchParams);
 
   return <Menus searchConditions={searchConditions} />;
 };

@@ -1,3 +1,5 @@
+'use client';
+
 import { api } from '@/lib/swagger-client';
 import { Button, Flex, Heading, Skeleton } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
