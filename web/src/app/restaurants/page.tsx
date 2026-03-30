@@ -12,7 +12,8 @@ const RestaurantsPage = async ({
   searchParams: Promise<RestaurantsSearchCondition>;
 }) => {
   const resolvedSearchParams = await searchParams;
-  const searchConditions = CreateRestaurantsSearchCondition(resolvedSearchParams);
+  const searchConditions =
+    CreateRestaurantsSearchCondition(resolvedSearchParams);
 
   return <Restaurants searchConditions={searchConditions} />;
 };

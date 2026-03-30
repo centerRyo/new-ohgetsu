@@ -1,5 +1,5 @@
-import type { OptionalQuery as OptionalQuery_gsgao6 } from '../app/menus/[id]/page';
 import type { OptionalQuery as OptionalQuery_qbbltk } from '../app/menus/page';
+import type { OptionalQuery as OptionalQuery_gsgao6 } from '../app/menus/[id]/page';
 import type { OptionalQuery as OptionalQuery_1rgxedo } from '../app/restaurants/page';
 
 const buildSuffix = (url?: {

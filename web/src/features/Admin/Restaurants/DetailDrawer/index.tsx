@@ -35,11 +35,7 @@ type Props = {
   mutate: KeyedMutator<HttpResponse<RestaurantDto[], any>>;
 };
 
-export const DetailDrawer = ({
-  state,
-  onClose,
-  mutate,
-}: Props) => {
+export const DetailDrawer = ({ state, onClose, mutate }: Props) => {
   const isEdit = !!state.restaurantId;
 
   const { data } = useSWR(
