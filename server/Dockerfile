@@ -3,6 +3,9 @@ FROM node:24-alpine AS base
 
 WORKDIR /app
 
+# Install OpenSSL required by Prisma on Alpine
+RUN apk add --no-cache openssl
+
 # Copy package.json and package-lock.json and install dependencies
 COPY package.json package-lock.json ./
 
