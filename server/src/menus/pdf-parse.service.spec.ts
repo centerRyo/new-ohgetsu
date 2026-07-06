@@ -7,6 +7,7 @@ import {
   classifySymbol,
   matchIngredient,
   normalizeName,
+  parsePages,
   reconstructHeaders,
   TextItem,
 } from './pdf-parse.service';
@@ -64,6 +65,21 @@ describe('matchIngredient', () => {
 
   it('縦書き連結後の文字列を正規化して照合できる', () => {
     expect(matchIngredient('カ シ ュ ー ナ ッ ツ', INGREDIENTS)?.id).toBe(
+      'id-cashew'
+    );
+  });
+
+  it('前方一致で照合できる(キウイ↔キウイフルーツ)', () => {
+    const ings = [...INGREDIENTS, { id: 'id-kiwi', name: 'キウイフルーツ' }];
+    expect(matchIngredient('キウイ', ings)?.id).toBe('id-kiwi');
+  });
+
+  it('縦書き復元でかな順が乱れても構成文字一致(アナグラム)で照合できる', () => {
+    // カシューナッツ(カ,シ,ュ,ー,ナ,ッ,ツ) の並べ替え
+    expect(matchIngredient('シューナッカツ', INGREDIENTS)?.id).toBe(
+      'id-cashew'
+    );
+    expect(matchIngredient('カナシッュツー', INGREDIENTS)?.id).toBe(
       'id-cashew'
     );
   });
@@ -172,9 +188,9 @@ describe('buildTable', () => {
       { x: 160, y: 380, str: '●' },
     ];
     const result = buildTable(withUnknown, INGREDIENTS);
-    expect(
-      result.unmatchedColumns.map((u) => u.headerText)
-    ).toContain('謎の成分');
+    expect(result.unmatchedColumns.map((u) => u.headerText)).toContain(
+      '謎の成分'
+    );
   });
 
   it('メニュー行が0件なら422(UnprocessableEntity)を投げる', () => {
@@ -194,6 +210,37 @@ describe('buildTable', () => {
   });
 });
 
+describe('parsePages', () => {
+  const page = (rowY: number): TextItem[] => [
+    { x: 40, y: 410, str: '商品名' },
+    { x: 100, y: 410, str: '卵' },
+    { x: 130, y: 410, str: '乳' },
+    { x: 40, y: rowY, str: 'カレー' },
+    { x: 100, y: rowY, str: '●' },
+    { x: 130, y: rowY, str: '△' },
+  ];
+
+  it('複数ページのメニューを結合する(ページ間でY座標が重複しても分離して解析)', () => {
+    // 2ページとも同じYレンジ。ページ単位で解析しないと行が混ざる。
+    const result = parsePages([page(390), page(390)], INGREDIENTS);
+    expect(result.menus.length).toBe(2);
+    expect(result.menus.every((m) => m.name === 'カレー')).toBe(true);
+  });
+
+  it('説明のみで表の無いページはスキップし、有効ページの結果を返す', () => {
+    const infoOnly: TextItem[] = [{ x: 20, y: 500, str: 'これは説明文です' }];
+    const result = parsePages([infoOnly, page(390)], INGREDIENTS);
+    expect(result.menus.length).toBe(1);
+  });
+
+  it('全ページが解析不能なら422を投げる', () => {
+    const infoOnly: TextItem[] = [{ x: 20, y: 500, str: '説明文' }];
+    expect(() => parsePages([infoOnly, infoOnly], INGREDIENTS)).toThrow(
+      UnprocessableEntityException
+    );
+  });
+});
+
 // 実PDFを使った統合的検証(fixtureが読めない環境ではskip)
 describe('parsePdf (実PDF)', () => {
   const pdfPath = path.resolve(
@@ -203,19 +250,62 @@ describe('parsePdf (実PDF)', () => {
   const exists = fs.existsSync(pdfPath);
   const maybe = exists ? it : it.skip;
 
-  maybe('allergy-nutrition_value_6.pdf からメニューを解析できる', async () => {
-    // 遅延importでpdfjsのロードコストをこのテストに限定
-    const { PdfParseService } = await import('./pdf-parse.service');
-    const service = new PdfParseService({
-      ingredients: { findMany: async () => INGREDIENTS },
-    } as any);
-    const buffer = fs.readFileSync(pdfPath);
-    const result = await service.parsePdf(buffer);
-    expect(result.menus.length).toBeGreaterThan(0);
-    // 「含む」判定が少なくとも1件はある
-    const anyContains = result.menus.some((m) =>
-      m.cells.some((c) => c.status === 'contains')
-    );
-    expect(anyContains).toBe(true);
-  }, 30000);
+  // 実PDFは28種のingredient名で照合する
+  const REAL_INGREDIENTS = [
+    '卵',
+    '乳',
+    '小麦',
+    'そば',
+    '落花生',
+    'えび',
+    'かに',
+    'アーモンド',
+    'あわび',
+    'いか',
+    'いくら',
+    'オレンジ',
+    'カシューナッツ',
+    'キウイフルーツ',
+    '牛肉',
+    'くるみ',
+    'ごま',
+    'さけ',
+    'さば',
+    '大豆',
+    '鶏肉',
+    'バナナ',
+    '豚肉',
+    'まつたけ',
+    'もも',
+    'やまいも',
+    'りんご',
+    'ゼラチン',
+  ].map((name, i) => ({ id: `real-${i}`, name }));
+
+  maybe(
+    'allergy-nutrition_value_6.pdf から複数ページのメニューを解析できる',
+    async () => {
+      // 遅延importでpdfjsのロードコストをこのテストに限定
+      const { PdfParseService } = await import('./pdf-parse.service');
+      const service = new PdfParseService({
+        ingredients: { findMany: async () => REAL_INGREDIENTS },
+      } as any);
+      const buffer = fs.readFileSync(pdfPath);
+      const result = await service.parsePdf(buffer);
+
+      // 全4ページ分のメニューが取れる
+      expect(result.menus.length).toBeGreaterThan(30);
+      // 商品名が正しく復元されている(先頭メニュー)
+      expect(result.menus[0].name).toContain('アスパラ');
+      // 「含む」判定(●)がある
+      expect(
+        result.menus.some((m) => m.cells.some((c) => c.status === 'contains'))
+      ).toBe(true);
+      // △から生成されたnoteを持つメニューがある
+      expect(result.menus.some((m) => m.note?.includes('接触の可能性'))).toBe(
+        true
+      );
+    },
+    30000
+  );
 });

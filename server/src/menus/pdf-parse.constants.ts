@@ -23,7 +23,8 @@ export const NONE_SYMBOLS = ['×', '✕', '✖', 'ー', '-', '−', '―'] as co
  * △(接触の可能性)を menus.note に保存する際の定型文プレフィックス。
  * 例: 「調理器具・製造ライン共有のため接触の可能性: 乳, えび, かに」
  */
-export const CONTACT_NOTE_PREFIX = '調理器具・製造ライン共有のため接触の可能性: ';
+export const CONTACT_NOTE_PREFIX =
+  '調理器具・製造ライン共有のため接触の可能性: ';
 
 /**
  * アレルゲン列ヘッダーの別名辞書。
