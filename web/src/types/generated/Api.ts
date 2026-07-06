@@ -79,7 +79,7 @@ export interface PartialMenuDto {
    * 写真
    * @format byte
    */
-  pic?: string;
+  pic?: Blob;
   /** 備考 */
   note?: string;
   ingredientIds: string[];
@@ -88,6 +88,38 @@ export interface PartialMenuDto {
 export interface CreateMenuDto {
   restaurantId: string;
   menus: PartialMenuDto[];
+}
+
+export interface ParsePdfDto {
+  /** @format binary */
+  file: File;
+}
+
+export interface ParsedCellDto {
+  ingredientId?: string;
+  ingredientName: string;
+  status: 'contains' | 'contact' | 'none';
+}
+
+export interface ParsedMenuRowDto {
+  name: string;
+  cells: ParsedCellDto[];
+  note?: string;
+}
+
+export interface ParsedIngredientDto {
+  id: string;
+  name: string;
+}
+
+export interface UnmatchedColumnDto {
+  headerText: string;
+}
+
+export interface ParsePdfResultDto {
+  menus: ParsedMenuRowDto[];
+  ingredients: ParsedIngredientDto[];
+  unmatchedColumns: UnmatchedColumnDto[];
 }
 
 export interface UpdateMenuDto {
@@ -227,8 +259,12 @@ export class HttpClient<SecurityDataType = unknown> {
       input !== null && typeof input !== 'string'
         ? JSON.stringify(input)
         : input,
-    [ContentType.FormData]: (input: any) =>
-      Object.keys(input || {}).reduce((formData, key) => {
+    [ContentType.FormData]: (input: any) => {
+      if (input instanceof FormData) {
+        return input;
+      }
+
+      return Object.keys(input || {}).reduce((formData, key) => {
         const property = input[key];
         formData.append(
           key,
@@ -239,7 +275,8 @@ export class HttpClient<SecurityDataType = unknown> {
               : `${property}`
         );
         return formData;
-      }, new FormData()),
+      }, new FormData());
+    },
     [ContentType.UrlEncoded]: (input: any) => this.toQueryString(input),
   };
 
@@ -325,13 +362,14 @@ export class HttpClient<SecurityDataType = unknown> {
             : payloadFormatter(body),
       }
     ).then(async (response) => {
-      const r = response.clone() as HttpResponse<T, E>;
+      const r = response as HttpResponse<T, E>;
       r.data = null as unknown as T;
       r.error = null as unknown as E;
 
+      const responseToParse = responseFormat ? response.clone() : response;
       const data = !responseFormat
         ? r
-        : await response[responseFormat]()
+        : await responseToParse[responseFormat]()
             .then((data) => {
               if (r.ok) {
                 r.data = data;
@@ -577,6 +615,24 @@ export class Api<
       this.request<DeleteMenuDto, any>({
         path: `/menus/${id}`,
         method: 'DELETE',
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description テキスト埋め込みのアレルゲン表PDFを座標ベースで解析し、メニュー×アレルゲンの候補を返す。DB登録はせず、フロントで確認・修正後に POST /menus で登録する。
+     *
+     * @tags menus
+     * @name MenusControllerParsePdf
+     * @summary アレルゲン表PDFを解析してメニュー候補を返す
+     * @request POST:/menus/parse-pdf
+     */
+    menusControllerParsePdf: (data: ParsePdfDto, params: RequestParams = {}) =>
+      this.request<ParsePdfResultDto, any>({
+        path: `/menus/parse-pdf`,
+        method: 'POST',
+        body: data,
+        type: ContentType.FormData,
         format: 'json',
         ...params,
       }),
