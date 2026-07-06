@@ -2,6 +2,15 @@ import { ApiProperty } from '@nestjs/swagger';
 import { CellStatus } from './pdf-parse.constants';
 
 /**
+ * POST /menus/parse-pdf のリクエスト(multipart/form-data)。
+ */
+export class ParsePdfDto {
+  /** アレルゲン表PDF */
+  @ApiProperty({ type: 'string', format: 'binary' })
+  file: Express.Multer.File;
+}
+
+/**
  * 解析されたセル1つ分(メニュー × アレルゲン)。
  */
 export class ParsedCellDto {
