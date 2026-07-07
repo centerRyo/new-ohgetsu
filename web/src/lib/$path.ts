@@ -35,6 +35,14 @@ export const pagesPath = {
     restaurants: {
       _id: (id: string | number) => ({
         menus: {
+          pdf_import: {
+            $url: (url?: { hash?: string }) => ({
+              pathname: '/admin/restaurants/[id]/menus/pdf-import' as const,
+              query: { id },
+              hash: url?.hash,
+              path: `/admin/restaurants/${id}/menus/pdf-import${buildSuffix(url)}`,
+            }),
+          },
           $url: (url?: { hash?: string }) => ({
             pathname: '/admin/restaurants/[id]/menus' as const,
             query: { id },
