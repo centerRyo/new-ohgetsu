@@ -12,6 +12,9 @@ async function main() {
     primitiveTypeConstructs: () => ({
       string: {
         'date-time': 'Date',
+        // format:byte(base64文字列)はstringとして扱う。
+        // 既存のメニュー画像はbase64文字列でJSON送信しているため。
+        byte: 'string',
       },
     }),
   });
