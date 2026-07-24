@@ -18,6 +18,13 @@
 
 Let's Encrypt の証明書がまだ存在しない状態では nginx は起動できないため、デプロイ前に **初回の証明書取得をサーバー上で手動実行**する。
 
+初回取得は **standalone 方式**（certbot 自身が一時的に 80 番で待ち受けて検証）を使う。
+現行の本番 nginx は 80 番をすべて HTTPS へリダイレクトしており webroot 方式では
+チャレンジが 404 になるため、現行 nginx を数十秒〜1 分だけ停止して 80 番を空ける。
+
+> **ダウンタイム**: この手順の間、現行 nginx を停止するため数十秒〜1 分程度サービスが
+> 停止する。低トラフィックの時間帯に実施することを推奨する。
+
 さくらクラウドのサーバーに SSH でログインし、以下を実行する。
 
 ```sh
@@ -28,34 +35,34 @@ EMAIL=<有効期限切れ通知を受け取るメールアドレス>
 docker volume create letsencrypt
 docker volume create certbot-webroot
 
-# 一時 nginx を立て、HTTP-01 チャレンジ用に 80 番を開ける
-docker run -d --name nginx-bootstrap \
-  -p 80:80 \
-  -v certbot-webroot:/var/www/certbot \
-  nginx:latest \
-  sh -c 'echo "server { listen 80; location /.well-known/acme-challenge/ { root /var/www/certbot; } location / { return 200 \"ok\"; } }" > /etc/nginx/conf.d/default.conf && nginx -g "daemon off;"'
+# --- ここからダウンタイム開始 ---
+# 現行 nginx を停止して 80 番を空ける（削除ではなく停止。取得失敗時に戻せるように）
+docker stop nginx-proxy
 
-# 初回の証明書を取得
+# standalone 方式で初回の証明書を取得（certbot が一時的に 80 番を使う）
 docker run --rm \
+  -p 80:80 \
   -v letsencrypt:/etc/letsencrypt \
-  -v certbot-webroot:/var/www/certbot \
   certbot/certbot certonly \
-    --webroot -w /var/www/certbot \
+    --standalone \
     -d "$DOMAIN" \
     --email "$EMAIL" \
     --agree-tos --no-eff-email
 
-# 一時 nginx を撤去
-docker rm -f nginx-bootstrap
+# 取得できたら現行 nginx を再開（新イメージのデプロイまでのつなぎ）
+docker start nginx-proxy
+# --- ここでダウンタイム終了 ---
 ```
 
 `/etc/letsencrypt/live/ohgetsu.com/fullchain.pem` が生成されれば成功。
-このあと通常どおり GitHub Actions の **Deploy Nginx Proxy and DB**（`workflow_dispatch`）を実行すると、
-本番 nginx と certbot（自動更新）コンテナが起動する。
+このあと PR をマージし、GitHub Actions の **Deploy Nginx Proxy and DB**（`workflow_dispatch`）を
+実行すると、証明書を読む新しい本番 nginx と certbot（自動更新）コンテナが起動する。
 
 > 補足: 発行検証がうまくいくか不安な場合は、上記 `certonly` に `--staging` を付けて
 > Let's Encrypt のステージング環境で試すとレート制限を消費せずに確認できる。成功したら
-> `--staging` を外し、`--force-renewal` を付けて本番証明書を取得し直す。
+> `--staging` を外して本番証明書を取得し直す（staging の証明書は `letsencrypt` ボリューム上に
+> 残るので、本番取得前に `docker run --rm -v letsencrypt:/etc/letsencrypt certbot/certbot
+> delete --cert-name "$DOMAIN"` で消しておく）。
 
 ## 自動更新の仕組み
 
