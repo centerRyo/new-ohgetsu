@@ -58,6 +58,23 @@ docker start nginx-proxy
 このあと PR をマージし、GitHub Actions の **Deploy Nginx Proxy and DB**（`workflow_dispatch`）を
 実行すると、証明書を読む新しい本番 nginx と certbot（自動更新）コンテナが起動する。
 
+> **重要（standalone → webroot への切り替え）**: 初回取得を `--standalone` で行うと、
+> renewal 設定にも standalone が記録される。しかし更新時は 80 番を本番 nginx が使っているため、
+> standalone のままだと自動更新が 80 番の競合で失敗する。新 nginx デプロイ後に一度だけ、
+> 更新方式を webroot に切り替えておくこと（新 nginx は `/.well-known/acme-challenge` を配信できる）。
+>
+> ```sh
+> # renewal 設定を webroot に切り替える（この1回だけ 80番競合なしで動くよう nginx 稼働中に実行）
+> docker run --rm \
+>   -v letsencrypt:/etc/letsencrypt \
+>   -v certbot-webroot:/var/www/certbot \
+>   certbot/certbot certonly --webroot -w /var/www/certbot \
+>     -d ohgetsu.com --force-renewal --agree-tos
+>
+> # 以後の自動更新が通るか検証
+> docker exec certbot certbot renew --dry-run
+> ```
+
 > 補足: 発行検証がうまくいくか不安な場合は、上記 `certonly` に `--staging` を付けて
 > Let's Encrypt のステージング環境で試すとレート制限を消費せずに確認できる。成功したら
 > `--staging` を外して本番証明書を取得し直す（staging の証明書は `letsencrypt` ボリューム上に
