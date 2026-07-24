@@ -69,3 +69,7 @@ jobs:
             docker rm -f ohgetsu-web || true
             docker run -d --name ohgetsu-web --network ohgetsu_network \
               -p 3000:3000 ${{ env.REGISTRY }}/${{ env.WEB_IMAGE_NAME }}:latest
+
+            # Clean up the dangling <none> image orphaned by pulling the new
+            # :latest. Images used by a running container are never pruned.
+            docker image prune -f
