@@ -109,8 +109,20 @@ jobs:
                        sleep 12h & wait $!;
                      done'
 
-            # Run PostgreSQL container
-            docker rm -f ohgetsu-db || true
-            docker run -d --name ohgetsu-db --network ohgetsu_network \
-              -e POSTGRES_USER=${{ secrets.DB_USER }} -e POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }} -e POSTGRES_DB=ohgetsu \
-              -p 5432:5432 postgres:latest
+            # Run PostgreSQL container.
+            # The database is decoupled from the nginx/certbot lifecycle: if a
+            # DB container is already running, leave it untouched so re-running
+            # this workflow (e.g. to update nginx) never disrupts the database.
+            # Data is persisted in the ohgetsu-db-store volume, so even a
+            # deliberate recreate keeps the data intact.
+            docker volume inspect ohgetsu-db-store > /dev/null 2>&1 || docker volume create ohgetsu-db-store
+            if [ -z "$(docker ps -q -f name=^ohgetsu-db$)" ]; then
+              docker rm -f ohgetsu-db || true
+              docker run -d --name ohgetsu-db --network ohgetsu_network \
+                --restart unless-stopped \
+                -e POSTGRES_USER=${{ secrets.DB_USER }} -e POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }} -e POSTGRES_DB=ohgetsu \
+                -v ohgetsu-db-store:/var/lib/postgresql/data \
+                -p 5432:5432 postgres:latest
+            else
+              echo "ohgetsu-db is already running; leaving it untouched."
+            fi
