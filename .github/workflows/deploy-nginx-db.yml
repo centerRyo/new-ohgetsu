@@ -126,3 +126,9 @@ jobs:
             else
               echo "ohgetsu-db is already running; leaving it untouched."
             fi
+
+            # Clean up dangling images left behind by "docker pull latest".
+            # Each deploy pulls a new :latest, orphaning the previous one as an
+            # untagged <none> image. Images still referenced by a running
+            # container are never removed by prune, so this is safe.
+            docker image prune -f
