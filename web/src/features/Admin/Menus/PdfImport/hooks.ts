@@ -147,7 +147,10 @@ export const useHandler = ({ restaurantId, file }: UseHandlerArgs) => {
       if (!state) return;
       const dto = toCreateMenuDto(restaurantId, state.rows);
       if (dto.menus.length === 0) {
-        toaster.create({ title: '登録できるメニューがありません', type: 'error' });
+        toaster.create({
+          title: '登録できるメニューがありません',
+          type: 'error',
+        });
         return;
       }
       setSubmitting(true);
