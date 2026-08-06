@@ -494,7 +494,7 @@ export class PdfParseService {
     let doc;
     try {
       // legacyビルドはNode(CommonJS)向け。ワーカ不要でメモリ上で解析する。
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const pdfjs = require('pdfjs-dist/legacy/build/pdf.js');
       const data = new Uint8Array(buffer);
       doc = await pdfjs.getDocument({ data, useSystemFonts: true }).promise;
