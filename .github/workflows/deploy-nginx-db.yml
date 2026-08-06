@@ -26,14 +26,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Create SSL cert files
-        env:
-          SSL_CERT: ${{ secrets.SSL_CERT }}
-          SSL_KEY: ${{ secrets.SSL_KEY }}
-        run: |
-          printf "%s" "$SSL_CERT" > ./nginx/ssl_cert.pem
-          printf "%s" "$SSL_KEY" > ./nginx/ssl_key.pem
-
       - name: Login to Sakra Cloud Container Registry
         uses: docker/login-action@v2
         with:
@@ -51,30 +43,92 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.NGINX_IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.NGINX_IMAGE_NAME }}:${{ steps.set-tag.outputs.version }}
 
-      - name: Clean up SSL cert files
-        run: rm -f ./nginx/ssl_cert.pem ./nginx/ssl_key.pem
-
       - name: Execute remote commands via SSH
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          REGISTRY: ${{ env.REGISTRY }}
+          NGINX_IMAGE_NAME: ${{ env.NGINX_IMAGE_NAME }}
+          DOMAIN: ohgetsu.com
         with:
           host: ${{ secrets.SAKURA_CLOUD_SSH_HOST }}
           username: ${{ secrets.SAKURA_CLOUD_SSH_USERNAME }}
           key: ${{ secrets.SAKURA_CLOUD_SSH_KEY }}
+          envs: REGISTRY,NGINX_IMAGE_NAME,DOMAIN
           script: |
+            set -e
+
             # Pull the latest nginx image
-            docker pull ${{ env.REGISTRY }}/${{ env.NGINX_IMAGE_NAME }}:latest
+            docker pull ${REGISTRY}/${NGINX_IMAGE_NAME}:latest
 
             # Create Docker network if not exists
             docker network inspect ohgetsu_network > /dev/null 2>&1 || docker network create ohgetsu_network
 
-            # Run nginx proxy container
+            # Named volumes shared between nginx and certbot:
+            #   letsencrypt     -> issued certificates (/etc/letsencrypt)
+            #   certbot-webroot -> ACME HTTP-01 challenge files (/var/www/certbot)
+            docker volume inspect letsencrypt > /dev/null 2>&1 || docker volume create letsencrypt
+            docker volume inspect certbot-webroot > /dev/null 2>&1 || docker volume create certbot-webroot
+
+            # Guard: nginx will fail to start if no certificate exists yet.
+            # The very first certificate must be issued manually on the server
+            # (see docs/letsencrypt-setup.md). Abort the deploy early with a
+            # clear message rather than leaving nginx in a crash loop.
+            if ! docker run --rm -v letsencrypt:/etc/letsencrypt alpine \
+                 test -f /etc/letsencrypt/live/${DOMAIN}/fullchain.pem; then
+              echo "ERROR: No Let's Encrypt certificate found for ${DOMAIN}."
+              echo "Run the initial issuance step in docs/letsencrypt-setup.md before deploying."
+              exit 1
+            fi
+
+            # Run nginx proxy container.
+            # Reloads its config every 6h so a freshly renewed certificate is
+            # picked up without an external signal (certbot and nginx are
+            # decoupled: nginx just re-reads the shared volume periodically).
             docker rm -f nginx-proxy || true
             docker run -d --name nginx-proxy --network ohgetsu_network \
+              --restart unless-stopped \
               -p 80:80 -p 443:443 \
-              ${{ env.REGISTRY }}/${{ env.NGINX_IMAGE_NAME }}:latest
+              -v letsencrypt:/etc/letsencrypt:ro \
+              -v certbot-webroot:/var/www/certbot \
+              ${REGISTRY}/${NGINX_IMAGE_NAME}:latest \
+              sh -c 'while :; do sleep 6h & wait $!; nginx -s reload; done & nginx -g "daemon off;"'
 
-            # Run PostgreSQL container
-            docker rm -f ohgetsu-db || true
-            docker run -d --name ohgetsu-db --network ohgetsu_network \
-              -e POSTGRES_USER=${{ secrets.DB_USER }} -e POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }} -e POSTGRES_DB=ohgetsu \
-              -p 5432:5432 postgres:latest
+            # Run certbot renewal container.
+            # Attempts renewal every 12h; certbot only renews certs within ~30
+            # days of expiry, so this is a no-op most of the time. Renewed certs
+            # land in the shared letsencrypt volume and nginx reloads them (above).
+            docker rm -f certbot || true
+            docker run -d --name certbot \
+              --restart unless-stopped \
+              -v letsencrypt:/etc/letsencrypt \
+              -v certbot-webroot:/var/www/certbot \
+              --entrypoint "" \
+              certbot/certbot \
+              sh -c 'trap exit TERM; while :; do
+                       certbot renew || true;
+                       sleep 12h & wait $!;
+                     done'
+
+            # Run PostgreSQL container.
+            # The database is decoupled from the nginx/certbot lifecycle: if a
+            # DB container is already running, leave it untouched so re-running
+            # this workflow (e.g. to update nginx) never disrupts the database.
+            # Data is persisted in the ohgetsu-db-store volume, so even a
+            # deliberate recreate keeps the data intact.
+            docker volume inspect ohgetsu-db-store > /dev/null 2>&1 || docker volume create ohgetsu-db-store
+            if [ -z "$(docker ps -q -f name=^ohgetsu-db$)" ]; then
+              docker rm -f ohgetsu-db || true
+              docker run -d --name ohgetsu-db --network ohgetsu_network \
+                --restart unless-stopped \
+                -e POSTGRES_USER=${{ secrets.DB_USER }} -e POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }} -e POSTGRES_DB=ohgetsu \
+                -v ohgetsu-db-store:/var/lib/postgresql/data \
+                -p 5432:5432 postgres:latest
+            else
+              echo "ohgetsu-db is already running; leaving it untouched."
+            fi
+
+            # Clean up dangling images left behind by "docker pull latest".
+            # Each deploy pulls a new :latest, orphaning the previous one as an
+            # untagged <none> image. Images still referenced by a running
+            # container are never removed by prune, so this is safe.
+            docker image prune -f

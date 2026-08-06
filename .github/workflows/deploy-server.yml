@@ -71,3 +71,7 @@ jobs:
             docker run -d --name ohgetsu-server --network ohgetsu_network \
               -e DATABASE_URL="postgres://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@ohgetsu-db:5432/ohgetsu" \
               -p 8080:8080 ${{ env.REGISTRY }}/${{ env.SERVER_IMAGE_NAME }}:latest
+
+            # Clean up the dangling <none> image orphaned by pulling the new
+            # :latest. Images used by a running container are never pruned.
+            docker image prune -f
