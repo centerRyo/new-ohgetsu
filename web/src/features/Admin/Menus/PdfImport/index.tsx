@@ -7,6 +7,9 @@ import {
   Heading,
   HStack,
   Input,
+  ProgressRange,
+  ProgressRoot,
+  ProgressTrack,
   Stack,
   TableBody,
   TableCell,
@@ -36,6 +39,7 @@ export const PdfImport = ({ restaurantId }: Props) => {
   const {
     state,
     parsing,
+    parseProgress,
     submitting,
     handleParse,
     updateName,
@@ -84,6 +88,22 @@ export const PdfImport = ({ restaurantId }: Props) => {
           >
             解析する
           </Button>
+          {parsing && (
+            <Stack gap={1}>
+              <ProgressRoot
+                value={parseProgress}
+                colorPalette='green'
+                size='xs'
+              >
+                <ProgressTrack>
+                  <ProgressRange transition='width 0.15s ease-out' />
+                </ProgressTrack>
+              </ProgressRoot>
+              <Text fontSize='xs' color='gray.500'>
+                解析中…
+              </Text>
+            </Stack>
+          )}
         </Stack>
       )}
 

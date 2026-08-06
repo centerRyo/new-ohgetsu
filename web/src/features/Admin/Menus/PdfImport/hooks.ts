@@ -64,9 +64,17 @@ type UseHandlerArgs = {
   file: File | null;
 };
 
+/** 解析の擬似進捗を更新する間隔(ms) */
+const PARSE_PROGRESS_TICK_MS = 100;
+/** 解析の擬似進捗が張り付く上限(実レスポンス到達まではここで足踏みする) */
+const PARSE_PROGRESS_CAP = 90;
+/** 1tickごとに残り距離を縮める割合(大きいPDFで10秒前後かかる想定でキャリブレーション) */
+const PARSE_PROGRESS_DECAY = 0.03;
+
 export const useHandler = ({ restaurantId, file }: UseHandlerArgs) => {
   const [state, setState] = useState<PdfImportState | null>(null);
   const [parsing, setParsing] = useState(false);
+  const [parseProgress, setParseProgress] = useState(0);
   const [submitting, setSubmitting] = useState(false);
 
   /** PDFを解析して確認テーブルの初期状態を作る */
@@ -76,8 +84,17 @@ export const useHandler = ({ restaurantId, file }: UseHandlerArgs) => {
       return;
     }
     setParsing(true);
+    setParseProgress(0);
+    const timer = setInterval(() => {
+      setParseProgress((prev) =>
+        prev < PARSE_PROGRESS_CAP
+          ? prev + (PARSE_PROGRESS_CAP - prev) * PARSE_PROGRESS_DECAY
+          : prev
+      );
+    }, PARSE_PROGRESS_TICK_MS);
     try {
       const { data } = await api.menus.menusControllerParsePdf({ file });
+      setParseProgress(100);
       setState({
         rows: data.menus,
         ingredients: data.ingredients,
@@ -93,7 +110,9 @@ export const useHandler = ({ restaurantId, file }: UseHandlerArgs) => {
         type: 'error',
       });
     } finally {
+      clearInterval(timer);
       setParsing(false);
+      setTimeout(() => setParseProgress(0), 300);
     }
   }, [file]);
 
@@ -177,6 +196,7 @@ export const useHandler = ({ restaurantId, file }: UseHandlerArgs) => {
   return {
     state,
     parsing,
+    parseProgress,
     submitting,
     handleParse,
     updateName,
