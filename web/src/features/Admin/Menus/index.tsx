@@ -22,6 +22,7 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
 import useSWR from 'swr';
 import { DetailDrawer } from './DetailDrawer';
 import { useDetailDrawer } from './hooks/useDetailDrawer';
@@ -33,6 +34,7 @@ type Props = {
 };
 
 export const MenusAdmin = ({ restaurantId }: Props) => {
+  const router = useRouter();
   const { state, handleOpen, handleClose } = useDetailDrawer();
 
   const { data: restaurantData, isLoading: restaurantLoading } = useSWR(
@@ -68,10 +70,23 @@ export const MenusAdmin = ({ restaurantId }: Props) => {
               <span>全{menus.length}件</span>
             </HStack>
           </GridItem>
-          <GridItem colStart={20} colEnd={20}>
-            <Button w='100%' fontWeight='bold' onClick={() => handleOpen()}>
-              新規作成
-            </Button>
+          <GridItem colStart={17} colEnd={20}>
+            <HStack gap={3} justifyContent='flex-end'>
+              <Button
+                colorPalette='cyan'
+                fontWeight='bold'
+                onClick={() =>
+                  router.push(
+                    `/admin/restaurants/${restaurantId}/menus/pdf-import`
+                  )
+                }
+              >
+                PDFインポート
+              </Button>
+              <Button fontWeight='bold' onClick={() => handleOpen()}>
+                新規作成
+              </Button>
+            </HStack>
           </GridItem>
         </Grid>
         <TableScrollArea>

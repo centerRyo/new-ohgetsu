@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -23,12 +24,20 @@ import { CreateMenuDto } from './create-menu.dto';
 import { DeleteMenuDto } from './delete-menu.dto';
 import { MenuDto, findMenusQuery } from './menus.dto';
 import { MenusService } from './menus.service';
+import { ParsePdfDto, ParsePdfResultDto } from './parse-pdf.dto';
+import { PdfParseService } from './pdf-parse.service';
 import { UpdateMenuDto } from './update-menu.dto';
+
+/** アップロード可能なPDFの上限サイズ(10MB) */
+const MAX_PDF_SIZE = 10 * 1024 * 1024;
 
 @Controller('menus')
 @ApiTags('menus')
 export class MenusController {
-  constructor(private readonly menusService: MenusService) {}
+  constructor(
+    private readonly menusService: MenusService,
+    private readonly pdfParseService: PdfParseService
+  ) {}
 
   @Get()
   @ApiOperation({
@@ -63,6 +72,34 @@ export class MenusController {
     const menus = await this.menusService.create(data);
 
     return menus.map((menu) => new MenuDto(menu));
+  }
+
+  @Post('parse-pdf')
+  @ApiOperation({
+    summary: 'アレルゲン表PDFを解析してメニュー候補を返す',
+    description:
+      'テキスト埋め込みのアレルゲン表PDFを座標ベースで解析し、メニュー×アレルゲンの候補を返す。DB登録はせず、フロントで確認・修正後に POST /menus で登録する。',
+  })
+  @ApiResponse({ status: HttpStatus.OK, type: ParsePdfResultDto })
+  @ApiBody({ type: ParsePdfDto })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(
+    FileInterceptor('file', { limits: { fileSize: MAX_PDF_SIZE } })
+  )
+  async parsePdf(
+    @UploadedFile() file?: Express.Multer.File
+  ): Promise<ParsePdfResultDto> {
+    if (!file) {
+      throw new BadRequestException('PDFファイルが添付されていません');
+    }
+    const isPdf =
+      file.mimetype === 'application/pdf' ||
+      file.originalname?.toLowerCase().endsWith('.pdf');
+    if (!isPdf) {
+      throw new BadRequestException('PDFファイルをアップロードしてください');
+    }
+
+    return this.pdfParseService.parsePdf(file.buffer);
   }
 
   @Patch(':id')

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "menus" ALTER COLUMN "note" SET DATA TYPE TEXT;
