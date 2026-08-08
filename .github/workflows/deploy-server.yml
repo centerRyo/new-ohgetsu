@@ -60,6 +60,10 @@ jobs:
           username: ${{ secrets.SAKURA_CLOUD_SSH_USERNAME }}
           key: ${{ secrets.SAKURA_CLOUD_SSH_KEY }}
           script: |
+            # Log in on the deploy target so the pull below works now that
+            # the registry's public "Pull only" access has been discontinued.
+            echo "${{ secrets.SAKURA_CLOUD_PULL_PASSWORD }}" | docker login ${{ env.REGISTRY }} -u "${{ secrets.SAKURA_CLOUD_PULL_USERNAME }}" --password-stdin
+
             # Pull the latest images
             docker pull ${{ env.REGISTRY }}/${{ env.SERVER_IMAGE_NAME }}:latest
 
