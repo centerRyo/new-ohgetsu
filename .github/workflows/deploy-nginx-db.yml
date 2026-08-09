@@ -49,8 +49,8 @@ jobs:
           REGISTRY: ${{ env.REGISTRY }}
           NGINX_IMAGE_NAME: ${{ env.NGINX_IMAGE_NAME }}
           DOMAIN: ohgetsu.com
-          REGISTRY_PULL_USERNAME: ${{ secrets.SAKURA_CLOUD_PULL_USERNAME }}
-          REGISTRY_PULL_PASSWORD: ${{ secrets.SAKURA_CLOUD_PULL_PASSWORD }}
+          REGISTRY_PULL_USERNAME: ${{ secrets.SAKURA_CLOUD_USERNAME }}
+          REGISTRY_PULL_PASSWORD: ${{ secrets.SAKURA_CLOUD_PASSWORD }}
         with:
           host: ${{ secrets.SAKURA_CLOUD_SSH_HOST }}
           username: ${{ secrets.SAKURA_CLOUD_SSH_USERNAME }}
