@@ -79,7 +79,10 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^@nestjs/swagger$": "<rootDir>/../test/swagger.stub.ts"
+    }
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
