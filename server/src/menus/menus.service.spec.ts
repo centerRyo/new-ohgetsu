@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ingredients, restaurants } from '@prisma/client';
 import { AppModule } from '../app.module';
 import { PrismaService } from '../prisma.service';
+import { resetDb } from '../reset-db';
 import { MenusModule } from './menus.module';
 import { MenusService } from './menus.service';
 
@@ -21,6 +22,8 @@ describe('MenusService', () => {
     service = await module.resolve<MenusService>(MenusService);
 
     prisma = module.get<PrismaService>(PrismaService);
+
+    await resetDb(prisma);
 
     const genre = await prisma.genres.create({
       data: {
@@ -51,10 +54,7 @@ describe('MenusService', () => {
   });
 
   afterAll(async () => {
-    await prisma.menus.deleteMany();
-    await prisma.restaurants.deleteMany();
-    await prisma.genres.deleteMany();
-    await prisma.ingredients.deleteMany();
+    await resetDb(prisma);
   });
 
   describe('findAll', () => {

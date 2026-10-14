@@ -15,6 +15,21 @@ jobs:
       matrix:
         node-version: [24.x]
     timeout-minutes: 10
+    services:
+      # prisma/.env.test の接続先 (127.0.0.1:5433/ohgetsu-test) に合わせる
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: ohgetsu-test
+          POSTGRES_PASSWORD: postgres
+          TZ: 'Asia/Tokyo'
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     defaults:
       run:
         working-directory: server
@@ -54,3 +69,12 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Migrate test DB
+        run: npx dotenv -e ./prisma/.env.test -- prisma migrate deploy
+
+      - name: Test
+        run: npm test
