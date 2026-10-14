@@ -75,8 +75,23 @@ describe('Genres', () => {
     await waitFor(() =>
       expect(screen.getByTestId('genreId')).toHaveTextContent('g2')
     );
-    // jsdomではinputのvalueプロパティ更新が反映されないため、属性で確認する
-    expect(await findInput()).toHaveAttribute('value', '日本料理');
+    // 入力途中の文字列ではなく、選択したジャンル名が表示される
+    expect(await findInput()).toHaveValue('日本料理');
+  });
+
+  it('クリアするとgenreIdと入力欄が空になる', async () => {
+    const user = setup({ defaultGenreId: 'g2' });
+    await waitFor(async () =>
+      expect(await findInput()).toHaveValue('日本料理')
+    );
+
+    const clear = document.querySelector('[data-part="clear-trigger"]');
+    await user.click(clear as Element);
+
+    await waitFor(() =>
+      expect(screen.getByTestId('genreId')).toHaveTextContent('')
+    );
+    expect(await findInput()).toHaveValue('');
   });
 
   it('該当がない場合はメッセージを表示する', async () => {
