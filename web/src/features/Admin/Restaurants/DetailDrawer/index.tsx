@@ -144,7 +144,7 @@ export const DetailDrawer = ({ state, onClose, mutate }: Props) => {
               </Flex>
 
               <Flex mb={8}>
-                <Genres errors={errors} register={register} />
+                <Genres errors={errors} control={control} />
               </Flex>
 
               <Field.Root>
