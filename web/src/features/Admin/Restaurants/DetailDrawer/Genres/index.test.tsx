@@ -2,7 +2,7 @@ import { ChakraProvider, defaultSystem } from '@chakra-ui/react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SWRConfig } from 'swr';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { FormValues } from '../../index.d';
 import Genres from './index';
 
@@ -25,15 +25,16 @@ const Form = ({ defaultGenreId = '' }: { defaultGenreId?: string }) => {
     control,
     formState: { errors },
     handleSubmit,
-    watch,
   } = useForm<FormValues>({
     defaultValues: { name: '', genreId: defaultGenreId, isOpen: true },
   });
 
+  const genreId = useWatch({ control, name: 'genreId' });
+
   return (
     <form onSubmit={handleSubmit(() => {})}>
       <Genres errors={errors} control={control} />
-      <output data-testid='genreId'>{watch('genreId')}</output>
+      <output data-testid='genreId'>{genreId}</output>
       <button type='submit'>submit</button>
     </form>
   );
@@ -74,7 +75,8 @@ describe('Genres', () => {
     await waitFor(() =>
       expect(screen.getByTestId('genreId')).toHaveTextContent('g2')
     );
-    expect(await findInput()).toHaveValue('日本料理');
+    // jsdomではinputのvalueプロパティ更新が反映されないため、属性で確認する
+    expect(await findInput()).toHaveAttribute('value', '日本料理');
   });
 
   it('該当がない場合はメッセージを表示する', async () => {
