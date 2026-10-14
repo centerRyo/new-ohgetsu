@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from '../app.module';
 import { PrismaService } from '../prisma.service';
+import { resetDb } from '../reset-db';
 import { RestaurantsModule } from './restaurants.module';
 import { RestaurantsService } from './restaurants.service';
 
@@ -16,13 +17,12 @@ describe('RestaurantsService', () => {
     service = await module.resolve<RestaurantsService>(RestaurantsService);
 
     prisma = module.get<PrismaService>(PrismaService);
+
+    await resetDb(prisma);
   });
 
   afterAll(async () => {
-    await prisma.menus.deleteMany();
-    await prisma.restaurants.deleteMany();
-    await prisma.genres.deleteMany();
-    await prisma.ingredients.deleteMany();
+    await resetDb(prisma);
   });
 
   describe('find', () => {
@@ -50,8 +50,7 @@ describe('RestaurantsService', () => {
     };
 
     afterEach(async () => {
-      await prisma.restaurants.deleteMany();
-      await prisma.genres.deleteMany();
+      await resetDb(prisma);
     });
 
     it('検索キーワードがない場合、全件取得できる', async () => {
@@ -89,8 +88,7 @@ describe('RestaurantsService', () => {
 
   describe('findOne', () => {
     afterEach(async () => {
-      await prisma.restaurants.deleteMany();
-      await prisma.genres.deleteMany();
+      await resetDb(prisma);
     });
 
     it('指定したIDのレストランを取得できる', async () => {

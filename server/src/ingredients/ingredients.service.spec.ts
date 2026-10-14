@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from '../app.module';
 import { PrismaService } from '../prisma.service';
+import { resetDb } from '../reset-db';
 import { IngredientsModule } from './ingredients.module';
 import { IngredientsService } from './ingredients.service';
 
@@ -16,10 +17,12 @@ describe('IngredientsService', () => {
     service = module.get<IngredientsService>(IngredientsService);
 
     prisma = module.get<PrismaService>(PrismaService);
+
+    await resetDb(prisma);
   });
 
   afterAll(async () => {
-    await prisma.ingredients.deleteMany();
+    await resetDb(prisma);
   });
 
   describe('findAll', () => {
