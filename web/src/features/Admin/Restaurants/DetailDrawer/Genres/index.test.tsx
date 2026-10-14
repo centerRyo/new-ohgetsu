@@ -76,7 +76,9 @@ describe('Genres', () => {
       expect(screen.getByTestId('genreId')).toHaveTextContent('g2')
     );
     // 入力途中の文字列ではなく、選択したジャンル名が表示される
-    expect(await findInput()).toHaveValue('日本料理');
+    await waitFor(async () =>
+      expect(await findInput()).toHaveValue('日本料理')
+    );
   });
 
   it('クリアするとgenreIdと入力欄が空になる', async () => {
@@ -91,7 +93,7 @@ describe('Genres', () => {
     await waitFor(() =>
       expect(screen.getByTestId('genreId')).toHaveTextContent('')
     );
-    expect(await findInput()).toHaveValue('');
+    await waitFor(async () => expect(await findInput()).toHaveValue(''));
   });
 
   it('該当がない場合はメッセージを表示する', async () => {
